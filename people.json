@@ -1,0 +1,55 @@
+{
+  "outDir": "src/types/people",
+  "specVersions": "https://v2.archive.subsquid.io/metadata/people-chain",
+  "pallets": {
+    "Identity": {
+      "events": [
+        "IdentitySet",
+        "IdentityCleared",
+        "IdentityKilled",
+        "JudgementRequested",
+        "JudgementUnrequested",
+        "JudgementGiven",
+        "RegistrarAdded",
+        "SubIdentityAdded",
+        "SubIdentitiesSet",
+        "SubIdentityRenamed",
+        "SubIdentityRemoved",
+        "SubIdentityRevoked",
+        "AuthorityAdded",
+        "AuthorityRemoved",
+        "UsernameSet",
+        "UsernameQueued",
+        "PreapprovalExpired",
+        "PrimaryUsernameSet",
+        "DanglingUsernameRemoved",
+        "UsernameUnbound",
+        "UsernameRemoved",
+        "UsernameKilled"
+      ],
+      "calls": [
+        "add_registrar",
+        "set_fee",
+        "set_fields",
+        "set_account_id",
+        "request_judgement",
+        "provide_judgement",
+        "cancel_request",
+        "set_subs",
+        "add_sub",
+        "rename_sub",
+        "remove_sub",
+        "quit_sub",
+        "add_username_authority",
+        "remove_username_authority",
+        "set_username_for",
+        "accept_username",
+        "set_primary_username",
+        "remove_expired_approval",
+        "remove_dangling_username"
+      ],
+      "storage": [],
+      "constants": []
+    }
+  }
+}
