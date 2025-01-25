@@ -1,10 +1,31 @@
 {
-  "outDir": "src/types",
-  "specVersions": "https://v2.archive.subsquid.io/metadata/kusama",
+  "outDir": "src/types/polkadot",
+  "specVersions": "https://v2.archive.subsquid.io/metadata/polkadot",
   "pallets": {
-    "Balances": {
+    "Identity": {
       "events": [
-        "Transfer"
+        "IdentitySet",
+        "IdentityCleared",
+        "IdentityKilled",
+        "JudgementRequested",
+        "JudgementUnrequested",
+        "JudgementGiven",
+        "RegistrarAdded",
+        "SubIdentityAdded",
+        "SubIdentitiesSet",
+        "SubIdentityRenamed",
+        "SubIdentityRemoved",
+        "SubIdentityRevoked",
+        "AuthorityAdded",
+        "AuthorityRemoved",
+        "UsernameSet",
+        "UsernameQueued",
+        "PreapprovalExpired",
+        "PrimaryUsernameSet",
+        "DanglingUsernameRemoved",
+        "UsernameUnbound",
+        "UsernameRemoved",
+        "UsernameKilled"
       ],
       "calls": [],
       "storage": [],
