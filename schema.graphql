@@ -74,7 +74,7 @@ enum Interaction {
 # }
 
 # Entity to represent when the cache was last updated
-type CacheStatus @entity {
-  id: ID!
-  lastBlockTimestamp: DateTime!
-}
+# type CacheStatus @entity {
+#   id: ID!
+#   lastBlockTimestamp: DateTime!
+# }
