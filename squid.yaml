@@ -1,17 +1,19 @@
 manifestVersion: subsquid.io/v0.1
 name: identics
 version: 1
-description: Substrate squid template
+description: 'SubSquid indexer for Identities on People Chain'
 build: 
 deploy:
   addons:
     postgres: 
     rpc:
-      - kusama.http
+      - polkadot.http
   processor:
     cmd:
       - sqd
       - process:prod
+    env:
+      CHAIN: polkadot
   api:
     cmd:
       - sqd
