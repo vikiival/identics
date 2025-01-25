@@ -9,22 +9,25 @@ import {
     Extrinsic as _Extrinsic
 } from '@subsquid/substrate-processor'
 
-import {events} from './types'
+import {events} from './types/polkadot'
+
+const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/polkadot`
+// const NODE_URL = `wss://${CHAIN}-asset-hub-rpc.polkadot.io`
 
 export const processor = new SubstrateBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
     // See https://docs.subsquid.io/substrate-indexing/supported-networks/
-    .setGateway('https://v2.archive.subsquid.io/network/kusama')
+    .setGateway('https://v2.archive.subsquid.io/network/polkadot')
     // Chain RPC endpoint is required on Substrate for metadata and real-time updates
     .setRpcEndpoint({
         // Set via .env for local runs or via secrets when deploying to Subsquid Cloud
         // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull(process.env.RPC_KUSAMA_HTTP, 'No RPC endpoint supplied'),
+        url: assertNotNull(process.env.NODE_URL, 'No RPC endpoint supplied'),
         // More RPC connection options at https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source
         rateLimit: 10
     })
     .addEvent({
-        name: [events.balances.transfer.name],
+        name: [events.identity.identitySet.name],
         extrinsic: true
     })
     .setFields({
@@ -40,7 +43,7 @@ export const processor = new SubstrateBatchProcessor()
         }
     })
     // Uncomment to disable RPC ingestion and drastically reduce no of RPC calls
-    //.useArchiveOnly()
+    .useArchiveOnly()
 
 export type Fields = SubstrateBatchProcessorFields<typeof processor>
 export type Block = BlockHeader<Fields>
