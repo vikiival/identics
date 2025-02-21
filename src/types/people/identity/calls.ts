@@ -14,6 +14,19 @@ export const addRegistrar =  {
     ),
 }
 
+export const setIdentity =  {
+    name: 'Identity.set_identity',
+    /**
+     * See [`Pallet::set_identity`].
+     */
+    v1002006: new CallType(
+        'Identity.set_identity',
+        sts.struct({
+            info: v1002006.IdentityInfo,
+        })
+    ),
+}
+
 export const setSubs =  {
     name: 'Identity.set_subs',
     /**

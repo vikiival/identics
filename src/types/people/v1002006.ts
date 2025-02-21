@@ -308,6 +308,34 @@ export interface Data_ShaThree256 {
     value: Bytes
 }
 
+export const IdentityInfo: sts.Type<IdentityInfo> = sts.struct(() => {
+    return  {
+        display: Data,
+        legal: Data,
+        web: Data,
+        matrix: Data,
+        email: Data,
+        pgpFingerprint: sts.option(() => sts.bytes()),
+        image: Data,
+        twitter: Data,
+        github: Data,
+        discord: Data,
+    }
+})
+
+export interface IdentityInfo {
+    display: Data
+    legal: Data
+    web: Data
+    matrix: Data
+    email: Data
+    pgpFingerprint?: (Bytes | undefined)
+    image: Data
+    twitter: Data
+    github: Data
+    discord: Data
+}
+
 export const MultiAddress: sts.Type<MultiAddress> = sts.closedEnum(() => {
     return  {
         Address20: sts.bytes(),
