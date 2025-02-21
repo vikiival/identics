@@ -50,7 +50,8 @@ type Event implements EventType @entity {
 # Possible on-chain interactions that we listen for
 enum Interaction {
   CREATE
-  DESTROY
+  CLEAR
+  DESTROY # this is forcible removal
   CHANGE
 }
 
