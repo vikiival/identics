@@ -8,6 +8,7 @@
     "build": "rm -rf lib && tsc"
   },
   "dependencies": {
+    "@kodadot1/metasquid": "0.3.1-rc.0",
     "@subsquid/graphql-server": "^4.9.0",
     "@subsquid/ss58": "^2.0.2",
     "@subsquid/substrate-processor": "^8.5.2",
@@ -23,7 +24,7 @@
     "@subsquid/substrate-metadata-explorer": "^3.2.0",
     "@subsquid/substrate-typegen": "^8.1.0",
     "@subsquid/typeorm-codegen": "^2.0.2",
-    "@types/node": "^22.10.10",
+    "@types/node": "^22.13.1",
     "typescript": "^5.7.3"
   }
 }
