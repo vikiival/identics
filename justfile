@@ -2,7 +2,7 @@ default := 'squid'
 types := 'typegen'
 
 process: build
-	node --require=dotenv/config lib/processor.js
+	node --require=dotenv/config lib/main.js
 
 serve:
 	@npx squid-graphql-server
