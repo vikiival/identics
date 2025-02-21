@@ -1,0 +1,284 @@
+
+import { identity as calls } from "../../types/people/calls"
+import { identity as events } from "../../types/people/events"
+import { Data, Data_None, MultiAddress } from "../../types/people/v1002006"
+import { addressOf, unHex } from "../../utils/helper"
+import { debug } from "../../utils/logger"
+import { Context } from "../../utils/types"
+
+// UTILITY
+function fromData(data: Data): string | null {
+    if (isEmpty(data)) return null
+    return unHex(data.value)
+}
+
+function isEmpty<T>(data: Data): data is Data_None {
+    return data.__kind === 'None'
+}
+
+// GETTERS
+
+export function getSetIdentityCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.setIdentity
+    if (call.v1002006.is(ctx)) {
+        const { info } = call.v1002006.decode(ctx)
+        return {
+          display: fromData(info.display),
+          legal: fromData(info.legal),
+          web: fromData(info.web),
+          email: fromData(info.email),
+          matrix: fromData(info.matrix),
+          image: fromData(info.image),
+          twitter: fromData(info.twitter),
+          github:  fromData(info.github),
+          discord: fromData(info.discord),
+        }
+    }
+
+    // warn(Interaction.CREATE, 'USING UNSAFE GETTER! PLS UPDATE TYPES!')
+    const { info } = call.v1002006.decode(ctx)
+    return {
+      display: fromData(info.display),
+      legal: fromData(info.legal),
+      web: fromData(info.web),
+      email: fromData(info.email),
+      matrix: fromData(info.matrix),
+      image: fromData(info.image),
+      twitter: fromData(info.twitter),
+      github:  fromData(info.github),
+      discord: fromData(info.discord),
+    }
+}
+
+function fromMulticall(ma: MultiAddress) {
+   if (ma.__kind === 'Index') {
+       return null
+   }
+  
+  debug(`CALL::${ma.__kind}`, ma)
+  return addressOf(ma.value)
+}
+
+export function getProvideJudgementCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.provideJudgement
+    if (call.v1002006.is(ctx)) {
+      const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
+      return { regisrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, identity: unHex(identity) }
+    }
+    const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
+    return { regisrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, identity: unHex(identity) }
+}
+
+export function getAddSubCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.addSub
+    if (call.v1002006.is(ctx)) {
+        const { sub, data } = call.v1002006.decode(ctx)
+        return { sub: fromMulticall(sub), data: unHex(data) }
+    }
+    const { sub, data } = call.v1002006.decode(ctx)
+    return { sub: fromMulticall(sub), data: unHex(data) }
+}
+
+export function getSetSubsCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.setSubs
+    if (call.v1002006.is(ctx)) {
+        const { subs } = call.v1002006.decode(ctx)
+        return subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) }))
+    }
+    const { subs } = call.v1002006.decode(ctx)
+    return subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) }))
+}
+
+export function getRenameSubCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.renameSub
+    if (call.v1002006.is(ctx)) {
+        const { sub, data } = call.v1002006.decode(ctx)
+        return { sub: fromMulticall(sub), data: fromData(data) }
+    }
+    const { sub, data } = call.v1002006.decode(ctx)
+    return { sub: fromMulticall(sub), data: fromData(data) }
+}
+
+export function getAddUsernameAuthorityCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.addUsernameAuthority
+    if (call.v1002006.is(ctx)) {
+        const { authority, suffix, allocation } = call.v1002006.decode(ctx)
+        return { authority: fromMulticall(authority), suffix, allocation }
+    }
+    const { authority, suffix, allocation } = call.v1002006.decode(ctx)
+    return { authority: fromMulticall(authority), suffix, allocation }
+}
+
+export function getRemoveUsernameAuthorityCall(_ctx: Context) {
+    const ctx = _ctx.call
+    const call = calls.removeUsernameAuthority
+    if (call.v1002006.is(ctx)) {
+        const { authority } = call.v1002006.decode(ctx)
+        return { authority: fromMulticall(authority) }
+    }
+    const { authority } = call.v1002006.decode(ctx)
+    return { authority: fromMulticall(authority) }
+}
+
+// OK Events
+export function getIdentityClearedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.identityCleared
+    if (event.v1002006.is(ctx)) {
+        const { who } = event.v1002006.decode(ctx)
+        return { who: addressOf(who) }
+    }
+    const { who } = event.v1002006.decode(ctx)
+    return { who: addressOf(who) }
+}
+
+export function getIdentityKilledEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.identityKilled
+    if (event.v1002006.is(ctx)) {
+        const { who } = event.v1002006.decode(ctx)
+        return { who: addressOf(who) }
+    }
+    const { who } = event.v1002006.decode(ctx)
+    return { who: addressOf(who) }
+}
+
+export function getSubIdentityRemovedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.subIdentityRemoved
+    if (event.v1002006.is(ctx)) {
+        const { sub, main } = event.v1002006.decode(ctx)
+        return { sub: addressOf(sub), main: addressOf(main) }
+    }
+    const { sub, main } = event.v1002006.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+}
+
+export function getSubIdentityRevokedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.subIdentityRevoked
+    if (event.v1002006.is(ctx)) {
+        const { sub, main } = event.v1002006.decode(ctx)
+        return { sub: addressOf(sub), main: addressOf(main) }
+    }
+    const { sub, main } = event.v1002006.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+}
+
+export function getUsernameSetEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.usernameSet
+    if (event.v1002006.is(ctx)) {
+        const { who, username } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), username }
+    }
+    const { who, username } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), username }
+}
+
+export function getUsernameQueuedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.usernameQueued
+    if (event.v1002006.is(ctx)) {
+        const { who, username, expiration } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), username, expiration }
+    }
+    const { who, username, expiration } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), username, expiration }
+}
+
+export function getPreapprovalExpiredEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.preapprovalExpired
+    if (event.v1002006.is(ctx)) {
+        const { whose: who } = event.v1002006.decode(ctx)
+        return { who: addressOf(who) }
+    }
+    const { whose: who } = event.v1002006.decode(ctx)
+    return { who: addressOf(who) }
+}
+
+export function getPrimaryUsernameSetEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.primaryUsernameSet
+    if (event.v1002006.is(ctx)) {
+        const { who, username } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), username }
+    }
+    const { who, username } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), username }
+}
+
+// DOABLE Events
+export function getJudgementRequestedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.judgementRequested
+    if (event.v1002006.is(ctx)) {
+        const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), registrar }
+    }
+    const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), registrar }
+}
+
+export function getJudgementUnrequestedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.judgementUnrequested
+    if (event.v1002006.is(ctx)) {
+        const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), registrar }
+    }
+    const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), registrar }
+}
+
+export function getDanglingUsernameRemovedEvent(_ctx: Context) {
+    const ctx = _ctx.call
+    const event = events.danglingUsernameRemoved
+    if (event.v1002006.is(ctx)) {
+        const { who, username } = event.v1002006.decode(ctx)
+        return { who: addressOf(who), username }
+    }
+    const { who, username } = event.v1002006.decode(ctx)
+    return { who: addressOf(who), username }
+}
+
+// export function getUsernameUnboundEvent(_ctx: Context) {
+//     const ctx = _ctx.call
+//     const event = events.usernameUnbound
+//     if (event.v1002006.is(ctx)) {
+//         const { who, username } = event.v1002006.decode(ctx)
+//         return { who, username }
+//     }
+//     const { who, username } = event.v1002006.decode(ctx)
+//     return { who, username }
+// }
+
+// export function getUsernameRemovedEvent(_ctx: Context) {
+//     const ctx = _ctx.call
+//     const event = events.usernameRemoved
+//     if (event.v1002006.is(ctx)) {
+//         const { who, username } = event.v1002006.decode(ctx)
+//         return { who, username }
+//     }
+//     const { who, username } = event.v1002006.decode(ctx)
+//     return { who, username }
+// }
+
+// export function getUsernameKilledEvent(_ctx: Context) {
+//     const ctx = _ctx.call
+//     const event = events.U
+//     if (event.v1002006.is(ctx)) {
+//         const { who, username } = event.v1002006.decode(ctx)
+//         return { who, username }
+//     }
+//     const { who, username } = event.v1002006.decode(ctx)
+//     return { who, username }
+// }
+
