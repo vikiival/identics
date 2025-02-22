@@ -32,9 +32,25 @@ export async function calls<T extends SelectedCall>(item: T, ctx: Context): Prom
     case IdxCall.setIdentity:
       await idx.handleIdentitySet(ctx)
       break
+    case IdxCall.provideJudgement:
+      await idx.handleJudgementProvide(ctx)
+      break
+    case IdxCall.addSub:
+      await idx.handleSubAdd(ctx)
+      break
+    case IdxCall.setSubs:
+      await idx.handleSubListSet(ctx)
+      break
+    case IdxCall.renameSub:
+      await idx.handleSubRename(ctx)
+      break
+    case IdxCall.addUsernameAuthority:
+      await idx.handleUsernameAuthorityAdd(ctx)
+    case IdxCall.removeUsernameAuthority:
+      await idx.handleUsernameAuthorityRemove(ctx)
     default:
       debug(`CALL::${item.name}`, item, true)
-      // throw new Error(`Unknown call ${item.name}`)
+      throw new Error(`Unknown call ${item.name}`)
   }
 }
 
