@@ -14,7 +14,7 @@ import {calls} from './types/people'
 
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/people-chain`
 const NODE_URL = `wss://sys.ibp.network/people-polkadot`
-const STARTING_BLOCK = 188868
+const STARTING_BLOCK = 76280
 
 console.log(Object.keys(events.identity))
 
@@ -68,8 +68,7 @@ export const processor = new SubstrateBatchProcessor()
             args: true
         },
         extrinsic: {
-            hash: true,
-            fee: true
+            signature: true
         },
         block: {
             timestamp: true
