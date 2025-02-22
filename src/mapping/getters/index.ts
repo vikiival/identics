@@ -1,4 +1,3 @@
-
 import { identity as calls } from "../../types/people/calls"
 import { identity as events } from "../../types/people/events"
 import { Data, Data_None, MultiAddress } from "../../types/people/v1002006"
@@ -14,6 +13,10 @@ function fromData(data: Data): string | null {
 
 function isEmpty<T>(data: Data): data is Data_None {
     return data.__kind === 'None'
+}
+
+function subFrom(sub: MultiAddress, data: Data): { address: string | null, data: string | null } {
+    return { address: fromMulticall(sub), data: fromData(data) }
 }
 
 // GETTERS
@@ -56,7 +59,7 @@ function fromMulticall(ma: MultiAddress) {
        return null
    }
   
-  debug(`CALL::${ma.__kind}`, ma)
+  debug(`CALL::fromMulticall::${ma.__kind}`, ma)
   return addressOf(ma.value)
 }
 
@@ -65,10 +68,10 @@ export function getProvideJudgementCall(_ctx: Context) {
     const call = calls.provideJudgement
     if (call.v1002006.is(ctx)) {
       const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
-      return { regisrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, identity: unHex(identity) }
+      return { registrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, checksum: identity }
     }
     const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
-    return { regisrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, identity: unHex(identity) }
+    return { registrarId: regIndex, target: fromMulticall(target), judgement: judgement.__kind, checksum: identity }
 }
 
 export function getAddSubCall(_ctx: Context) {
@@ -76,10 +79,10 @@ export function getAddSubCall(_ctx: Context) {
     const call = calls.addSub
     if (call.v1002006.is(ctx)) {
         const { sub, data } = call.v1002006.decode(ctx)
-        return { sub: fromMulticall(sub), data: unHex(data) }
+        return subFrom(sub, data)
     }
     const { sub, data } = call.v1002006.decode(ctx)
-    return { sub: fromMulticall(sub), data: unHex(data) }
+    return subFrom(sub, data)
 }
 
 export function getSetSubsCall(_ctx: Context) {
@@ -98,10 +101,10 @@ export function getRenameSubCall(_ctx: Context) {
     const call = calls.renameSub
     if (call.v1002006.is(ctx)) {
         const { sub, data } = call.v1002006.decode(ctx)
-        return { sub: fromMulticall(sub), data: fromData(data) }
+        return subFrom(sub, data)
     }
     const { sub, data } = call.v1002006.decode(ctx)
-    return { sub: fromMulticall(sub), data: fromData(data) }
+    return subFrom(sub, data)
 }
 
 export function getAddUsernameAuthorityCall(_ctx: Context) {
