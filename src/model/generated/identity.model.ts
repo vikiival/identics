@@ -1,6 +1,8 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, OneToMany as OneToMany_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, OneToMany as OneToMany_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 import {Username} from "./username.model"
 import {Event} from "./event.model"
+import {Sub} from "./sub.model"
+import {Judgement} from "./_judgement"
 
 @Entity_()
 export class Identity {
@@ -48,4 +50,19 @@ export class Identity {
 
     @OneToMany_(() => Event, e => e.identity)
     events!: Event[]
+
+    @OneToMany_(() => Sub, e => e.identity)
+    subs!: Sub[]
+
+    /**
+     * Jugdement
+     */
+    @Column_("varchar", {length: 10, nullable: true})
+    jugdement!: Judgement | undefined | null
+
+    @IntColumn_({nullable: true})
+    registrar!: number | undefined | null
+
+    @StringColumn_({nullable: true})
+    hash!: string | undefined | null
 }
