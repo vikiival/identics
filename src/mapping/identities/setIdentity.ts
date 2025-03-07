@@ -15,7 +15,7 @@ const OPERATION = Action.CREATE
  * @param context - the context for the Call   
  **/
 export async function handleIdentitySet(context: Context): Promise<void> {
-    pending(OPERATION, `[COLECTTION++]: ${context.block.height}`)
+    pending(OPERATION, `${context.block.height}`)
     const call = unwrap(context, getSetIdentityCall)
     debug(OPERATION, call)
 
