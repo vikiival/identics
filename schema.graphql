@@ -12,6 +12,17 @@ type Identity @entity {
   discord: String
   usernames: [Username!] @derivedFrom(field: "identity")
   events: [Event!] @derivedFrom(field: "identity")
+  subs: [Sub!] @derivedFrom(field: "identity")
+  "Jugdement"
+  jugdement: Judgement
+  registrar: Int
+  hash: String
+}
+
+type Sub @entity {
+  id: ID!
+  name: String!
+  identity: Identity!
 }
 
 type Username @entity {
@@ -53,6 +64,16 @@ enum Interaction {
   CLEAR
   DESTROY # this is forcible removal
   CHANGE
+}
+
+enum Judgement {
+  Erroneous
+  FeePaid
+  KnownGood
+  LowQuality
+  OutOfDate
+  Reasonable
+  Unknown
 }
 
 
