@@ -90,10 +90,10 @@ export function getSetSubsCall(_ctx: Context) {
     const call = calls.setSubs
     if (call.v1002006.is(ctx)) {
         const { subs } = call.v1002006.decode(ctx)
-        return subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) }))
+        return { subs: subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) || undefined }))}
     }
     const { subs } = call.v1002006.decode(ctx)
-    return subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) }))
+    return { subs: subs.map(([addr, data]) => ({ address: addressOf(addr), data: fromData(data) || undefined }))}
 }
 
 export function getRenameSubCall(_ctx: Context) {
