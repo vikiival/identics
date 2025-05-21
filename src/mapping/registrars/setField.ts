@@ -1,10 +1,10 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
-import { getSetFeeCall } from '../getters'
-import { Identity } from '../../model'
+import { getSetFeeCall, getSetFieldCall } from '../getters'
+import { Identity, Registrar } from '../../model'
 
 const OPERATION = `CALL::SET_FIELDS`
 
@@ -16,9 +16,21 @@ const OPERATION = `CALL::SET_FIELDS`
  */
 export async function handleFieldSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getSetFeeCall)
-  debug(OPERATION, event)
+  const call = unwrap(context, getSetFieldCall)
+  debug(OPERATION, call)
 
-  success(OPERATION, `OK`)
-  // await context.store.save(final)
+  const id = call.index.toString()
+  const final = await get(context.store, Registrar, id)
+
+  if (!final) {
+    skip(OPERATION, `Registrar not found: ${id}`)
+    return
+  }
+
+  // DEV: bitmap of requeired fields
+  final.field = call.fields
+  final.updatedAt = call.timestamp
+
+  success(OPERATION, `${final.id}/${final.fee}`)
+  await context.store.save(final)
 }
