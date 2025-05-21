@@ -4,11 +4,11 @@ import {
   getOrFail as get,
 } from '@kodadot1/metasquid/entity'
 
-import { unwrap } from '../../../utils/extract'
-import { debug, pending, success } from '../../../utils/logger'
-import { Action, Context } from '../../../utils/types'
-import { getSetIdentityCall, getSetSubsCall } from '../../getters'
-import { Identity, Sub } from '../../../model'
+import { unwrap } from '../../utils/extract'
+import { debug, pending, success } from '../../utils/logger'
+import { Action, Context } from '../../utils/types'
+import { getSetIdentityCall, getSetSubsCall } from '../getters'
+import { Identity, Sub } from '../../model'
 
 const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 

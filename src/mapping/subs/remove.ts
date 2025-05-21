@@ -1,7 +1,7 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending } from '../../../utils/logger'
-import { Context } from '../../../utils/types'
-import { getRemoveSubCall } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getRemoveSubCall } from '../getters'
 
 const OPERATION = `CALL::REMOVE_SUB` //Action.CREATE
 

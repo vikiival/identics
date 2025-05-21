@@ -9,6 +9,8 @@ import { ProcessorContext } from '../processor'
 import { debug, error } from '../utils/logger'
 import { Context, SelectedCall, SelectedEvent } from '../utils/types'
 import * as idx from './identities'
+import * as sub from './subs'
+import * as jud from './judgements'
 
 type EventHandlerFunction = <T extends SelectedEvent>(
   ctx: Context
@@ -26,7 +28,7 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
   //   [IdxEvent.renameSubIdentity]: idx.handleSubIdentityRenamedEvent,
   //   [IdxEvent.removeSubIdentity]: idx.handleSubIdentityRemovedEvent,
   //   [IdxEvent.revokeSubIdentity]: idx.handleSubIdentityRevokedEvent,
-  //   [IdxEvent.requestJudgement]: idx.handleJudgementRequestedEvent,
+  [IdxEvent.requestJudgement]: jud.handleJudgementRequest,
   //   [IdxEvent.giveJudgement]: idx.handleJudgementGivenEvent,
   //   [IdxEvent.addRegistrar]: idx.handleRegistrarAddedEvent,
   //   [IdxEvent.unrequestJudgement]: idx.handleJudgementUnrequestedEvent,
@@ -43,12 +45,12 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
 }
 
 const callHandlers: Record<string, CallHandlerFunction> = {
-  //   [IdxCall.setIdentity]: idx.handleIdentitySet,
+  [IdxCall.setIdentity]: idx.handleIdentitySet,
   //   // [IdxCall.clearIdentity]: idx.handleIdentityClear,
   //   // [IdxCall.killIdentity]: idx.handleIdentityKill,
-  //   [IdxCall.provideJudgement]: idx.handleJudgementProvide,
+  [IdxCall.provideJudgement]: jud.handleJudgementProvide,
   //   [IdxCall.addSub]: idx.handleSubAdd,
-  //   [IdxCall.setSubs]: idx.handleSubListSet,
+  [IdxCall.setSubs]: sub.handleSubListSet,
   //   [IdxCall.renameSub]: idx.handleSubRename,
   //   // [IdxCall.removeSub]: idx.handleSubRemove,
   //   // [IdxCall.quitSub]: idx.handleSubQuit,

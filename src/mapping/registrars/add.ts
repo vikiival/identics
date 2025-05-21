@@ -1,7 +1,7 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending, success } from '../../../utils/logger'
-import { Action, Context } from '../../../utils/types'
-import { getRegistrarAddedEvent } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending, success } from '../../utils/logger'
+import { Action, Context } from '../../utils/types'
+import { getRegistrarAddedEvent } from '../getters'
 
 const OPERATION = `CALL::ADD_REGISTRAR`
 

@@ -1,7 +1,7 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending } from '../../../utils/logger'
-import { Context } from '../../../utils/types'
-import { getAddUsernameAuthorityCall } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getAddUsernameAuthorityCall } from '../getters'
 
 const OPERATION = `CALL::ADD_SUB` //Action.CREATE
 
