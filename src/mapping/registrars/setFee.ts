@@ -1,10 +1,10 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getSetFeeCall } from '../getters'
-import { Identity } from '../../model'
+import { Identity, Registrar } from '../../model'
 
 const OPERATION = `CALL::SET_FEE`
 
@@ -19,6 +19,17 @@ export async function handleFeeSet(context: Context): Promise<void> {
   const event = unwrap(context, getSetFeeCall)
   debug(OPERATION, event)
 
-  success(OPERATION, `OK`)
-  // await context.store.save(final)
+  const id = event.index.toString()
+  const final = await get(context.store, Registrar, id)
+
+  if (!final) {
+    skip(OPERATION, `Registrar not found: ${id}`)
+    return
+  }
+
+  final.fee = event.fee
+  final.updatedAt = event.timestamp
+
+  success(OPERATION, `${final.id}/${final.fee}`)
+  await context.store.save(final)
 }
