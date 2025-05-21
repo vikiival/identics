@@ -1,9 +1,11 @@
+import { get } from '@kodadot1/metasquid/entity'
 import { unwrap } from '../../utils/extract'
-import { debug, pending } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getProvideJudgementCall } from '../getters'
+import { Identity, Judgement } from '../../model'
 
-const OPERATION = `CALL::JUDGEMENT` //Action.CREATE
+const OPERATION = `CALL::JUDGEMENT_GIVE` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -16,18 +18,20 @@ export async function handleJudgementProvide(context: Context): Promise<void> {
   const call = unwrap(context, getProvideJudgementCall)
   debug(OPERATION, call)
 
-  const id = call.caller
-  // const final = await get(context.store, Identity, id)
+  const id = call.target
+  const final = await get(context.store, Identity, id)
 
-  // final.jugdement = call.judgement as Judgement
-  // final.registrar = call.registrarId
-  // final.hash = call.checksum
+  if (!final) {
+    skip(OPERATION, `Identity not found: ${id}`)
+    return
+  }
 
-  // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
+  final.judgement = call.judgement as Judgement
+  final.registrar = call.registrarId
+  final.hash = call.checksum
 
-  // success(OPERATION, `${final.id}/${final.jugdement}//${final.jugdement}`)
-  // await context.store.save(final)
+  final.updatedAt = call.timestamp
+
+  success(OPERATION, `${final.judgement}/${final.id}`)
+  await context.store.save(final)
 }
