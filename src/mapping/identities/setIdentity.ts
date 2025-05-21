@@ -23,9 +23,9 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   const final = await getOrCreate(context.store, Identity, id, {})
 
   // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
+  final.blockNumber = BigInt(call.blockNumber)
+  final.createdAt = call.timestamp
+  final.updatedAt = call.timestamp
 
   // Set properties from IdentityInfo
   final.name = call.display
@@ -38,7 +38,7 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   final.github = call.github
   final.discord = call.discord
 
-  success(OPERATION, `[COLLECTION] ${final.id}`)
+  success(OPERATION, `${final.id}`)
   await context.store.save(final)
 
   console.log(`Identity set to: ${id}`)
