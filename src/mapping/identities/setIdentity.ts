@@ -42,6 +42,4 @@ export async function handleIdentitySet(context: Context): Promise<void> {
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
-
-  console.log(`Identity set to: ${id}`)
 }
