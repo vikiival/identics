@@ -1,10 +1,10 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { create, get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getAddSubCall, getSetIdentityCall, getSetSubsCall } from '../getters'
-import { Identity } from '../../model'
+import { ChainOrigin, Identity, Sub } from '../../model'
 
 const OPERATION = `CALL::ADD_SUB` //Action.CREATE
 
@@ -20,26 +20,22 @@ export async function handleSubAdd(context: Context): Promise<void> {
   debug(OPERATION, call)
 
   const id = call.caller
-  // const final = await getOrCreate(context.store, Identity, id, {})
 
-  // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
+  const identity = await get(context.store, Identity, id)
 
-  // Set properties from IdentityInfo
-  // final.name = call.display
-  // final.legal = call.legal
-  // final.web = call.web
-  // final.matrix = call.matrix
-  // final.email = call.email
-  // final.image = call.image
-  // final.twitter = call.twitter
-  // final.github = call.github
-  // final.discord = call.discord
+  if (!identity) {
+    skip(OPERATION, `Identity not found`)
+    return
+  }
 
-  // success(OPERATION, `[COLLECTION] ${final.id}`)
-  // await context.store.save(final)
+  const sub = create(Sub, call.address, {
+    name: call.data,
+    identity,
+    blockNumber: BigInt(call.blockNumber),
+    createdAt: call.timestamp,
+    updatedAt: call.timestamp,
+    origin: ChainOrigin.PEOPLE,
+  })
 
   console.log(`Identity set to: ${id}`)
 }
