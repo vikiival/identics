@@ -37,5 +37,6 @@ export async function handleSubAdd(context: Context): Promise<void> {
     origin: ChainOrigin.PEOPLE,
   })
 
-  console.log(`Identity set to: ${id}`)
+  await context.store.save(sub)
+  success(OPERATION, `${id}/${call.address}`)
 }
