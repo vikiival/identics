@@ -14,7 +14,7 @@ type Identity @entity {
   events: [Event!] @derivedFrom(field: "identity")
   subs: [Sub!] @derivedFrom(field: "identity")
   "Jugdement"
-  jugdement: Judgement
+  judgement: Judgement
   registrar: Int
   hash: String
   "Basic"
@@ -23,6 +23,27 @@ type Identity @entity {
   createdAt: DateTime! @index
   origin: ChainOrigin!
   burned: Boolean!
+}
+
+type Registrar @entity {
+  id: ID!
+  address: String!
+  blockNumber: BigInt @index
+  updatedAt: DateTime! @index
+  createdAt: DateTime! @index
+  origin: ChainOrigin!
+  fee: BigInt
+  field: BigInt
+}
+
+type Authority @entity {
+  id: ID!
+  address: String!
+  suffix: String!
+  blockNumber: BigInt @index
+  updatedAt: DateTime! @index
+  createdAt: DateTime! @index
+  origin: ChainOrigin!
 }
 
 type Sub @entity {
@@ -39,8 +60,10 @@ type Username @entity {
   id: ID!
   primary: Boolean!
   name: String! @index
-  identity: Identity!
+  identity: Identity
   createdAt: DateTime! @index
+  gracePeriod: BigInt @index
+  status: UsernameStatus!
 }
 
 # Abstract entity to represent an event
@@ -90,6 +113,13 @@ enum Judgement {
   OutOfDate
   Reasonable
   Unknown
+}
+
+enum UsernameStatus {
+  Available
+  Unbinding
+  Queued
+  Removed
 }
 
 
