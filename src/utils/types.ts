@@ -54,7 +54,7 @@ export type SelectedBlock = Pick<
   BlockHeader<Fields>,
   'height' | 'timestamp' | 'hash'
 >
-export type SelectedEvent = Pick<Event, 'name' | 'args'>
+export type SelectedEvent = Pick<Event, 'name' | 'args' | 'block' | 'call'>
 export type SelectedExtrinsic = Pick<Extrinsic, 'signature' | 'call'>
 export type SelectedCall = Pick<
   Call,
