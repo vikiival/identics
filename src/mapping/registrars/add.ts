@@ -1,7 +1,9 @@
+import { create } from '@kodadot1/metasquid/entity'
+import { Registrar } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import { getRegistrarAddedEvent } from '../getters'
+import { Context } from '../../utils/types'
+import { getAddRegistrarCall, getRegistrarAddedEvent } from '../getters'
 
 const OPERATION = `CALL::ADD_REGISTRAR`
 
@@ -14,8 +16,18 @@ const OPERATION = `CALL::ADD_REGISTRAR`
 export async function handleRegistrarAdd(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getRegistrarAddedEvent)
+  const call = unwrap(context, getAddRegistrarCall)
   debug(OPERATION, event)
+  debug(OPERATION, call)
+
+  const id = event.index.toString()
+  const final = create(Registrar, id, {
+    address: call.account,
+    blockNumber: BigInt(event.blockNumber),
+    createdAt: event.timestamp,
+    updatedAt: event.timestamp,
+  })
 
   success(OPERATION, `OK`)
-  // await context.store.save(final)
+  await context.store.save(final)
 }
