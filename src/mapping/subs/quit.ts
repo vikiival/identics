@@ -15,16 +15,16 @@ const OPERATION = `CALL::QUIT_SUB` //Action.CREATE
  */
 export async function handleSubQuit(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const call = unwrap(context, getSubIdentityRevokedEvent)
-  debug(OPERATION, call)
+  const event = unwrap(context, getSubIdentityRevokedEvent)
+  debug(OPERATION, event)
 
-  const id = call.sub
+  const id = event.sub
   const final = await get(context.store, Sub, id)
   if (!final) {
     skip(OPERATION, `Sub not found: ${id}`)
     return
   }
 
-  success(OPERATION, `${call.main}/${id}`)
+  success(OPERATION, `${event.main}/${id}`)
   await context.store.remove(final)
 }

@@ -11,6 +11,8 @@ import { Context, SelectedCall, SelectedEvent } from '../utils/types'
 import * as idx from './identities'
 import * as sub from './subs'
 import * as jud from './judgements'
+import * as reg from './registrars'
+import * as usrn from './usernames'
 
 type EventHandlerFunction = <T extends SelectedEvent>(
   ctx: Context
@@ -20,53 +22,52 @@ type CallHandlerFunction = <T extends SelectedCall>(
 ) => Promise<void>
 
 const eventHandlers: Record<string, EventHandlerFunction> = {
-  //   // [IdxEvent.setIdentity]: idx.handleIdentitySetEvent, // call
   [IdxEvent.clearIdentity]: idx.handleIdentityClear,
-  //   [IdxEvent.killIdentity]: idx.handleIdentityKilledEvent,
+  [IdxEvent.killIdentity]: idx.handleIdentityKill,
   //   [IdxEvent.addSubIdentity]: idx.handleSubIdentityAddedEvent,
   //   [IdxEvent.setSubIdentities]: idx.handleSubIdentitiesSetEvent,
   //   [IdxEvent.renameSubIdentity]: idx.handleSubIdentityRenamedEvent,
-  //   [IdxEvent.removeSubIdentity]: idx.handleSubIdentityRemovedEvent,
-  //   [IdxEvent.revokeSubIdentity]: idx.handleSubIdentityRevokedEvent,
+  [IdxEvent.removeSubIdentity]: sub.handleSubRemove,
+  [IdxEvent.revokeSubIdentity]: sub.handleSubQuit,
   [IdxEvent.requestJudgement]: jud.handleJudgementRequest,
   //   [IdxEvent.giveJudgement]: idx.handleJudgementGivenEvent,
   //   [IdxEvent.addRegistrar]: idx.handleRegistrarAddedEvent,
-  //   [IdxEvent.unrequestJudgement]: idx.handleJudgementUnrequestedEvent,
-  //   [IdxEvent.addAuthority]: idx.handleAuthorityAddedEvent,
-  //   [IdxEvent.removeAuthority]: idx.handleAuthorityRemovedEvent,
-  //   // [IdxEvent.setUsername]: idx.handleUsernameSetEvent,
-  //   // [IdxEvent.queueUsername]: idx.handleUsernameQueuedEvent,
-  //   // [IdxEvent.expirePreapproval]: idx.handlePreapprovalExpiredEvent,
-  //   // [IdxEvent.setPrimaryUsername]: idx.handlePrimaryUsernameSetEvent,
-  //   // [IdxEvent.removeDanglingUsername]: idx.handleDanglingUsernameRemovedEvent,
-  //   // [IdxEvent.unbindUsername]: idx.handleUsernameUnboundEvent,
-  //   // [IdxEvent.removeUsername]: idx.handleUsernameRemovedEvent,
-  //   // [IdxEvent.killUsername]: idx.handleUsernameKilledEvent
+  [IdxEvent.unrequestJudgement]: jud.handleJudgementCancel,
+  // [IdxEvent.addAuthority]: idx.handleAuthorityAddedEvent,
+  // [IdxEvent.removeAuthority]: idx.handleAuthorityRemovedEvent,
+  [IdxEvent.setUsername]: usrn.handleUsernameSet,
+  // [IdxEvent.queueUsername]: idx.handleUsernameQueuedEvent,
+  // [IdxEvent.expirePreapproval]: idx.handlePreapprovalExpiredEvent,
+  [IdxEvent.setPrimaryUsername]: usrn.handlePrimaryUsernameSet,
+  [IdxEvent.removeDanglingUsername]: usrn.handleDanglingUsernameRemove,
+  // [IdxEvent.unbindUsername]: idx.handleUsernameUnboundEvent,
+  // [IdxEvent.removeUsername]: idx.handleUsernameRemovedEvent,
+  // [IdxEvent.killUsername]: idx.handleUsernameKilledEvent
 }
 
 const callHandlers: Record<string, CallHandlerFunction> = {
   [IdxCall.setIdentity]: idx.handleIdentitySet,
   // [IdxCall.clearIdentity]: idx.handleIdentityClear,
-  //   // [IdxCall.killIdentity]: idx.handleIdentityKill,
+  // [IdxCall.killIdentity]: idx.handleIdentityKill,
   [IdxCall.provideJudgement]: jud.handleJudgementProvide,
-  //   [IdxCall.addSub]: idx.handleSubAdd,
+  [IdxCall.addSub]: sub.handleSubAdd,
   [IdxCall.setSubs]: sub.handleSubListSet,
-  //   [IdxCall.renameSub]: idx.handleSubRename,
-  //   // [IdxCall.removeSub]: idx.handleSubRemove,
-  //   // [IdxCall.quitSub]: idx.handleSubQuit,
-  //   [IdxCall.addUsernameAuthority]: idx.handleUsernameAuthorityAdd,
-  //   [IdxCall.removeUsernameAuthority]: idx.handleUsernameAuthorityRemove,
-  //   [IdxCall.addRegistrar]: idx.handleRegistrarAdd,
-  //   [IdxCall.setFee]: idx.handleFeeSet,
-  //   [IdxCall.setFields]: idx.handleFieldSet,
-  //   [IdxCall.setAccountId]: idx.handleAccountIdSet,
-  //   // [IdxCall.requestJudgement]: idx.handleJudgementRequest,
-  //   // [IdxCall.cancelRequest]: idx.handleJudgementRequestCancel,
-  //   // [IdxCall.setUsernameFor]: idx.handleUsernameSetFor,
-  //   // [IdxCall.acceptUsername]: idx.handleUsernameAccept,
-  //   // [IdxCall.setPrimaryUsername]: idx.handleUsernamePrimarySet,
-  //   // [IdxCall.removeExpiredApproval]: idx.handleUsernameExpiredApprovalRemove,
-  //   // [IdxCall.removeDanglingUsername]: idx.handleUsernameDanglingRemove
+  [IdxCall.renameSub]: sub.handleSubRename,
+  // [IdxCall.removeSub]: idx.handleSubRemove,
+  // [IdxCall.quitSub]: idx.handleSubQuit,
+  [IdxCall.addUsernameAuthority]: usrn.handleUsernameAuthorityAdd,
+  [IdxCall.removeUsernameAuthority]: usrn.handleUsernameAuthorityRemove,
+  [IdxCall.addRegistrar]: reg.handleRegistrarAdd,
+  [IdxCall.setFee]: reg.handleFeeSet,
+  [IdxCall.setFields]: reg.handleFieldSet,
+  [IdxCall.setAccountId]: reg.handleAccountIdSet,
+  // [IdxCall.requestJudgement]: idx.handleJudgementRequest,
+  // [IdxCall.cancelRequest]: idx.handleJudgementRequestCancel,
+  // [IdxCall.setUsernameFor]: idx.handleUsernameSetFor,
+  // [IdxCall.acceptUsername]: idx.handleUsernameAccept,
+  // [IdxCall.setPrimaryUsername]: idx.handleUsernamePrimarySet,
+  // [IdxCall.removeExpiredApproval]: idx.handleUsernameExpiredApprovalRemove,
+  // [IdxCall.removeDanglingUsername]: idx.handleUsernameDanglingRemove
 }
 
 /**

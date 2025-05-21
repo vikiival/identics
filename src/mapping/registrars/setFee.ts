@@ -16,10 +16,10 @@ const OPERATION = `CALL::SET_FEE`
  */
 export async function handleFeeSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getSetFeeCall)
-  debug(OPERATION, event)
+  const call = unwrap(context, getSetFeeCall)
+  debug(OPERATION, call)
 
-  const id = event.index.toString()
+  const id = call.index.toString()
   const final = await get(context.store, Registrar, id)
 
   if (!final) {
@@ -27,8 +27,8 @@ export async function handleFeeSet(context: Context): Promise<void> {
     return
   }
 
-  final.fee = event.fee
-  final.updatedAt = event.timestamp
+  final.fee = call.fee
+  final.updatedAt = call.timestamp
 
   success(OPERATION, `${final.id}/${final.fee}`)
   await context.store.save(final)
