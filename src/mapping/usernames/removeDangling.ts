@@ -3,10 +3,15 @@ import { getOrCreate } from '@kodadot1/metasquid/entity'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
-import { getAddSubCall, getSetIdentityCall, getSetSubsCall } from '../getters'
-import { Identity } from '../../model'
+import {
+  getAddSubCall,
+  getRemoveDanglingUsernameEvent,
+  getSetIdentityCall,
+  getSetSubsCall,
+} from '../getters'
+import { Identity, Username, UsernameStatus } from '../../model'
 
-const OPERATION = `CALL::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::USERNAME_REMOVE_DANGLING`
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -18,30 +23,14 @@ export async function handleDanglingUsernameRemove(
   context: Context
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const call = unwrap(context, getAddSubCall)
-  debug(OPERATION, call)
+  const event = unwrap(context, getRemoveDanglingUsernameEvent)
+  debug(OPERATION, event)
 
-  const id = call.caller
-  // const final = await getOrCreate(context.store, Identity, id, {})
+  const id = event.username
+  const final = await getOrCreate(context.store, Username, id, {})
 
-  // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
+  final.status = UsernameStatus.Removed
 
-  // Set properties from IdentityInfo
-  // final.name = call.display
-  // final.legal = call.legal
-  // final.web = call.web
-  // final.matrix = call.matrix
-  // final.email = call.email
-  // final.image = call.image
-  // final.twitter = call.twitter
-  // final.github = call.github
-  // final.discord = call.discord
-
-  // success(OPERATION, `[COLLECTION] ${final.id}`)
-  // await context.store.save(final)
-
-  console.log(`Identity set to: ${id}`)
+  await context.store.save(final)
+  success(OPERATION, `${event.who}/${id}`)
 }
