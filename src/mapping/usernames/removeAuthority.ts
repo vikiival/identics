@@ -1,16 +1,12 @@
+import { get } from '@kodadot1/metasquid/entity'
 import { unwrap } from '../../utils/extract'
-import { debug, pending } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getRemoveUsernameAuthorityCall } from '../getters'
+import { Authority } from '../../model'
 
-const OPERATION = `CALL::AUTH_REMOVE` //Action.CREATE
+const OPERATION = `CALL::AUTH_REMOVE`
 
-/**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
- */
 /**
  * Handle the identity create call (Identity.set_identity)
  * Creates a new Identity entity
@@ -24,8 +20,14 @@ export async function handleUsernameAuthorityRemove(
   const call = unwrap(context, getRemoveUsernameAuthorityCall)
   debug(OPERATION, call)
 
-  const id = call.caller
-  // const final = await getOrCreate(context.store, Identity, id, {})
+  const id = call.authority
+  const final = await get(context.store, Authority, id)
 
-  console.log(`Identity set to: ${id}`)
+  if (!final) {
+    skip(OPERATION, `Authority not found: ${id}`)
+    return
+  }
+
+  await context.store.remove(final)
+  success(OPERATION, `${id}/${call.suffix}`)
 }
