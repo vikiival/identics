@@ -1,16 +1,10 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { get } from '@kodadot1/metasquid/entity'
 
+import { Sub } from '../../model'
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import {
-  getAddSubCall,
-  getRemoveUsernameAuthorityCall,
-  getRenameSubCall,
-  getSetIdentityCall,
-  getSetSubsCall,
-} from '../getters'
-import { Identity } from '../../model'
+import { debug, pending, skip, success } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getRenameSubCall } from '../getters'
 
 const OPERATION = `CALL::RENAME_SUB` //Action.CREATE
 
@@ -25,27 +19,16 @@ export async function handleSubRename(context: Context): Promise<void> {
   const call = unwrap(context, getRenameSubCall)
   debug(OPERATION, call)
 
-  const id = call.caller
-  // const final = await getOrCreate(context.store, Identity, id, {})
+  const id = call.address
+  const final = await get(context.store, Sub, id)
+  if (!final) {
+    skip(OPERATION, `Sub not found: ${id}`)
+    return
+  }
 
-  // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
+  final.name = call.data || ''
+  final.updatedAt = call.timestamp
 
-  // Set properties from IdentityInfo
-  // final.name = call.display
-  // final.legal = call.legal
-  // final.web = call.web
-  // final.matrix = call.matrix
-  // final.email = call.email
-  // final.image = call.image
-  // final.twitter = call.twitter
-  // final.github = call.github
-  // final.discord = call.discord
-
-  // success(OPERATION, `[COLLECTION] ${final.id}`)
-  // await context.store.save(final)
-
-  console.log(`Identity set to: ${id}`)
+  success(OPERATION, `${call.caller}/${id}`)
+  await context.store.save(final)
 }
