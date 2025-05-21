@@ -4,7 +4,7 @@ import { unwrap } from '../../utils/extract'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getSetIdentityCall } from '../getters'
-import { Identity } from '../../model'
+import { ChainOrigin, Identity } from '../../model'
 
 const OPERATION = Action.CREATE
 
@@ -26,6 +26,8 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   final.blockNumber = BigInt(call.blockNumber)
   final.createdAt = call.timestamp
   final.updatedAt = call.timestamp
+  final.origin = ChainOrigin.PEOPLE
+  final.burned = false
 
   // Set properties from IdentityInfo
   final.name = call.display
