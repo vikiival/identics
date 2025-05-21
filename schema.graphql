@@ -17,12 +17,22 @@ type Identity @entity {
   jugdement: Judgement
   registrar: Int
   hash: String
+  "Basic"
+  blockNumber: BigInt @index
+  updatedAt: DateTime! @index
+  createdAt: DateTime! @index
+  origin: ChainOrigin!
+  burned: Boolean!
 }
 
 type Sub @entity {
   id: ID!
   name: String!
   identity: Identity!
+  blockNumber: BigInt @index
+  updatedAt: DateTime! @index
+  createdAt: DateTime! @index
+  origin: ChainOrigin!
 }
 
 type Username @entity {
@@ -30,6 +40,7 @@ type Username @entity {
   primary: Boolean!
   name: String! @index
   identity: Identity!
+  createdAt: DateTime! @index
 }
 
 # Abstract entity to represent an event
@@ -56,6 +67,11 @@ type Event implements EventType @entity {
   meta: String!
   identity: Identity!
   # version: Int!
+}
+
+enum ChainOrigin {
+  RELAY
+  PEOPLE
 }
 
 # Possible on-chain interactions that we listen for
