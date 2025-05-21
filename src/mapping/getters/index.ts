@@ -197,6 +197,17 @@ export function getSubIdentityRemovedEvent(_ctx: Context) {
   return { sub: addressOf(sub), main: addressOf(main) }
 }
 
+export function getSubIdentityAddEvent(_ctx: Context) {
+  const ctx = _ctx.call
+  const event = events.subIdentityAdded
+  if (event.v1002006.is(ctx)) {
+    const { sub, main } = event.v1002006.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+  }
+  const { sub, main } = event.v1002006.decode(ctx)
+  return { sub: addressOf(sub), main: addressOf(main) }
+}
+
 export function getSubIdentityRevokedEvent(_ctx: Context) {
   const ctx = _ctx.call
   const event = events.subIdentityRevoked
@@ -379,69 +390,16 @@ export function getRegistrarAddedEvent(_ctx: Context) {
   return { index }
 }
 
-// export function getSubIdentityAddedEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     const event = events.subIdentityAdded
-//     if (event.v1002006.is(ctx)) {
-//         const { sub, main } = event.v1002006.decode(ctx)
-//         return { sub: addressOf(sub), main: addressOf(main) }
-//     }
-//     const { sub, main } = event.v1002006.decode(ctx)
-//     return { sub: addressOf(sub), main: addressOf(main) }
-// }
-
-// export function getAuthorityAddedEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     const event = events.authorityAdded
-//     if (event.v1002006.is(ctx)) {
-//         const { authority } = event.v1002006.decode(ctx)
-//         return { authority: addressOf(authority) }
-//     }
-//     const { authority } = event.v1002006.decode(ctx)
-//     return { authority: addressOf(authority) }
-// }
-
-// export function getAuthorityRemovedEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     const event = events.authorityRemoved
-//     if (event.v1002006.is(ctx)) {
-//         const { authority } = event.v1002006.decode(ctx)
-//         return { authority: addressOf(authority) }
-//     }
-//     const { authority } = event.v1002006.decode(ctx)
-//     return { authority: addressOf(authority) }
-// }
-
-// // Add missing call getters
-// export function getQuitSubCall(_ctx: Context) {
-//     const ctx = _ctx.call
-//     const call = calls.quitSub
-//     if (call.v1002006.is(ctx)) {
-//         return {}
-//     }
-//     return {}
-// }
-
-// export function getClearIdentityCall(_ctx: Context) {
-//     const ctx = _ctx.call
-//     // Account for potential naming differences
-//     // Assuming clearIdentity is the correct call name based on context
-//     const call = calls.clearIdentity || calls.cancelIdentity
-//     if (call && call.v1002006 && call.v1002006.is(ctx)) {
-//         return {}
-//     }
-//     return {}
-// }
-
-// export function getKillIdentityCall(_ctx: Context) {
-//     const ctx = _ctx.call
-//     const call = calls.killIdentity
-//     if (call && call.v1002006 && call.v1002006.is(ctx)) {
-//         const { target } = call.v1002006.decode(ctx)
-//         return { target: fromMulticall(target) }
-//     }
-//     return { target: null }
-// }
+export function getRemoveExpiredApprovalCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.removeExpiredApproval
+  if (call.v1002006.is(ctx)) {
+    const { username } = call.v1002006.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002006.decode(ctx)
+  return { username }
+}
 
 export function getAddRegistrarCall(_ctx: Context) {
   const ctx = _ctx.call
