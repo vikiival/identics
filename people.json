@@ -47,7 +47,10 @@
         "accept_username",
         "set_primary_username",
         "remove_expired_approval",
-        "remove_dangling_username"
+        "remove_dangling_username",
+        "unbind_username",
+        "remove_username",
+        "kill_username"
       ],
       "storage": [],
       "constants": []
