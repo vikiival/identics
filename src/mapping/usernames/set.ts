@@ -1,24 +1,18 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { unwrap } from '../../utils/extract'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import {
   getAddSubCall,
-  getRemoveUsernameAuthorityCall,
   getSetIdentityCall,
   getSetSubsCall,
+  getUsernameSetEvent,
 } from '../getters'
-import { Identity } from '../../model'
+import { Identity, Username } from '../../model'
 
-const OPERATION = `CALL::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::SET_USERNAME` //Action.CREATE
 
-/**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
- */
 /**
  * Handle the identity create call (Identity.set_identity)
  * Creates a new Identity entity
@@ -27,11 +21,14 @@ const OPERATION = `CALL::ADD_SUB` //Action.CREATE
  */
 export async function handleUsernameSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const call = unwrap(context, getRemoveUsernameAuthorityCall)
-  debug(OPERATION, call)
+  const event = unwrap(context, getUsernameSetEvent)
+  debug(OPERATION, event)
 
-  const id = call.caller
-  // const final = await getOrCreate(context.store, Identity, id, {})
+  const id = event.username
+  const final = await getOrCreate(context.store, Username, id, {})
 
-  console.log(`Identity set to: ${id}`)
+  final.createdAt = event.timestamp
+
+  const identity = await get(context.store, Identity, event.who)
+  final.identity = identity
 }
