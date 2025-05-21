@@ -105,12 +105,9 @@ export async function calls<T extends SelectedCall>(
  **/
 export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
   const start = ctx.blocks[0].header.height
+  const end = ctx.blocks[ctx.blocks.length - 1].header.height
 
-  logger.info(
-    `Processing ${ctx.blocks.length} blocks from ${
-      ctx.blocks[0].header.height
-    } to ${ctx.blocks[ctx.blocks.length - 1].header.height}`
-  )
+  logger.info(`Processing ${ctx.blocks.length} blocks from ${start} to ${end}`)
 
   for (const block of ctx.blocks) {
     for (const call of block.calls) {

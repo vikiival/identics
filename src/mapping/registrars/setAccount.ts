@@ -1,7 +1,7 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending, success } from '../../../utils/logger'
-import { Context } from '../../../utils/types'
-import { getSetAccountCall } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending, success } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getSetAccountCall } from '../getters'
 
 const OPERATION = `CALL::SET_FEE`
 

@@ -1,9 +1,9 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending } from '../../../utils/logger'
-import { Context } from '../../../utils/types'
-import { getProvideJudgementCall } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getProvideJudgementCall } from '../getters'
 
-const OPERATION = `CALL::JUDGEMENT_REQEST` //Action.CREATE
+const OPERATION = `CALL::JUDGEMENT` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -11,7 +11,7 @@ const OPERATION = `CALL::JUDGEMENT_REQEST` //Action.CREATE
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
-export async function handleJudgementRequest(context: Context): Promise<void> {
+export async function handleJudgementProvide(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getProvideJudgementCall)
   debug(OPERATION, call)

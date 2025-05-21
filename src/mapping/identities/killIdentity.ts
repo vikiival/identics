@@ -11,7 +11,7 @@ const OPERATION = Action.DESTROY
  * Marks an Identity as cleared
  * @param context - the context for the Call
  */
-export async function handleIdentityClear(context: Context): Promise<void> {
+export async function handleIdentityKill(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   //   const event = unwrap(context, getSetAccountCall)
   debug(OPERATION, context, true)

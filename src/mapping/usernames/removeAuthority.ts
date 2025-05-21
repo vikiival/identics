@@ -1,17 +1,9 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getRemoveUsernameAuthorityCall } from '../getters'
 
-import { unwrap } from '../../../utils/extract'
-import { debug, pending, success } from '../../../utils/logger'
-import { Action, Context } from '../../../utils/types'
-import {
-  getAddSubCall,
-  getRemoveUsernameAuthorityCall,
-  getSetIdentityCall,
-  getSetSubsCall,
-} from '../../getters'
-import { Identity } from '../../../model'
-
-const OPERATION = `CALL::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::AUTH_REMOVE` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)

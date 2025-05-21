@@ -1,7 +1,7 @@
-import { unwrap } from '../../../utils/extract'
-import { debug, pending } from '../../../utils/logger'
-import { Context } from '../../../utils/types'
-import { getProvideJudgementCall } from '../../getters'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getProvideJudgementCall } from '../getters'
 
 const OPERATION = `CALL::JUDGEMENT` //Action.CREATE
 
