@@ -6,8 +6,8 @@ import { debug } from '../../utils/logger'
 import { Context } from '../../utils/types'
 
 // UTILITY
-function fromData(data: Data): string | null {
-  if (isEmpty(data)) return null
+function fromData(data: Data): string | undefined {
+  if (isEmpty(data)) return undefined
   return unHex(data.value)
 }
 
@@ -17,9 +17,9 @@ function isEmpty<T>(data: Data): data is Data_None {
 
 function subFrom(
   sub: MultiAddress,
-  data: Data,
-): { address: string | null; data: string | null } {
-  return { address: fromMulticall(sub), data: fromData(data) }
+  data: Data
+): { address: string; data: string | undefined } {
+  return { address: fromMulticall(sub) as string, data: fromData(data) }
 }
 
 // GETTERS
@@ -73,7 +73,7 @@ export function getProvideJudgementCall(_ctx: Context) {
     const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
     return {
       registrarId: regIndex,
-      target: fromMulticall(target),
+      target: fromMulticall(target) as string,
       judgement: judgement.__kind,
       checksum: identity,
     }
@@ -81,7 +81,7 @@ export function getProvideJudgementCall(_ctx: Context) {
   const { regIndex, target, judgement, identity } = call.v1002006.decode(ctx)
   return {
     registrarId: regIndex,
-    target: fromMulticall(target),
+    target: fromMulticall(target) as string,
     judgement: judgement.__kind,
     checksum: identity,
   }
@@ -146,10 +146,10 @@ export function getAddUsernameAuthorityCall(_ctx: Context) {
   const call = calls.addUsernameAuthority
   if (call.v1002006.is(ctx)) {
     const { authority, suffix, allocation } = call.v1002006.decode(ctx)
-    return { authority: fromMulticall(authority), suffix, allocation }
+    return { authority: fromMulticall(authority) as string, suffix, allocation }
   }
   const { authority, suffix, allocation } = call.v1002006.decode(ctx)
-  return { authority: fromMulticall(authority), suffix, allocation }
+  return { authority: fromMulticall(authority) as string, suffix, allocation }
 }
 
 export function getRemoveUsernameAuthorityCall(_ctx: Context) {
@@ -157,10 +157,10 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
   const call = calls.removeUsernameAuthority
   if (call.v1002006.is(ctx)) {
     const { authority } = call.v1002006.decode(ctx)
-    return { authority: fromMulticall(authority) }
+    return { authority: fromMulticall(authority) as string, suffix: '' }
   }
   const { authority } = call.v1002006.decode(ctx)
-  return { authority: fromMulticall(authority) }
+  return { authority: fromMulticall(authority) as string, suffix: '' }
 }
 
 // OK Events
@@ -252,9 +252,47 @@ export function getPrimaryUsernameSetEvent(_ctx: Context) {
   return { who: addressOf(who), username }
 }
 
+export function getUsernameRemoveEvent(_ctx: Context) {
+  const ctx = _ctx.call
+  return { username: '' }
+  // const event = events.usernameRemoved
+  // if (event.v1002006.is(ctx)) {
+  //   const { username } = event.v1002006.decode(ctx)
+  //   return { username }
+  // }
+  // const { username } = event.v1002006.decode(ctx)
+  // return { username }
+}
+
+export function getUsernameKillEvent(_ctx: Context) {
+  const ctx = _ctx.event
+  // Uncomment once the event is available in types
+  // const event = events.usernameKilled
+  // if (event.v1002006.is(ctx)) {
+  //     const { username } = event.v1002006.decode(ctx)
+  //     return { username }
+  // }
+  //     const { username } = event.v1002006.decode(ctx)
+  //     return { username }
+  return { username: '' }
+}
+
+export function getUsernameUnbindEvent(_ctx: Context) {
+  const ctx = _ctx.event
+  // Uncomment once the event is available in types
+  // const event = events.usernameUnbound
+  // if (event.v1002006.is(ctx)) {
+  //     const { username } = event.v1002006.decode(ctx)
+  //     return { username }
+  // }
+  //     const { username } = event.v1002006.decode(ctx)
+  //     return { username }
+  return { username: '' }
+}
+
 // DOABLE Events
 export function getJudgementRequestedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.judgementRequested
   if (event.v1002006.is(ctx)) {
     const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
@@ -275,7 +313,7 @@ export function getJudgementUnrequestedEvent(_ctx: Context) {
   return { who: addressOf(who), registrar }
 }
 
-export function getDanglingUsernameRemovedEvent(_ctx: Context) {
+export function getRemoveDanglingUsernameEvent(_ctx: Context) {
   const ctx = _ctx.call
   const event = events.danglingUsernameRemoved
   if (event.v1002006.is(ctx)) {
@@ -297,15 +335,26 @@ export function getSetFeeCall(_ctx: Context) {
   return { index, fee }
 }
 
+export function getSetFieldCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.setFields
+  if (call.v1002006.is(ctx)) {
+    const { index, fields } = call.v1002006.decode(ctx)
+    return { index, fields }
+  }
+  const { index, fields } = call.v1002006.decode(ctx)
+  return { index, fields }
+}
+
 export function getSetAccountCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.setAccountId
   if (call.v1002006.is(ctx)) {
     const { index, new: account } = call.v1002006.decode(ctx)
-    return { index, account: fromMulticall(account) }
+    return { index, account: fromMulticall(account) as string }
   }
   const { index, new: account } = call.v1002006.decode(ctx)
-  return { index, account: fromMulticall(account) }
+  return { index, account: fromMulticall(account) as string }
 }
 
 // export function getJudgementGivenEvent(_ctx: Context) {
@@ -320,15 +369,14 @@ export function getSetAccountCall(_ctx: Context) {
 // }
 
 export function getRegistrarAddedEvent(_ctx: Context) {
-  return { index: null }
-  // const ctx = _ctx.event
-  // const event = events.registrarAdded
-  // if (event.v1002006.is(ctx)) {
-  //     const { registrarIndex: index } = event.v1002006.decode(ctx)
-  //     return { index }
-  // }
-  // const { registrarIndex: index } = event.v1002006.decode(ctx)
-  // return { index }
+  const ctx = _ctx.event
+  const event = events.registrarAdded
+  if (event.v1002006.is(ctx)) {
+    const { registrarIndex: index } = event.v1002006.decode(ctx)
+    return { index }
+  }
+  const { registrarIndex: index } = event.v1002006.decode(ctx)
+  return { index }
 }
 
 // export function getSubIdentityAddedEvent(_ctx: Context) {
@@ -364,42 +412,6 @@ export function getRegistrarAddedEvent(_ctx: Context) {
 //     return { authority: addressOf(authority) }
 // }
 
-// export function getUsernameUnboundEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     // Uncomment once the event is available in types
-//     // const event = events.usernameUnbound
-//     // if (event.v1002006.is(ctx)) {
-//     //     const { who, username } = event.v1002006.decode(ctx)
-//     //     return { who: addressOf(who), username }
-//     // }
-//     // const { who, username } = event.v1002006.decode(ctx)
-//     return { who: null, username: null }
-// }
-
-// export function getUsernameRemovedEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     // Uncomment once the event is available in types
-//     // const event = events.usernameRemoved
-//     // if (event.v1002006.is(ctx)) {
-//     //     const { who, username } = event.v1002006.decode(ctx)
-//     //     return { who: addressOf(who), username }
-//     // }
-//     // const { who, username } = event.v1002006.decode(ctx)
-//     return { who: null, username: null }
-// }
-
-// export function getUsernameKilledEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     // Uncomment once the event is available in types
-//     // const event = events.usernameKilled
-//     // if (event.v1002006.is(ctx)) {
-//     //     const { who, username } = event.v1002006.decode(ctx)
-//     //     return { who: addressOf(who), username }
-//     // }
-//     // const { who, username } = event.v1002006.decode(ctx)
-//     return { who: null, username: null }
-// }
-
 // // Add missing call getters
 // export function getQuitSubCall(_ctx: Context) {
 //     const ctx = _ctx.call
@@ -431,13 +443,13 @@ export function getRegistrarAddedEvent(_ctx: Context) {
 //     return { target: null }
 // }
 
-// export function getAddRegistrarCall(_ctx: Context) {
-//     const ctx = _ctx.call
-//     const call = calls.addRegistrar
-//     if (call.v1002006.is(ctx)) {
-//         const { account } = call.v1002006.decode(ctx)
-//         return { account: fromMulticall(account) }
-//     }
-//     const { account } = call.v1002006.decode(ctx)
-//     return { account: fromMulticall(account) }
-// }
+export function getAddRegistrarCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.addRegistrar
+  if (call.v1002006.is(ctx)) {
+    const { account } = call.v1002006.decode(ctx)
+    return { account: fromMulticall(account) as string }
+  }
+  const { account } = call.v1002006.decode(ctx)
+  return { account: fromMulticall(account) as string }
+}
