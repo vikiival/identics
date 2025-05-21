@@ -1,14 +1,14 @@
 import {
   create,
   findByIdListAsMap as getMany,
-  getOrFail as get,
+  get,
 } from '@kodadot1/metasquid/entity'
 
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getSetIdentityCall, getSetSubsCall } from '../getters'
-import { Identity, Sub } from '../../model'
+import { ChainOrigin, Identity, Sub } from '../../model'
 
 const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 
@@ -24,10 +24,24 @@ export async function handleSubListSet(context: Context): Promise<void> {
   debug(OPERATION, call)
 
   const id = call.caller
-  // const identity = await get(context.store, Identity, id)
+  const identity = await get(context.store, Identity, id)
 
-  // const subs = call.subs.map(sub => create(Sub, sub.address, { name: sub.data, identity }))
+  if (!identity) {
+    skip(OPERATION, `Identity not found`)
+    return
+  }
+
+  const subs = call.subs.map((sub) =>
+    create(Sub, sub.address, {
+      name: sub.data,
+      identity,
+      blockNumber: BigInt(call.blockNumber),
+      createdAt: call.timestamp,
+      updatedAt: call.timestamp,
+      origin: ChainOrigin.PEOPLE,
+    })
+  )
 
   success(OPERATION, `${id}/${call.subs.length}`)
-  // await context.store.upsert(subs)
+  await context.store.upsert(subs)
 }
