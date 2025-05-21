@@ -59,7 +59,7 @@ export class Identity {
      * Jugdement
      */
     @Column_("varchar", {length: 10, nullable: true})
-    jugdement!: Judgement | undefined | null
+    judgement!: Judgement | undefined | null
 
     @IntColumn_({nullable: true})
     registrar!: number | undefined | null
