@@ -33,10 +33,10 @@ export enum IdentityEvent {
 }
 
 /**
-* Identity Pallet Calls
-* @enum {string}
-* @readonly
-*/
+ * Identity Pallet Calls
+ * @enum {string}
+ * @readonly
+ */
 export enum IdentityCall {
   setIdentity = 'Identity.set_identity',
   provideJudgement = 'Identity.provide_judgement',

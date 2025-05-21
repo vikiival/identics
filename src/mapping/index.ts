@@ -1,71 +1,116 @@
 import { logger } from '@kodadot1/metasquid/logger'
 
-import { Store } from "@subsquid/typeorm-store"
-import { IdentityCall as IdxCall, IdentityEvent as IdxEvent } from '../processable'
+import { Store } from '@subsquid/typeorm-store'
+import {
+  IdentityCall as IdxCall,
+  IdentityEvent as IdxEvent,
+} from '../processable'
 import { ProcessorContext } from '../processor'
-import { debug } from '../utils/logger'
+import { debug, error } from '../utils/logger'
 import { Context, SelectedCall, SelectedEvent } from '../utils/types'
 import * as idx from './identities'
 
-type EventHandlerFunction = <T extends SelectedEvent>(item: T, ctx: Context) => Promise<void>
-type CallHandlerFunction = <T extends SelectedCall>(item: T, ctx: Context) => Promise<void>
+type EventHandlerFunction = <T extends SelectedEvent>(
+  ctx: Context
+) => Promise<void>
+type CallHandlerFunction = <T extends SelectedCall>(
+  ctx: Context
+) => Promise<void>
+
+const eventHandlers: Record<string, EventHandlerFunction> = {
+  //   // [IdxEvent.setIdentity]: idx.handleIdentitySetEvent, // call
+  //   [IdxEvent.clearIdentity]: idx.handleIdentityClearedEvent,
+  //   [IdxEvent.killIdentity]: idx.handleIdentityKilledEvent,
+  //   [IdxEvent.addSubIdentity]: idx.handleSubIdentityAddedEvent,
+  //   [IdxEvent.setSubIdentities]: idx.handleSubIdentitiesSetEvent,
+  //   [IdxEvent.renameSubIdentity]: idx.handleSubIdentityRenamedEvent,
+  //   [IdxEvent.removeSubIdentity]: idx.handleSubIdentityRemovedEvent,
+  //   [IdxEvent.revokeSubIdentity]: idx.handleSubIdentityRevokedEvent,
+  //   [IdxEvent.requestJudgement]: idx.handleJudgementRequestedEvent,
+  //   [IdxEvent.giveJudgement]: idx.handleJudgementGivenEvent,
+  //   [IdxEvent.addRegistrar]: idx.handleRegistrarAddedEvent,
+  //   [IdxEvent.unrequestJudgement]: idx.handleJudgementUnrequestedEvent,
+  //   [IdxEvent.addAuthority]: idx.handleAuthorityAddedEvent,
+  //   [IdxEvent.removeAuthority]: idx.handleAuthorityRemovedEvent,
+  //   // [IdxEvent.setUsername]: idx.handleUsernameSetEvent,
+  //   // [IdxEvent.queueUsername]: idx.handleUsernameQueuedEvent,
+  //   // [IdxEvent.expirePreapproval]: idx.handlePreapprovalExpiredEvent,
+  //   // [IdxEvent.setPrimaryUsername]: idx.handlePrimaryUsernameSetEvent,
+  //   // [IdxEvent.removeDanglingUsername]: idx.handleDanglingUsernameRemovedEvent,
+  //   // [IdxEvent.unbindUsername]: idx.handleUsernameUnboundEvent,
+  //   // [IdxEvent.removeUsername]: idx.handleUsernameRemovedEvent,
+  //   // [IdxEvent.killUsername]: idx.handleUsernameKilledEvent
+}
+
+const callHandlers: Record<string, CallHandlerFunction> = {
+  //   [IdxCall.setIdentity]: idx.handleIdentitySet,
+  //   // [IdxCall.clearIdentity]: idx.handleIdentityClear,
+  //   // [IdxCall.killIdentity]: idx.handleIdentityKill,
+  //   [IdxCall.provideJudgement]: idx.handleJudgementProvide,
+  //   [IdxCall.addSub]: idx.handleSubAdd,
+  //   [IdxCall.setSubs]: idx.handleSubListSet,
+  //   [IdxCall.renameSub]: idx.handleSubRename,
+  //   // [IdxCall.removeSub]: idx.handleSubRemove,
+  //   // [IdxCall.quitSub]: idx.handleSubQuit,
+  //   [IdxCall.addUsernameAuthority]: idx.handleUsernameAuthorityAdd,
+  //   [IdxCall.removeUsernameAuthority]: idx.handleUsernameAuthorityRemove,
+  //   [IdxCall.addRegistrar]: idx.handleRegistrarAdd,
+  //   [IdxCall.setFee]: idx.handleFeeSet,
+  //   [IdxCall.setFields]: idx.handleFieldSet,
+  //   [IdxCall.setAccountId]: idx.handleAccountIdSet,
+  //   // [IdxCall.requestJudgement]: idx.handleJudgementRequest,
+  //   // [IdxCall.cancelRequest]: idx.handleJudgementRequestCancel,
+  //   // [IdxCall.setUsernameFor]: idx.handleUsernameSetFor,
+  //   // [IdxCall.acceptUsername]: idx.handleUsernameAccept,
+  //   // [IdxCall.setPrimaryUsername]: idx.handleUsernamePrimarySet,
+  //   // [IdxCall.removeExpiredApproval]: idx.handleUsernameExpiredApprovalRemove,
+  //   // [IdxCall.removeDanglingUsername]: idx.handleUsernameDanglingRemove
+}
 
 /**
  * Main entry point for processing events
  * @param item - the event to process
  * @param ctx - the context for the event
  **/
-export async function events<T extends SelectedEvent>(item: T, ctx: Context): Promise<void> {
-  switch (item.name) {
-    case IdxEvent.setIdentity:
-      logger.info(`Processing event ${item.name}`)
-      debug(`EVENT::${item.name}`, item, true)
-      break
-    default:
-      logger.error(`Unknown event ${item.name}`)
-      // throw new Error(`Unknown event ${item.name}`)
+export async function events<T extends SelectedEvent>(
+  item: T,
+  ctx: Context
+): Promise<void> {
+  const handler = eventHandlers[item.name as IdxEvent]
+  if (!handler) {
+    logger.error(`Unknown event ${item.name}`)
+    debug(`EVENT::${item.name}`, item, true)
+    return
   }
+
+  return handler(ctx)
 }
 
-export async function calls<T extends SelectedCall>(item: T, ctx: Context): Promise<void> {
-  switch (item.name) {
-    case IdxCall.setIdentity:
-      await idx.handleIdentitySet(ctx)
-      break
-    case IdxCall.provideJudgement:
-      await idx.handleJudgementProvide(ctx)
-      break
-    case IdxCall.addSub:
-      await idx.handleSubAdd(ctx)
-      break
-    case IdxCall.setSubs:
-      await idx.handleSubListSet(ctx)
-      break
-    case IdxCall.renameSub:
-      await idx.handleSubRename(ctx)
-      break
-    case IdxCall.addUsernameAuthority:
-      await idx.handleUsernameAuthorityAdd(ctx)
-    case IdxCall.removeUsernameAuthority:
-      await idx.handleUsernameAuthorityRemove(ctx)
-    default:
-      debug(`CALL::${item.name}`, item, true)
-      throw new Error(`Unknown call ${item.name}`)
+export async function calls<T extends SelectedCall>(
+  item: T,
+  ctx: Context
+): Promise<void> {
+  const handler = callHandlers[item.name as IdxCall]
+  if (!handler) {
+    logger.error(`Unknown call ${item.name}`)
+    debug(`CALL::${item.name}`, item, true)
+    return
   }
+
+  return handler(ctx)
 }
 
 /**
  * mainFrame is the main entry point for processing a batch of blocks
-**/
+ **/
 export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
   const start = ctx.blocks[0].header.height
 
   logger.info(
-    `Processing ${ctx.blocks.length} blocks from ${ctx.blocks[0].header.height} to ${
-      ctx.blocks[ctx.blocks.length - 1].header.height
-    }`
+    `Processing ${ctx.blocks.length} blocks from ${
+      ctx.blocks[0].header.height
+    } to ${ctx.blocks[ctx.blocks.length - 1].header.height}`
   )
-  
 
   for (const block of ctx.blocks) {
     for (const call of block.calls) {
@@ -81,7 +126,16 @@ export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
 
     for (const event of block.events) {
       logger.debug(`Processing event: ${event.name}`)
-      debug(`EVENT::${event.name}`, event, true)
+      if (!event.call) {
+        throw new Error(`${event.name} does not have a call`)
+      }
+      await events(event, {
+        event: event,
+        block: block.header,
+        store: ctx.store,
+        extrinsic: event.extrinsic,
+        call: event.call as SelectedCall,
+      })
     }
   }
 
@@ -89,6 +143,6 @@ export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
     const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
     const lastDate = new Date(lastBlock.timestamp || Date.now())
     logger.info(`Found head block, updating cache`)
-    // await updateOfferCache(lastDate, lastBlock.height, ctx.store)  
+    // await updateOfferCache(lastDate, lastBlock.height, ctx.store)
   }
 }

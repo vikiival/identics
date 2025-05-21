@@ -1,5 +1,6 @@
 export * from "./identity.model"
 export * from "./_judgement"
+export * from "./_chainOrigin"
 export * from "./sub.model"
 export * from "./username.model"
 export * from "./event.model"

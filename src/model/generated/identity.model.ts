@@ -1,8 +1,9 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, OneToMany as OneToMany_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, Index as Index_, OneToMany as OneToMany_, IntColumn as IntColumn_, BigIntColumn as BigIntColumn_, DateTimeColumn as DateTimeColumn_, BooleanColumn as BooleanColumn_} from "@subsquid/typeorm-store"
 import {Username} from "./username.model"
 import {Event} from "./event.model"
 import {Sub} from "./sub.model"
 import {Judgement} from "./_judgement"
+import {ChainOrigin} from "./_chainOrigin"
 
 @Entity_()
 export class Identity {
@@ -65,4 +66,25 @@ export class Identity {
 
     @StringColumn_({nullable: true})
     hash!: string | undefined | null
+
+    /**
+     * Basic
+     */
+    @Index_()
+    @BigIntColumn_({nullable: true})
+    blockNumber!: bigint | undefined | null
+
+    @Index_()
+    @DateTimeColumn_({nullable: false})
+    updatedAt!: Date
+
+    @Index_()
+    @DateTimeColumn_({nullable: false})
+    createdAt!: Date
+
+    @Column_("varchar", {length: 6, nullable: false})
+    origin!: ChainOrigin
+
+    @BooleanColumn_({nullable: false})
+    burned!: boolean
 }

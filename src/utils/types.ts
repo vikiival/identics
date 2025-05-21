@@ -1,12 +1,12 @@
 import {
-  DataHandlerContext,
-  SubstrateBatchProcessorFields,
   Block as _Block,
+  BlockHeader,
   Call as _Call,
+  DataHandlerContext,
   Event as _Event,
   Extrinsic as _Extrinsic,
   type SubstrateBatchProcessor as SubstrateProcessor,
-  BlockHeader
+  SubstrateBatchProcessorFields,
 } from '@subsquid/substrate-processor'
 
 import { Store as SquidStore } from '@subsquid/typeorm-store'
@@ -20,24 +20,23 @@ export type BaseCall = {
   name?: string
 }
 
-
 export const fieldSelection = {
   block: {
-    timestamp: true
+    timestamp: true,
   },
   extrinsic: {
     signature: true,
   },
   call: {
-      name: true,
-      args: true,
-      origin: true,
-      extrinsic: true
+    name: true,
+    args: true,
+    origin: true,
   },
   event: {
-      name: true,
-      args: true,
-  }
+    name: true,
+    args: true,
+    call: true,
+  },
 } as const
 
 export type SelectedFields = typeof fieldSelection
@@ -49,14 +48,20 @@ export type Call = _Call<Fields>
 export type Extrinsic = _Extrinsic<Fields>
 
 export type ManagedStore = SquidStore & { em: () => EntityManager }
-export type Store =  SquidStore // & { em: () => EntityManager }
+export type Store = SquidStore // & { em: () => EntityManager }
 export type BatchContext<S = Store> = DataHandlerContext<S, Fields>
-export type SelectedBlock = Pick<BlockHeader<Fields>, 'height' | 'timestamp' | 'hash'>
+export type SelectedBlock = Pick<
+  BlockHeader<Fields>,
+  'height' | 'timestamp' | 'hash'
+>
 export type SelectedEvent = Pick<Event, 'name' | 'args'>
 export type SelectedExtrinsic = Pick<Extrinsic, 'signature' | 'call'>
-export type SelectedCall = Pick<Call, 'name' | 'origin' | 'extrinsic' | 'args' | 'block'>
+export type SelectedCall = Pick<
+  Call,
+  'name' | 'origin' | 'extrinsic' | 'args' | 'block'
+>
 
-export type Context<S = Store>  = {
+export type Context<S = Store> = {
   store: S
   block: SelectedBlock
   event: SelectedEvent
@@ -64,6 +69,8 @@ export type Context<S = Store>  = {
   call: SelectedCall
   // log: Logger
 }
+
+export type EventContext<S = Store> = Omit<Context<S>, 'call'>
 
 export type Optional<T> = T | null
 

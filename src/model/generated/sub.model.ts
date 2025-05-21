@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, ManyToOne as ManyToOne_, Index as Index_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, ManyToOne as ManyToOne_, Index as Index_, BigIntColumn as BigIntColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Identity} from "./identity.model"
+import {ChainOrigin} from "./_chainOrigin"
 
 @Entity_()
 export class Sub {
@@ -16,4 +17,19 @@ export class Sub {
     @Index_()
     @ManyToOne_(() => Identity, {nullable: true})
     identity!: Identity
+
+    @Index_()
+    @BigIntColumn_({nullable: true})
+    blockNumber!: bigint | undefined | null
+
+    @Index_()
+    @DateTimeColumn_({nullable: false})
+    updatedAt!: Date
+
+    @Index_()
+    @DateTimeColumn_({nullable: false})
+    createdAt!: Date
+
+    @Column_("varchar", {length: 6, nullable: false})
+    origin!: ChainOrigin
 }

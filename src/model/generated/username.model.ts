@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BooleanColumn as BooleanColumn_, StringColumn as StringColumn_, Index as Index_, ManyToOne as ManyToOne_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BooleanColumn as BooleanColumn_, StringColumn as StringColumn_, Index as Index_, ManyToOne as ManyToOne_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Identity} from "./identity.model"
 
 @Entity_()
@@ -20,4 +20,8 @@ export class Username {
     @Index_()
     @ManyToOne_(() => Identity, {nullable: true})
     identity!: Identity
+
+    @Index_()
+    @DateTimeColumn_({nullable: false})
+    createdAt!: Date
 }
