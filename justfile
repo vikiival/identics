@@ -91,3 +91,6 @@ dump NAME=default:
 check: codegen build
 
 kek: bug quick
+
+fmt:
+	deno fmt --no-semicolons --single-quote src/mappings src/*.ts
