@@ -66,7 +66,7 @@ const callHandlers: Record<string, CallHandlerFunction> = {
   // [IdxCall.setUsernameFor]: idx.handleUsernameSetFor,
   // [IdxCall.acceptUsername]: idx.handleUsernameAccept,
   // [IdxCall.setPrimaryUsername]: idx.handleUsernamePrimarySet,
-  // [IdxCall.removeExpiredApproval]: idx.handleUsernameExpiredApprovalRemove,
+  [IdxCall.removeExpiredApproval]: usrn.handleExpiredApprovalRemove,
   // [IdxCall.removeDanglingUsername]: idx.handleUsernameDanglingRemove
 }
 
