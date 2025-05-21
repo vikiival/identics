@@ -1,9 +1,11 @@
+import { get } from '@kodadot1/metasquid/entity'
+import { Registrar } from '../../model'
 import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
+import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getSetAccountCall } from '../getters'
 
-const OPERATION = `CALL::SET_FEE`
+const OPERATION = `CALL::SET_ACCOUNT`
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -13,9 +15,20 @@ const OPERATION = `CALL::SET_FEE`
  */
 export async function handleAccountIdSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getSetAccountCall)
-  debug(OPERATION, event)
+  const call = unwrap(context, getSetAccountCall)
+  debug(OPERATION, call)
 
-  success(OPERATION, `OK`)
-  // await context.store.save(final)
+  const id = call.index.toString()
+  const final = await get(context.store, Registrar, id)
+
+  if (!final) {
+    skip(OPERATION, `Registrar not found: ${id}`)
+    return
+  }
+
+  final.address = call.account
+  final.updatedAt = call.timestamp
+
+  success(OPERATION, `${final.id}/${final.address}`)
+  await context.store.save(final)
 }
