@@ -21,7 +21,7 @@ type CallHandlerFunction = <T extends SelectedCall>(
 
 const eventHandlers: Record<string, EventHandlerFunction> = {
   //   // [IdxEvent.setIdentity]: idx.handleIdentitySetEvent, // call
-  //   [IdxEvent.clearIdentity]: idx.handleIdentityClearedEvent,
+  [IdxEvent.clearIdentity]: idx.handleIdentityClear,
   //   [IdxEvent.killIdentity]: idx.handleIdentityKilledEvent,
   //   [IdxEvent.addSubIdentity]: idx.handleSubIdentityAddedEvent,
   //   [IdxEvent.setSubIdentities]: idx.handleSubIdentitiesSetEvent,
@@ -46,7 +46,7 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
 
 const callHandlers: Record<string, CallHandlerFunction> = {
   [IdxCall.setIdentity]: idx.handleIdentitySet,
-  //   // [IdxCall.clearIdentity]: idx.handleIdentityClear,
+  // [IdxCall.clearIdentity]: idx.handleIdentityClear,
   //   // [IdxCall.killIdentity]: idx.handleIdentityKill,
   [IdxCall.provideJudgement]: jud.handleJudgementProvide,
   //   [IdxCall.addSub]: idx.handleSubAdd,
