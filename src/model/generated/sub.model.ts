@@ -1,6 +1,7 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, ManyToOne as ManyToOne_, Index as Index_, BigIntColumn as BigIntColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Identity} from "./identity.model"
 import {ChainOrigin} from "./_chainOrigin"
+import {AddressType} from "./_addressType"
 
 @Entity_()
 export class Sub {
@@ -32,4 +33,7 @@ export class Sub {
 
     @Column_("varchar", {length: 6, nullable: false})
     origin!: ChainOrigin
+
+    @Column_("varchar", {length: 9, nullable: true})
+    type!: AddressType | undefined | null
 }
