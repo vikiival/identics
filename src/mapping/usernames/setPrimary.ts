@@ -1,6 +1,6 @@
 import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { Identity, Username } from '../../model'
+import { Identity, Username, UsernameStatus } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending } from '../../utils/logger'
 import { Context } from '../../utils/types'
@@ -25,6 +25,9 @@ export async function handlePrimaryUsernameSet(
   const final = await getOrCreate(context.store, Username, id, {})
 
   final.createdAt = event.timestamp
+  final.primary = true
+  final.name = event.username
+  final.status = UsernameStatus.Active
 
   const identity = await get(context.store, Identity, event.who)
   final.identity = identity
