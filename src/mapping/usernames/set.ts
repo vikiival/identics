@@ -9,7 +9,7 @@ import {
   getSetSubsCall,
   getUsernameSetEvent,
 } from '../getters'
-import { Identity, Username } from '../../model'
+import { Identity, Username, UsernameStatus } from '../../model'
 
 const OPERATION = `CALL::SET_USERNAME` //Action.CREATE
 
@@ -28,7 +28,12 @@ export async function handleUsernameSet(context: Context): Promise<void> {
   const final = await getOrCreate(context.store, Username, id, {})
 
   final.createdAt = event.timestamp
+  final.primary = false
+  final.name = event.username
+  final.status = UsernameStatus.Active
 
   const identity = await get(context.store, Identity, event.who)
   final.identity = identity
+
+  await context.store.save(final)
 }
