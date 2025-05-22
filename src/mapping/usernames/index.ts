@@ -1,5 +1,6 @@
-export * from './set'
 export * from './addAuthority'
+export * from './removeApproval'
 export * from './removeAuthority'
 export * from './removeDangling'
+export * from './set'
 export * from './setPrimary'
