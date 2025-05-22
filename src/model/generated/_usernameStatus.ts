@@ -1,5 +1,5 @@
 export enum UsernameStatus {
-    Available = "Available",
+    Active = "Active",
     Unbinding = "Unbinding",
     Queued = "Queued",
     Removed = "Removed",
