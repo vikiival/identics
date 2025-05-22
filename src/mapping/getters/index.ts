@@ -165,7 +165,7 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
 
 // OK Events
 export function getIdentityClearedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.identityCleared
   if (event.v1002006.is(ctx)) {
     const { who } = event.v1002006.decode(ctx)
@@ -176,7 +176,7 @@ export function getIdentityClearedEvent(_ctx: Context) {
 }
 
 export function getIdentityKilledEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.identityKilled
   if (event.v1002006.is(ctx)) {
     const { who } = event.v1002006.decode(ctx)
@@ -187,7 +187,7 @@ export function getIdentityKilledEvent(_ctx: Context) {
 }
 
 export function getSubIdentityRemovedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.subIdentityRemoved
   if (event.v1002006.is(ctx)) {
     const { sub, main } = event.v1002006.decode(ctx)
@@ -198,7 +198,7 @@ export function getSubIdentityRemovedEvent(_ctx: Context) {
 }
 
 export function getSubIdentityAddEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.subIdentityAdded
   if (event.v1002006.is(ctx)) {
     const { sub, main } = event.v1002006.decode(ctx)
@@ -209,7 +209,7 @@ export function getSubIdentityAddEvent(_ctx: Context) {
 }
 
 export function getSubIdentityRevokedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.subIdentityRevoked
   if (event.v1002006.is(ctx)) {
     const { sub, main } = event.v1002006.decode(ctx)
@@ -220,7 +220,7 @@ export function getSubIdentityRevokedEvent(_ctx: Context) {
 }
 
 export function getUsernameSetEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.usernameSet
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
@@ -231,7 +231,7 @@ export function getUsernameSetEvent(_ctx: Context) {
 }
 
 export function getUsernameQueuedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.usernameQueued
   if (event.v1002006.is(ctx)) {
     const { who, username, expiration } = event.v1002006.decode(ctx)
@@ -242,7 +242,7 @@ export function getUsernameQueuedEvent(_ctx: Context) {
 }
 
 export function getPreapprovalExpiredEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.preapprovalExpired
   if (event.v1002006.is(ctx)) {
     const { whose: who } = event.v1002006.decode(ctx)
@@ -253,7 +253,7 @@ export function getPreapprovalExpiredEvent(_ctx: Context) {
 }
 
 export function getPrimaryUsernameSetEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.primaryUsernameSet
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
@@ -264,7 +264,7 @@ export function getPrimaryUsernameSetEvent(_ctx: Context) {
 }
 
 export function getUsernameRemoveEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   return { username: '' }
   // const event = events.usernameRemoved
   // if (event.v1002006.is(ctx)) {
@@ -314,7 +314,7 @@ export function getJudgementRequestedEvent(_ctx: Context) {
 }
 
 export function getJudgementUnrequestedEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.judgementUnrequested
   if (event.v1002006.is(ctx)) {
     const { who, registrarIndex: registrar } = event.v1002006.decode(ctx)
@@ -325,7 +325,7 @@ export function getJudgementUnrequestedEvent(_ctx: Context) {
 }
 
 export function getRemoveDanglingUsernameEvent(_ctx: Context) {
-  const ctx = _ctx.call
+  const ctx = _ctx.event
   const event = events.danglingUsernameRemoved
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
