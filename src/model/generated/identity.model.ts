@@ -4,6 +4,7 @@ import {Event} from "./event.model"
 import {Sub} from "./sub.model"
 import {Judgement} from "./_judgement"
 import {ChainOrigin} from "./_chainOrigin"
+import {AddressType} from "./_addressType"
 
 @Entity_()
 export class Identity {
@@ -87,4 +88,7 @@ export class Identity {
 
     @BooleanColumn_({nullable: false})
     burned!: boolean
+
+    @Column_("varchar", {length: 9, nullable: true})
+    type!: AddressType | undefined | null
 }
