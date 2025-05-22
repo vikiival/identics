@@ -6,7 +6,7 @@ import { debug, pending, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getUsernameRemoveEvent } from '../getters'
 
-const OPERATION = `EVENT::SET_USERNAME`
+const OPERATION = `EVENT::REMOVE_USERNAME`
 
 /**
  * Handle the identity create call (Identity.set_identity)
