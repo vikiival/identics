@@ -5,6 +5,7 @@ import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getSetIdentityCall } from '../getters'
 import { ChainOrigin, Identity } from '../../model'
+import { addressTypeOf } from '../../utils/helper'
 
 const OPERATION = Action.CREATE
 
@@ -39,6 +40,8 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   final.twitter = call.twitter
   final.github = call.github
   final.discord = call.discord
+
+  final.type = addressTypeOf(id)
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
