@@ -23,11 +23,9 @@ export async function handleUsernameAuthorityRemove(
   const id = call.authority
   const final = await get(context.store, Authority, id)
 
-  if (!final) {
-    skip(OPERATION, `Authority not found: ${id}`)
-    return
+  if (final) {
+    await context.store.remove(final)
   }
 
-  await context.store.remove(final)
   success(OPERATION, `${id}/${call.suffix}`)
 }

@@ -1,14 +1,10 @@
-import {
-  create,
-  findByIdListAsMap as getMany,
-  get,
-} from '@kodadot1/metasquid/entity'
+import { create, get } from '@kodadot1/metasquid/entity'
 
+import { ChainOrigin, Identity, Sub } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import { getSetIdentityCall, getSetSubsCall } from '../getters'
-import { ChainOrigin, Identity, Sub } from '../../model'
+import { Context } from '../../utils/types'
+import { getSetSubsCall } from '../getters'
 
 const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 

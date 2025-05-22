@@ -20,11 +20,9 @@ export async function handleSubQuit(context: Context): Promise<void> {
 
   const id = event.sub
   const final = await get(context.store, Sub, id)
-  if (!final) {
-    skip(OPERATION, `Sub not found: ${id}`)
-    return
+  if (final) {
+    await context.store.remove(final)
   }
 
   success(OPERATION, `${event.main}/${id}`)
-  await context.store.remove(final)
 }
