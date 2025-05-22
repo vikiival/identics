@@ -32,10 +32,15 @@ export async function handleIdentityClear(context: Context): Promise<void> {
   final.judgement = undefined
   final.hash = undefined
 
-  await context.store.remove(
-    Sub,
-    final.subs.map((sub) => sub.id)
-  )
+  const subCount = final.subs.length
 
-  success(OPERATION, `OK`)
+  if (subCount) {
+    await context.store.remove(
+      Sub,
+      final.subs.map((sub) => sub.id)
+    )
+  }
+
+  await context.store.save(final)
+  success(OPERATION, `${id}/${subCount}`)
 }
