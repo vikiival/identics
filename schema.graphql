@@ -23,6 +23,7 @@ type Identity @entity {
   createdAt: DateTime! @index
   origin: ChainOrigin!
   burned: Boolean!
+  type: AddressType
 }
 
 type Registrar @entity {
@@ -54,6 +55,7 @@ type Sub @entity {
   updatedAt: DateTime! @index
   createdAt: DateTime! @index
   origin: ChainOrigin!
+  type: AddressType
 }
 
 type Username @entity {
@@ -116,10 +118,15 @@ enum Judgement {
 }
 
 enum UsernameStatus {
-  Available
+  Active
   Unbinding
   Queued
   Removed
+}
+
+enum AddressType {
+  Ethereum
+  Substrate
 }
 
 

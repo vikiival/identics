@@ -61,6 +61,11 @@ export type SelectedCall = Pick<
   'name' | 'origin' | 'extrinsic' | 'args' | 'block'
 >
 
+enum ChainOrigin {
+  RELAY = 'RELAY',
+  PEOPLE = 'PEOPLE',
+}
+
 export type Context<S = Store> = {
   store: S
   block: SelectedBlock
