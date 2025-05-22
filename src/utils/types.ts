@@ -72,6 +72,7 @@ export type Context<S = Store> = {
   event: SelectedEvent
   extrinsic: SelectedExtrinsic | undefined
   call: SelectedCall
+  origin?: ChainOrigin
   // log: Logger
 }
 
