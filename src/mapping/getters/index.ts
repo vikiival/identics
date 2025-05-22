@@ -1,14 +1,37 @@
 import { identity as calls } from '../../types/people/calls'
 import { identity as events } from '../../types/people/events'
-import { Data, Data_None, MultiAddress } from '../../types/people/v1002006'
+import {
+  Data,
+  Data_BlakeTwo256,
+  Data_Keccak256,
+  Data_None,
+  Data_Sha256,
+  Data_ShaThree256,
+  MultiAddress,
+} from '../../types/people/v1002006'
 import { addressOf, unHex } from '../../utils/helper'
 import { debug } from '../../utils/logger'
 import { Context } from '../../utils/types'
 
 // UTILITY
 function fromData(data: Data): string | undefined {
-  if (isEmpty(data)) return undefined
+  if (isEmpty(data)) {
+    return undefined
+  }
+
+  if (isHashed(data)) {
+    return data.value
+  }
+
   return unHex(data.value)
+}
+
+function isHashed(
+  data: Data
+): data is Data_BlakeTwo256 | Data_Keccak256 | Data_ShaThree256 | Data_Sha256 {
+  return ['BlakeTwo256', 'Keccak256', 'ShaThree256', 'Sha256'].includes(
+    data.__kind
+  )
 }
 
 function isEmpty<T>(data: Data): data is Data_None {
@@ -60,6 +83,10 @@ export function getSetIdentityCall(_ctx: Context) {
 function fromMulticall(ma: MultiAddress) {
   if (ma.__kind === 'Index') {
     return null
+  }
+
+  if (ma.__kind === 'Address20') {
+    return ma.value
   }
 
   debug(`CALL::fromMulticall::${ma.__kind}`, ma)
@@ -224,10 +251,10 @@ export function getUsernameSetEvent(_ctx: Context) {
   const event = events.usernameSet
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
-    return { who: addressOf(who), username }
+    return { who: addressOf(who), username: unHex(username) }
   }
   const { who, username } = event.v1002006.decode(ctx)
-  return { who: addressOf(who), username }
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getUsernameQueuedEvent(_ctx: Context) {
@@ -235,10 +262,10 @@ export function getUsernameQueuedEvent(_ctx: Context) {
   const event = events.usernameQueued
   if (event.v1002006.is(ctx)) {
     const { who, username, expiration } = event.v1002006.decode(ctx)
-    return { who: addressOf(who), username, expiration }
+    return { who: addressOf(who), username: unHex(username), expiration }
   }
   const { who, username, expiration } = event.v1002006.decode(ctx)
-  return { who: addressOf(who), username, expiration }
+  return { who: addressOf(who), username: unHex(username), expiration }
 }
 
 export function getPreapprovalExpiredEvent(_ctx: Context) {
@@ -257,10 +284,10 @@ export function getPrimaryUsernameSetEvent(_ctx: Context) {
   const event = events.primaryUsernameSet
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
-    return { who: addressOf(who), username }
+    return { who: addressOf(who), username: unHex(username) }
   }
   const { who, username } = event.v1002006.decode(ctx)
-  return { who: addressOf(who), username }
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getUsernameRemoveEvent(_ctx: Context) {
@@ -329,10 +356,10 @@ export function getRemoveDanglingUsernameEvent(_ctx: Context) {
   const event = events.danglingUsernameRemoved
   if (event.v1002006.is(ctx)) {
     const { who, username } = event.v1002006.decode(ctx)
-    return { who: addressOf(who), username }
+    return { who: addressOf(who), username: unHex(username) }
   }
   const { who, username } = event.v1002006.decode(ctx)
-  return { who: addressOf(who), username }
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getSetFeeCall(_ctx: Context) {
