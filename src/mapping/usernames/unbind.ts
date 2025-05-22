@@ -11,7 +11,7 @@ import {
 } from '../getters'
 import { Identity, Username } from '../../model'
 
-const OPERATION = `CALL::SET_USERNAME` //Action.CREATE
+const OPERATION = `CALL::UNBIND_USERNAME` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
