@@ -1,10 +1,11 @@
-import { create, get, getOrCreate } from '@kodadot1/metasquid/entity'
+import { create, get } from '@kodadot1/metasquid/entity'
 
-import { unwrap } from '../../utils/extract'
-import { debug, pending, skip, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import { getAddSubCall, getSetIdentityCall, getSetSubsCall } from '../getters'
 import { ChainOrigin, Identity, Sub } from '../../model'
+import { unwrap } from '../../utils/extract'
+import { subNameOf } from '../../utils/helper'
+import { debug, pending, skip, success } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getAddSubCall } from '../getters'
 
 const OPERATION = `CALL::ADD_SUB` //Action.CREATE
 
@@ -29,7 +30,7 @@ export async function handleSubAdd(context: Context): Promise<void> {
   }
 
   const sub = create(Sub, call.address, {
-    name: call.data,
+    name: call.data || subNameOf(id, call.address),
     identity,
     blockNumber: BigInt(call.blockNumber),
     createdAt: call.timestamp,
