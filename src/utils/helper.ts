@@ -1,12 +1,11 @@
 import {
   ArchiveCallWithOptionalValue,
   Optional,
-  Store,
 } from '@kodadot1/metasquid/types'
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
-import { AddressType } from '../model'
 import md5 from 'md5'
+import { AddressType } from '../model'
 
 const codec = 'polkadot'
 
