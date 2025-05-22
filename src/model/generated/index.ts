@@ -1,6 +1,7 @@
 export * from "./identity.model"
 export * from "./_judgement"
 export * from "./_chainOrigin"
+export * from "./_addressType"
 export * from "./registrar.model"
 export * from "./authority.model"
 export * from "./sub.model"
