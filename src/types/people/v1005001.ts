@@ -63,6 +63,4 @@ export interface MultiAddress_Raw {
 
 export type AccountId32 = Bytes
 
-export const BoundedVec = sts.bytes()
-
 export const AccountId32 = sts.bytes()

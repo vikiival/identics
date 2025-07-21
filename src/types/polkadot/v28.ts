@@ -238,8 +238,94 @@ export interface Data_ShaThree256 {
 
 export type H256 = Bytes
 
-export const LookupSource = sts.bytes()
+export const IdentityJudgement: sts.Type<IdentityJudgement> = sts.closedEnum(() => {
+    return  {
+        Erroneous: sts.unit(),
+        FeePaid: Balance,
+        KnownGood: sts.unit(),
+        LowQuality: sts.unit(),
+        OutOfDate: sts.unit(),
+        Reasonable: sts.unit(),
+        Unknown: sts.unit(),
+    }
+})
 
 export const Balance = sts.bigint()
 
+export type IdentityJudgement = IdentityJudgement_Erroneous | IdentityJudgement_FeePaid | IdentityJudgement_KnownGood | IdentityJudgement_LowQuality | IdentityJudgement_OutOfDate | IdentityJudgement_Reasonable | IdentityJudgement_Unknown
+
+export interface IdentityJudgement_Erroneous {
+    __kind: 'Erroneous'
+}
+
+export interface IdentityJudgement_FeePaid {
+    __kind: 'FeePaid'
+    value: Balance
+}
+
+export interface IdentityJudgement_KnownGood {
+    __kind: 'KnownGood'
+}
+
+export interface IdentityJudgement_LowQuality {
+    __kind: 'LowQuality'
+}
+
+export interface IdentityJudgement_OutOfDate {
+    __kind: 'OutOfDate'
+}
+
+export interface IdentityJudgement_Reasonable {
+    __kind: 'Reasonable'
+}
+
+export interface IdentityJudgement_Unknown {
+    __kind: 'Unknown'
+}
+
+export type Balance = bigint
+
+export const LookupSource: sts.Type<LookupSource> = sts.closedEnum(() => {
+    return  {
+        Address20: H160,
+        Address32: H256,
+        Id: AccountId,
+        Index: sts.number(),
+        Raw: sts.bytes(),
+    }
+})
+
 export const AccountId = sts.bytes()
+
+export const H160 = sts.bytes()
+
+export type LookupSource = LookupSource_Address20 | LookupSource_Address32 | LookupSource_Id | LookupSource_Index | LookupSource_Raw
+
+export interface LookupSource_Address20 {
+    __kind: 'Address20'
+    value: H160
+}
+
+export interface LookupSource_Address32 {
+    __kind: 'Address32'
+    value: H256
+}
+
+export interface LookupSource_Id {
+    __kind: 'Id'
+    value: AccountId
+}
+
+export interface LookupSource_Index {
+    __kind: 'Index'
+    value: number
+}
+
+export interface LookupSource_Raw {
+    __kind: 'Raw'
+    value: Bytes
+}
+
+export type AccountId = Bytes
+
+export type H160 = Bytes

@@ -1,30 +1,5 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
-export const MultiSignature: sts.Type<MultiSignature> = sts.closedEnum(() => {
-    return  {
-        Ecdsa: sts.bytes(),
-        Ed25519: sts.bytes(),
-        Sr25519: sts.bytes(),
-    }
-})
-
-export type MultiSignature = MultiSignature_Ecdsa | MultiSignature_Ed25519 | MultiSignature_Sr25519
-
-export interface MultiSignature_Ecdsa {
-    __kind: 'Ecdsa'
-    value: Bytes
-}
-
-export interface MultiSignature_Ed25519 {
-    __kind: 'Ed25519'
-    value: Bytes
-}
-
-export interface MultiSignature_Sr25519 {
-    __kind: 'Sr25519'
-    value: Bytes
-}
-
 export const MultiAddress: sts.Type<MultiAddress> = sts.closedEnum(() => {
     return  {
         Address20: sts.bytes(),
@@ -34,6 +9,8 @@ export const MultiAddress: sts.Type<MultiAddress> = sts.closedEnum(() => {
         Raw: sts.bytes(),
     }
 })
+
+export const AccountId32 = sts.bytes()
 
 export type MultiAddress = MultiAddress_Address20 | MultiAddress_Address32 | MultiAddress_Id | MultiAddress_Index | MultiAddress_Raw
 
@@ -62,7 +39,3 @@ export interface MultiAddress_Raw {
 }
 
 export type AccountId32 = Bytes
-
-export const BoundedVec = sts.bytes()
-
-export const AccountId32 = sts.bytes()

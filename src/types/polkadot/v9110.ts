@@ -2,8 +2,8 @@ import {sts, Result, Option, Bytes, BitSequence} from './support'
 
 export const Data: sts.Type<Data> = sts.closedEnum(() => {
     return  {
-        BlakeTwo256: H256,
-        Keccak256: H256,
+        BlakeTwo256: sts.bytes(),
+        Keccak256: sts.bytes(),
         None: sts.unit(),
         Raw0: sts.bytes(),
         Raw1: sts.bytes(),
@@ -38,23 +38,21 @@ export const Data: sts.Type<Data> = sts.closedEnum(() => {
         Raw7: sts.bytes(),
         Raw8: sts.bytes(),
         Raw9: sts.bytes(),
-        Sha256: H256,
-        ShaThree256: H256,
+        Sha256: sts.bytes(),
+        ShaThree256: sts.bytes(),
     }
 })
-
-export const H256 = sts.bytes()
 
 export type Data = Data_BlakeTwo256 | Data_Keccak256 | Data_None | Data_Raw0 | Data_Raw1 | Data_Raw10 | Data_Raw11 | Data_Raw12 | Data_Raw13 | Data_Raw14 | Data_Raw15 | Data_Raw16 | Data_Raw17 | Data_Raw18 | Data_Raw19 | Data_Raw2 | Data_Raw20 | Data_Raw21 | Data_Raw22 | Data_Raw23 | Data_Raw24 | Data_Raw25 | Data_Raw26 | Data_Raw27 | Data_Raw28 | Data_Raw29 | Data_Raw3 | Data_Raw30 | Data_Raw31 | Data_Raw32 | Data_Raw4 | Data_Raw5 | Data_Raw6 | Data_Raw7 | Data_Raw8 | Data_Raw9 | Data_Sha256 | Data_ShaThree256
 
 export interface Data_BlakeTwo256 {
     __kind: 'BlakeTwo256'
-    value: H256
+    value: Bytes
 }
 
 export interface Data_Keccak256 {
     __kind: 'Keccak256'
-    value: H256
+    value: Bytes
 }
 
 export interface Data_None {
@@ -228,18 +226,93 @@ export interface Data_Raw9 {
 
 export interface Data_Sha256 {
     __kind: 'Sha256'
-    value: H256
+    value: Bytes
 }
 
 export interface Data_ShaThree256 {
     __kind: 'ShaThree256'
-    value: H256
+    value: Bytes
 }
 
-export type H256 = Bytes
+export const Judgement: sts.Type<Judgement> = sts.closedEnum(() => {
+    return  {
+        Erroneous: sts.unit(),
+        FeePaid: sts.bigint(),
+        KnownGood: sts.unit(),
+        LowQuality: sts.unit(),
+        OutOfDate: sts.unit(),
+        Reasonable: sts.unit(),
+        Unknown: sts.unit(),
+    }
+})
 
-export const LookupSource = sts.bytes()
+export type Judgement = Judgement_Erroneous | Judgement_FeePaid | Judgement_KnownGood | Judgement_LowQuality | Judgement_OutOfDate | Judgement_Reasonable | Judgement_Unknown
 
-export const Balance = sts.bigint()
+export interface Judgement_Erroneous {
+    __kind: 'Erroneous'
+}
 
-export const AccountId = sts.bytes()
+export interface Judgement_FeePaid {
+    __kind: 'FeePaid'
+    value: bigint
+}
+
+export interface Judgement_KnownGood {
+    __kind: 'KnownGood'
+}
+
+export interface Judgement_LowQuality {
+    __kind: 'LowQuality'
+}
+
+export interface Judgement_OutOfDate {
+    __kind: 'OutOfDate'
+}
+
+export interface Judgement_Reasonable {
+    __kind: 'Reasonable'
+}
+
+export interface Judgement_Unknown {
+    __kind: 'Unknown'
+}
+
+export const MultiAddress: sts.Type<MultiAddress> = sts.closedEnum(() => {
+    return  {
+        Address20: sts.bytes(),
+        Address32: sts.bytes(),
+        Id: AccountId32,
+        Index: sts.unit(),
+        Raw: sts.bytes(),
+    }
+})
+
+export const AccountId32 = sts.bytes()
+
+export type MultiAddress = MultiAddress_Address20 | MultiAddress_Address32 | MultiAddress_Id | MultiAddress_Index | MultiAddress_Raw
+
+export interface MultiAddress_Address20 {
+    __kind: 'Address20'
+    value: Bytes
+}
+
+export interface MultiAddress_Address32 {
+    __kind: 'Address32'
+    value: Bytes
+}
+
+export interface MultiAddress_Id {
+    __kind: 'Id'
+    value: AccountId32
+}
+
+export interface MultiAddress_Index {
+    __kind: 'Index'
+}
+
+export interface MultiAddress_Raw {
+    __kind: 'Raw'
+    value: Bytes
+}
+
+export type AccountId32 = Bytes
