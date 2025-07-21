@@ -12,8 +12,8 @@ importers:
         specifier: 0.3.1-rc.0
         version: 0.3.1-rc.0(@subsquid/logger@1.4.0)(@subsquid/ss58@2.0.2)(@subsquid/substrate-processor@8.6.0(@subsquid/substrate-runtime@2.0.1))(@subsquid/typeorm-store@1.5.1(@subsquid/big-decimal@1.0.0)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2)))(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))
       '@subsquid/graphql-server':
-        specifier: ^4.10.0
-        version: 4.10.0(@subsquid/big-decimal@1.0.0)(bufferutil@4.0.9)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))(utf-8-validate@5.0.10)
+        specifier: ^4.11.0
+        version: 4.11.0(@subsquid/big-decimal@1.0.0)(bufferutil@4.0.9)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))(utf-8-validate@5.0.10)
       '@subsquid/ss58':
         specifier: ^2.0.2
         version: 2.0.2
@@ -272,12 +272,12 @@ packages:
   '@subsquid/graphiql-console@0.3.0':
     resolution: {integrity: sha512-C89mus6IXnNi0xMQrZqUFBZwLj8tbuq9lye8Gq/lHmmERAUpi6UsWEyLdJLx2mneZzF3JtY8eNiiZ16jmjtvfw==}
 
-  '@subsquid/graphql-server@4.10.0':
-    resolution: {integrity: sha512-/iIcPZAhQTWxN7vlZ3l6itRFRwJpe8zpAreof8P5j6rR98yVgBrsWobow2FbQBcgf2mZTl8wPLN4FYOZt2ZLLA==}
+  '@subsquid/graphql-server@4.11.0':
+    resolution: {integrity: sha512-QXQxT1zP2optQKaJU53Y4XxNEhrFO3F2KPPN6ZN/0C/hYui50wdtMAS6HTzeCKvlUTvqRio0fzzSEtFmNpjg/A==}
     hasBin: true
     peerDependencies:
       '@subsquid/big-decimal': ^1.0.0
-      class-validator: ^0.14.0
+      class-validator: ^0.14.2
       type-graphql: ^1.2.0-rc.1
       typeorm: ^0.3.17
     peerDependenciesMeta:
@@ -1937,7 +1937,7 @@ snapshots:
 
   '@subsquid/graphiql-console@0.3.0': {}
 
-  '@subsquid/graphql-server@4.10.0(@subsquid/big-decimal@1.0.0)(bufferutil@4.0.9)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))(utf-8-validate@5.0.10)':
+  '@subsquid/graphql-server@4.11.0(@subsquid/big-decimal@1.0.0)(bufferutil@4.0.9)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))(utf-8-validate@5.0.10)':
     dependencies:
       '@apollo/utils.keyvadapter': 1.1.2
       '@apollo/utils.keyvaluecache': 1.0.2
