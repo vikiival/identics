@@ -96,20 +96,11 @@ export function getSetIdentityCall(_ctx: Context) {
 export function getProvideJudgementCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.provideJudgement
-  if (call.v9300.is(ctx)) {
-    const { regIndex, target, judgement, identity } = call.v9300.decode(ctx)
+  if (call.v5.is(ctx)) {
+    const { regIndex, target, judgement } = call.v5.decode(ctx)
     return {
       registrarId: regIndex,
-      target: fromMulticall(target) as string,
-      judgement: judgement.__kind,
-      checksum: identity,
-    }
-  }
-  if (call.v9110.is(ctx)) {
-    const { regIndex, target, judgement } = call.v9110.decode(ctx)
-    return {
-      registrarId: regIndex,
-      target: fromMulticall(target) as string,
+      target: fromLookupSource(target),
       judgement: judgement.__kind,
       checksum: undefined,
     }
@@ -123,21 +114,30 @@ export function getProvideJudgementCall(_ctx: Context) {
       checksum: undefined,
     }
   }
-  if (call.v5.is(ctx)) {
-    const { regIndex, target, judgement } = call.v5.decode(ctx)
+  if (call.v9110.is(ctx)) {
+    const { regIndex, target, judgement } = call.v9110.decode(ctx)
     return {
       registrarId: regIndex,
-      target: fromLookupSource(target),
+      target: fromMulticall(target) as string,
       judgement: judgement.__kind,
       checksum: undefined,
     }
   }
-  const { regIndex, target, judgement } = call.v5.decode(ctx)
+  if (call.v9300.is(ctx)) {
+    const { regIndex, target, judgement, identity } = call.v9300.decode(ctx)
+    return {
+      registrarId: regIndex,
+      target: fromMulticall(target) as string,
+      judgement: judgement.__kind,
+      checksum: identity,
+    }
+  }
+  const { regIndex, target, judgement, identity } = call.v9300.decode(ctx)
   return {
     registrarId: regIndex,
-    target: fromLookupSource(target),
+    target: fromMulticall(target) as string,
     judgement: judgement.__kind,
-    checksum: undefined,
+    checksum: identity,
   }
 }
 
@@ -160,20 +160,20 @@ function fromLookupSource(source: any): string {
 export function getAddSubCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.addSub
-  if (call.v9110.is(ctx)) {
-    const { sub, data } = call.v9110.decode(ctx)
-    return subFrom(sub, data)
+  if (call.v15.is(ctx)) {
+    const { sub, data } = call.v15.decode(ctx)
+    return { address: fromLookupSource(sub), data: fromData(data) }
   }
   if (call.v28.is(ctx)) {
     const { sub, data } = call.v28.decode(ctx)
     return { address: fromLookupSource(sub), data: fromData(data) }
   }
-  if (call.v15.is(ctx)) {
-    const { sub, data } = call.v15.decode(ctx)
-    return { address: fromLookupSource(sub), data: fromData(data) }
+  if (call.v9110.is(ctx)) {
+    const { sub, data } = call.v9110.decode(ctx)
+    return subFrom(sub, data)
   }
-  const { sub, data } = call.v15.decode(ctx)
-  return { address: fromLookupSource(sub), data: fromData(data) }
+  const { sub, data } = call.v9110.decode(ctx)
+  return subFrom(sub, data)
 }
 
 export function getSetSubsCall(_ctx: Context) {
@@ -200,39 +200,39 @@ export function getSetSubsCall(_ctx: Context) {
 export function getRenameSubCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.renameSub
-  if (call.v9110.is(ctx)) {
-    const { sub, data } = call.v9110.decode(ctx)
-    return subFrom(sub, data)
+  if (call.v15.is(ctx)) {
+    const { sub, data } = call.v15.decode(ctx)
+    return { address: fromLookupSource(sub), data: fromData(data) }
   }
   if (call.v28.is(ctx)) {
     const { sub, data } = call.v28.decode(ctx)
     return { address: fromLookupSource(sub), data: fromData(data) }
   }
-  if (call.v15.is(ctx)) {
-    const { sub, data } = call.v15.decode(ctx)
-    return { address: fromLookupSource(sub), data: fromData(data) }
+  if (call.v9110.is(ctx)) {
+    const { sub, data } = call.v9110.decode(ctx)
+    return subFrom(sub, data)
   }
-  const { sub, data } = call.v15.decode(ctx)
-  return { address: fromLookupSource(sub), data: fromData(data) }
+  const { sub, data } = call.v9110.decode(ctx)
+  return subFrom(sub, data)
 }
 
 export function getRemoveSubCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.removeSub
-  if (call.v9110.is(ctx)) {
-    const { sub } = call.v9110.decode(ctx)
-    return { address: fromMulticall(sub) }
+  if (call.v15.is(ctx)) {
+    const { sub } = call.v15.decode(ctx)
+    return { address: fromLookupSource(sub) }
   }
   if (call.v28.is(ctx)) {
     const { sub } = call.v28.decode(ctx)
     return { address: fromLookupSource(sub) }
   }
-  if (call.v15.is(ctx)) {
-    const { sub } = call.v15.decode(ctx)
-    return { address: fromLookupSource(sub) }
+  if (call.v9110.is(ctx)) {
+    const { sub } = call.v9110.decode(ctx)
+    return { address: fromMulticall(sub) }
   }
-  const { sub } = call.v15.decode(ctx)
-  return { address: fromLookupSource(sub) }
+  const { sub } = call.v9110.decode(ctx)
+  return { address: fromMulticall(sub) }
 }
 
 export function getAddUsernameAuthorityCall(_ctx: Context) {
@@ -253,75 +253,75 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
 export function getIdentityClearedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.identityCleared
-  if (event.v9140.is(ctx)) {
-    const { who } = event.v9140.decode(ctx)
-    return { who: addressOf(who) }
-  }
   if (event.v5.is(ctx)) {
     const [who] = event.v5.decode(ctx)
     return { who: addressOf(who) }
   }
-  const [who] = event.v5.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { who } = event.v9140.decode(ctx)
+    return { who: addressOf(who) }
+  }
+  const { who } = event.v9140.decode(ctx)
   return { who: addressOf(who) }
 }
 
 export function getIdentityKilledEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.identityKilled
-  if (event.v9140.is(ctx)) {
-    const { who } = event.v9140.decode(ctx)
-    return { who: addressOf(who) }
-  }
   if (event.v5.is(ctx)) {
     const [who] = event.v5.decode(ctx)
     return { who: addressOf(who) }
   }
-  const [who] = event.v5.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { who } = event.v9140.decode(ctx)
+    return { who: addressOf(who) }
+  }
+  const { who } = event.v9140.decode(ctx)
   return { who: addressOf(who) }
 }
 
 export function getSubIdentityRemovedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.subIdentityRemoved
-  if (event.v9140.is(ctx)) {
-    const { sub, main } = event.v9140.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
-  }
   if (event.v15.is(ctx)) {
     const [sub, main] = event.v15.decode(ctx)
     return { sub: addressOf(sub), main: addressOf(main) }
   }
-  const [sub, main] = event.v15.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { sub, main } = event.v9140.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+  }
+  const { sub, main } = event.v9140.decode(ctx)
   return { sub: addressOf(sub), main: addressOf(main) }
 }
 
 export function getSubIdentityAddEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.subIdentityAdded
-  if (event.v9140.is(ctx)) {
-    const { sub, main } = event.v9140.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
-  }
   if (event.v15.is(ctx)) {
     const [sub, main] = event.v15.decode(ctx)
     return { sub: addressOf(sub), main: addressOf(main) }
   }
-  const [sub, main] = event.v15.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { sub, main } = event.v9140.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+  }
+  const { sub, main } = event.v9140.decode(ctx)
   return { sub: addressOf(sub), main: addressOf(main) }
 }
 
 export function getSubIdentityRevokedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.subIdentityRevoked
-  if (event.v9140.is(ctx)) {
-    const { sub, main } = event.v9140.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
-  }
   if (event.v15.is(ctx)) {
     const [sub, main] = event.v15.decode(ctx)
     return { sub: addressOf(sub), main: addressOf(main) }
   }
-  const [sub, main] = event.v15.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { sub, main } = event.v9140.decode(ctx)
+    return { sub: addressOf(sub), main: addressOf(main) }
+  }
+  const { sub, main } = event.v9140.decode(ctx)
   return { sub: addressOf(sub), main: addressOf(main) }
 }
 
@@ -371,30 +371,30 @@ export function getUsernameUnbindEvent(_ctx: Context) {
 export function getJudgementRequestedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.judgementRequested
-  if (event.v9140.is(ctx)) {
-    const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
-    return { who: addressOf(who), registrar }
-  }
   if (event.v5.is(ctx)) {
     const [who, registrar] = event.v5.decode(ctx)
     return { who: addressOf(who), registrar }
   }
-  const [who, registrar] = event.v5.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
+    return { who: addressOf(who), registrar }
+  }
+  const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
   return { who: addressOf(who), registrar }
 }
 
 export function getJudgementUnrequestedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.judgementUnrequested
-  if (event.v9140.is(ctx)) {
-    const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
-    return { who: addressOf(who), registrar }
-  }
   if (event.v5.is(ctx)) {
     const [who, registrar] = event.v5.decode(ctx)
     return { who: addressOf(who), registrar }
   }
-  const [who, registrar] = event.v5.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
+    return { who: addressOf(who), registrar }
+  }
+  const { who, registrarIndex: registrar } = event.v9140.decode(ctx)
   return { who: addressOf(who), registrar }
 }
 
@@ -429,30 +429,30 @@ export function getSetFieldCall(_ctx: Context) {
 export function getSetAccountCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.setAccountId
-  if (call.v9291.is(ctx)) {
-    const { index, new: account } = call.v9291.decode(ctx)
-    return { index, account: fromMulticall(account) as string }
-  }
   if (call.v5.is(ctx)) {
     const { index, new: account } = call.v5.decode(ctx)
     return { index, account: addressOf(account) }
   }
-  const { index, new: account } = call.v5.decode(ctx)
-  return { index, account: addressOf(account) }
+  if (call.v9291.is(ctx)) {
+    const { index, new: account } = call.v9291.decode(ctx)
+    return { index, account: fromMulticall(account) as string }
+  }
+  const { index, new: account } = call.v9291.decode(ctx)
+  return { index, account: fromMulticall(account) as string }
 }
 
 export function getRegistrarAddedEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.registrarAdded
-  if (event.v9140.is(ctx)) {
-    const { registrarIndex: index } = event.v9140.decode(ctx)
-    return { index }
-  }
   if (event.v5.is(ctx)) {
     const index = event.v5.decode(ctx)
     return { index }
   }
-  const index = event.v5.decode(ctx)
+  if (event.v9140.is(ctx)) {
+    const { registrarIndex: index } = event.v9140.decode(ctx)
+    return { index }
+  }
+  const { registrarIndex: index } = event.v9140.decode(ctx)
   return { index }
 }
 
@@ -465,14 +465,14 @@ export function getRemoveExpiredApprovalCall(_ctx: Context) {
 export function getAddRegistrarCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.addRegistrar
-  if (call.v9291.is(ctx)) {
-    const { account } = call.v9291.decode(ctx)
-    return { account: fromMulticall(account) as string }
-  }
   if (call.v5.is(ctx)) {
     const { account } = call.v5.decode(ctx)
     return { account: addressOf(account) }
   }
-  const { account } = call.v5.decode(ctx)
-  return { account: addressOf(account) }
+  if (call.v9291.is(ctx)) {
+    const { account } = call.v9291.decode(ctx)
+    return { account: fromMulticall(account) as string }
+  }
+  const { account } = call.v9291.decode(ctx)
+  return { account: fromMulticall(account) as string }
 }
