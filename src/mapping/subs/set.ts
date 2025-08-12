@@ -4,9 +4,9 @@ import { ChainOrigin, Identity, Sub } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
-import { getSetSubsCall } from '../getters'
 import md5 from 'md5'
 import { addressTypeOf, subNameOf } from '../../utils/helper'
+import { getSetSubsCall } from '../getters'
 
 const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 
@@ -37,7 +37,7 @@ export async function handleSubListSet(context: Context): Promise<void> {
   // Use Map to deduplicate subs by address (key)
   const subsMap = new Map<string, Sub>()
 
-  call.subs.forEach((sub) => {
+  call.subs.forEach((sub: any) => {
     subsMap.set(
       sub.address,
       create(Sub, sub.address, {
