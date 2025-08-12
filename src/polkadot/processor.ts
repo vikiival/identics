@@ -10,6 +10,7 @@ import {
 } from '@subsquid/substrate-processor'
 
 import { events } from '../types/polkadot'
+import { fieldSelection } from '../utils/types'
 
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/polkadot`
 const NODE_URL = `wss://rpc.ibp.network/polkadot`
@@ -33,21 +34,23 @@ export const processor = new SubstrateBatchProcessor()
   .addEvent({
     name: [events.identity.identitySet.name],
     extrinsic: true,
+    call: true,
   })
-  .setFields({
-    event: {
-      args: true,
-    },
-    extrinsic: {
-      hash: true,
-      fee: true,
-    },
-    block: {
-      timestamp: true,
-    },
-  })
+  .setFields(fieldSelection)
+// .setFields({
+//   event: {
+//     args: true,
+//   },
+//   extrinsic: {
+//     hash: true,
+//     fee: true,
+//   },
+//   block: {
+//     timestamp: true,
+//   },
+// })
 // Uncomment to disable RPC ingestion and drastically reduce no of RPC calls
-processor.setRpcDataIngestionSettings({ disabled: true })
+processor.setRpcDataIngestionSettings({ disabled: false })
 
 export type Fields = SubstrateBatchProcessorFields<typeof processor>
 export type Block = BlockHeader<Fields>
