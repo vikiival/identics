@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hono/node-server':
+        specifier: ^1.18.2
+        version: 1.18.2(hono@4.9.1)
       '@kodadot1/metasquid':
         specifier: 0.3.1-rc.0
         version: 0.3.1-rc.0(@subsquid/logger@1.4.0)(@subsquid/ss58@2.0.2)(@subsquid/substrate-processor@8.6.0(@subsquid/substrate-runtime@2.0.1))(@subsquid/typeorm-store@1.5.1(@subsquid/big-decimal@1.0.0)(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2)))(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))
@@ -23,6 +26,9 @@ importers:
       '@subsquid/substrate-runtime':
         specifier: ^2.0.1
         version: 2.0.1
+      '@subsquid/typeorm-config':
+        specifier: ^4.1.1
+        version: 4.1.1(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))
       '@subsquid/typeorm-migration':
         specifier: ^1.3.0
         version: 1.3.0(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))
@@ -38,6 +44,9 @@ importers:
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
+      hono:
+        specifier: ^4.9.1
+        version: 4.9.1
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -191,6 +200,12 @@ packages:
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+
+  '@hono/node-server@1.18.2':
+    resolution: {integrity: sha512-icgNvC0vRYivzyuSSaUv9ttcwtN8fDyd1k3AOIBDJgYd84tXRZSS6na8X54CY/oYoFTNhEmZraW/Rb9XYwX4KA==}
+    engines: {node: '>=18.14.1'}
+    peerDependencies:
+      hono: ^4
 
   '@ioredis/commands@1.2.0':
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
@@ -982,6 +997,10 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  hono@4.9.1:
+    resolution: {integrity: sha512-qfvdJ42t6CQE0N/iSCa8KsW8SQqYD67YB+TYbwPHlnALvX+s7ynh8otR1NEk5jXtUg73gpV/B82OSufDmwtX3w==}
+    engines: {node: '>=16.9.0'}
 
   http-errors@2.0.0:
     resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
@@ -1827,6 +1846,10 @@ snapshots:
     dependencies:
       graphql: 15.10.1
 
+  '@hono/node-server@1.18.2(hono@4.9.1)':
+    dependencies:
+      hono: 4.9.1
+
   '@ioredis/commands@1.2.0': {}
 
   '@isaacs/cliui@8.0.2':
@@ -2185,7 +2208,7 @@ snapshots:
 
   '@subsquid/typeorm-config@4.1.1(typeorm@0.3.23(ioredis@5.4.2)(pg@8.15.6)(reflect-metadata@0.2.2))':
     dependencies:
-      '@subsquid/logger': 1.3.3
+      '@subsquid/logger': 1.4.0
       '@subsquid/util-internal-ts-node': 0.0.0
       '@subsquid/util-naming': 1.3.0
     optionalDependencies:
@@ -2891,6 +2914,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hono@4.9.1: {}
 
   http-errors@2.0.0:
     dependencies:
