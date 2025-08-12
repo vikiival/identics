@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server'
 import { createOrmConfig } from '@subsquid/typeorm-config'
 import { Hono } from 'hono'
+import { serializer } from '@kodadot1/metasquid'
 import { Identity } from './model'
 
 const app = new Hono()
@@ -13,13 +14,11 @@ const dataSource = new DataSource(cfg)
 dataSource
   .initialize()
   .then(() => {
-    console.log('DataSource initialized:', dataSource.options)
+    console.log('✅ Database connected successfully')
   })
   .catch((error) => {
-    console.error('Error during DataSource initialization:', error)
+    console.error('❌ Error during DataSource initialization:', error)
   })
-
-console.log('DataSource initialized:', dataSource.options)
 
 // GET /identities - Get all identities with optional filtering and pagination
 app.get('/identities', async (c) => {
@@ -32,18 +31,31 @@ app.get('/identities', async (c) => {
 
     const store = dataSource.manager
 
-    console.log(store)
+    // Build query with optional filters
+    const queryBuilder = store.createQueryBuilder(Identity, 'identity')
 
-    // For now, let's use a simple find without complex query builder
-    // since we need to understand the Subsquid store API better
-    const identities = await store.find(Identity, {
-      order: { createdAt: 'DESC' },
-      take: limit,
-      skip: (page - 1) * limit,
-    })
+    // Add filters based on query parameters
+    if (name) {
+      queryBuilder.andWhere('identity.name ILIKE :name', { name: `%${name}%` })
+    }
 
-    // Get total count - this might need adjustment based on Subsquid store API
-    const total = await store.count(Identity)
+    if (twitter) {
+      queryBuilder.andWhere('identity.twitter ILIKE :twitter', {
+        twitter: `%${twitter}%`,
+      })
+    }
+
+    if (origin) {
+      queryBuilder.andWhere('identity.origin = :origin', { origin })
+    }
+
+    // Add pagination and ordering
+    queryBuilder
+      .orderBy('identity.createdAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit)
+
+    const [identities, total] = await queryBuilder.getManyAndCount()
 
     const result = {
       identities,
@@ -57,7 +69,7 @@ app.get('/identities', async (c) => {
 
     return c.json({
       success: true,
-      data: result.identities,
+      data: JSON.parse(JSON.stringify(result.identities, serializer)),
       count: result.identities.length,
       pagination: result.pagination,
     })
@@ -75,52 +87,43 @@ app.get('/identities', async (c) => {
 })
 
 // GET /identities/:id - Get a specific identity by ID
-// app.get('/identities/:id', async (c) => {
-//   const id = c.req.param('id')
+app.get('/identities/:id', async (c) => {
+  const id = c.req.param('id')
 
-//   try {
-//     const result = await withDatabase(async (store) => {
-//       const identity = await store.findOne(Identity, {
-//         where: { id },
-//         relations: ['usernames', 'subs', 'events'],
-//       })
+  try {
+    const store = dataSource.manager
 
-//       return identity
-//     })
+    const identity = await store.findOne(Identity, {
+      where: { id },
+      relations: ['usernames', 'subs', 'events'],
+    })
 
-//     if (!result) {
-//       return c.json(
-//         {
-//           success: false,
-//           error: 'Identity not found',
-//         },
-//         404
-//       )
-//     }
+    if (!identity) {
+      return c.json(
+        {
+          success: false,
+          error: 'Identity not found',
+        },
+        404
+      )
+    }
 
-//     return c.json({
-//       success: true,
-//       data: result,
-//     })
-//   } catch (error) {
-//     console.error('Error fetching identity:', error)
-//     return c.json(
-//       {
-//         success: false,
-//         error: 'Failed to fetch identity',
-//         message: error instanceof Error ? error.message : 'Unknown error',
-//       },
-//       500
-//     )
-//   }
-// })
-
-app.get('/db', (c) => {
-  return c.json({
-    success: true,
-    message: 'Identics API is healthy',
-    timestamp: new Date().toISOString(),
-  })
+    // Use the serializer to handle BigInt and other special types
+    return c.json({
+      success: true,
+      data: JSON.parse(JSON.stringify(identity, serializer)),
+    })
+  } catch (error) {
+    console.error('Error fetching identity:', error)
+    return c.json(
+      {
+        success: false,
+        error: 'Failed to fetch identity',
+        message: error instanceof Error ? error.message : 'Unknown error',
+      },
+      500
+    )
+  }
 })
 
 // Health check endpoint
