@@ -6,7 +6,8 @@
   },
   "scripts": {
     "build": "rm -rf lib && tsc",
-    "start": "node --require=dotenv/config lib/api.js"
+    "start": "node --require=dotenv/config lib/api.js",
+    "test": "vitest run"
   },
   "dependencies": {
     "@hono/node-server": "^1.18.2",
@@ -31,6 +32,7 @@
     "@subsquid/substrate-typegen": "^8.1.0",
     "@subsquid/typeorm-codegen": "^2.0.2",
     "@types/node": "^22.15.17",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }
