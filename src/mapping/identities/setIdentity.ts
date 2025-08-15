@@ -27,7 +27,7 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   final.blockNumber = BigInt(call.blockNumber)
   final.createdAt = call.timestamp
   final.updatedAt = call.timestamp
-  final.origin = ChainOrigin.PEOPLE
+  final.origin = call.origin || ChainOrigin.PEOPLE
   final.burned = false
 
   // Set properties from IdentityInfo
