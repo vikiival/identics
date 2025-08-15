@@ -26,11 +26,13 @@ export const fieldSelection = {
   },
   extrinsic: {
     signature: true,
+    success: true,
   },
   call: {
     name: true,
     args: true,
     origin: true,
+    success: true,
   },
   event: {
     name: true,
