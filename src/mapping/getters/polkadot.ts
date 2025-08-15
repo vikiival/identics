@@ -1,3 +1,4 @@
+import { ChainOrigin } from '../../model'
 import { identity as calls } from '../../types/polkadot/calls'
 import { identity as events } from '../../types/polkadot/events'
 import {
@@ -23,6 +24,11 @@ function fromData(data: Data): string | undefined {
     return data.value
   }
 
+  // https://brandur.org/fragments/invalid-byte-sequence
+  if (data.value.startsWith('0x00')) {
+    return undefined
+  }
+
   return unHex(data.value)
 }
 
@@ -41,8 +47,12 @@ function isEmpty<T>(data: Data): data is Data_None {
 function subFrom(
   sub: MultiAddress,
   data: Data
-): { address: string; data: string | undefined } {
-  return { address: fromMulticall(sub) as string, data: fromData(data) }
+): { address: string; data: string | undefined; origin: ChainOrigin } {
+  return {
+    address: fromMulticall(sub) as string,
+    data: fromData(data),
+    origin: ChainOrigin.RELAY,
+  }
 }
 
 function fromMulticall(ma: MultiAddress) {
@@ -75,6 +85,7 @@ export function getSetIdentityCall(_ctx: Context) {
       twitter: fromData(info.twitter),
       github: undefined, // not available in polkadot v5
       discord: undefined, // not available in polkadot v5
+      origin: ChainOrigin.RELAY,
     }
   }
 
@@ -90,6 +101,7 @@ export function getSetIdentityCall(_ctx: Context) {
     twitter: fromData(info.twitter),
     github: undefined, // not available in polkadot v5
     discord: undefined, // not available in polkadot v5
+    origin: ChainOrigin.RELAY,
   }
 }
 
@@ -185,6 +197,7 @@ export function getSetSubsCall(_ctx: Context) {
       subs: subs.map(([addr, data]) => ({
         address: addressOf(addr),
         data: fromData(data) || undefined,
+        origin: ChainOrigin.RELAY, // Default origin for relay chain
       })),
     }
   }
@@ -193,6 +206,7 @@ export function getSetSubsCall(_ctx: Context) {
     subs: subs.map(([addr, data]) => ({
       address: addressOf(addr),
       data: fromData(data) || undefined,
+      origin: ChainOrigin.RELAY, // Default origin for relay chain
     })),
   }
 }
