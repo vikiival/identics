@@ -25,8 +25,8 @@ export function isEmpty(obj: Record<string, unknown>): boolean {
  * Export the value from the archive object { __kind, value }
  * @param call - the call to extract the value from
  */
-export function onlyValue(call: ArchiveCallWithOptionalValue): string {
-  return call?.value
+export function onlyValue(call: ArchiveCallWithOptionalValue | string): string {
+  return typeof call === 'string' ? call : call?.value
 }
 
 /**
