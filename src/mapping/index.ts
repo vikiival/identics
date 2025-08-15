@@ -114,14 +114,19 @@ export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
 
   for (const block of ctx.blocks) {
     for (const call of block.calls) {
-      logger.debug(`Processing call: ${call.name}`)
-      await calls(call, {
-        event: call.events[0],
-        block: block.header,
-        store: ctx.store,
-        extrinsic: call.extrinsic,
-        call: call,
-      })
+      logger.debug(
+        `Processing call: ${call.name} / ${call.success ? 'OK' : 'ERR'}`
+      )
+
+      if (call.success) {
+        await calls(call, {
+          event: call.events[0],
+          block: block.header,
+          store: ctx.store,
+          extrinsic: call.extrinsic,
+          call: call,
+        })
+      }
     }
 
     for (const event of block.events) {
