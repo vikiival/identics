@@ -11,15 +11,20 @@ import {
 
 import { events } from '../types/polkadot'
 import { fieldSelection } from '../utils/types'
+import { IdentityCall, IdentityEvent } from '../processable'
 
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/polkadot`
 const NODE_URL = `wss://rpc.ibp.network/polkadot`
-const STARTING_BLOCK = 188868
+const STARTING_BLOCK = 188868 // 189369jud
+const ENDING_BLOCK = 21553900
 
 console.log(Object.keys(events.identity))
+// const allEvents = Object.keys(events.identity).map(
+//   (name: any) => events.identity[name].name
+// )
 
 export const processor = new SubstrateBatchProcessor()
-  .setBlockRange({ from: STARTING_BLOCK - 8e3 })
+  .setBlockRange({ from: STARTING_BLOCK, to: ENDING_BLOCK })
   // Lookup archive by the network name in Subsquid registry
   // See https://docs.subsquid.io/substrate-indexing/supported-networks/
   .setGateway(ARCHIVE_URL)
@@ -31,8 +36,111 @@ export const processor = new SubstrateBatchProcessor()
     // More RPC connection options at https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source
     rateLimit: 10,
   })
+  .addCall({
+    name: [IdentityCall.setIdentity],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.provideJudgement],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.addSub],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setSubs],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.renameSub],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.addUsernameAuthority],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.removeUsernameAuthority],
+    extrinsic: true,
+  })
   .addEvent({
-    name: [events.identity.identitySet.name],
+    name: [IdentityEvent.clearIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.killIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.requestJudgement], // DOABLE?
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.unrequestJudgement], // DOABLE?
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.giveJudgement],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.removeSubIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.removeSubIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.revokeSubIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.setUsername],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.queueUsername],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.expirePreapproval],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.setPrimaryUsername],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.removeDanglingUsername], // DOABLE?
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.unbindUsername], // DOABLE?
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.removeUsername],
+    extrinsic: true,
+    call: true,
+  })
+  .addEvent({
+    name: [IdentityEvent.killUsername],
     extrinsic: true,
     call: true,
   })
