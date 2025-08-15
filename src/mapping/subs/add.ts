@@ -35,7 +35,7 @@ export async function handleSubAdd(context: Context): Promise<void> {
     blockNumber: BigInt(call.blockNumber),
     createdAt: call.timestamp,
     updatedAt: call.timestamp,
-    origin: ChainOrigin.PEOPLE,
+    origin: call.origin || ChainOrigin.PEOPLE,
   })
 
   await context.store.save(sub)
