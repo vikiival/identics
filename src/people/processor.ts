@@ -9,10 +9,10 @@ import {
   SubstrateBatchProcessorFields,
 } from '@subsquid/substrate-processor'
 
-import { events } from './types/people'
-import { calls } from './types/people'
-import { IdentityCall, IdentityEvent } from './processable'
-import { fieldSelection } from './utils/types'
+import { events } from '../types/people'
+import { calls } from '../types/people'
+import { IdentityCall, IdentityEvent } from '../processable'
+import { fieldSelection } from '../utils/types'
 
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/people-chain`
 const NODE_URL = `wss://sys.ibp.network/people-polkadot`
@@ -143,7 +143,7 @@ export const processor = new SubstrateBatchProcessor()
   })
   .setFields(fieldSelection)
 // Uncomment to disable RPC ingestion and drastically reduce no of RPC calls
-processor.setRpcDataIngestionSettings({ disabled: true })
+processor.setRpcDataIngestionSettings({ disabled: false })
 
 export type Fields = SubstrateBatchProcessorFields<typeof processor>
 export type Block = BlockHeader<Fields>
