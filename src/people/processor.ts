@@ -18,7 +18,7 @@ const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/people-chain`
 const NODE_URL = `wss://sys.ibp.network/people-polkadot`
 const STARTING_BLOCK = 76280
 
-console.log(Object.keys(IdentityEvent))
+console.log(Object.keys(events.identity))
 
 export const processor = new SubstrateBatchProcessor()
   .setBlockRange({ from: STARTING_BLOCK - 8e3 })
@@ -35,6 +35,16 @@ export const processor = new SubstrateBatchProcessor()
   })
   .addCall({
     name: [IdentityCall.setIdentity],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.clearIdentity],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.killIdentity],
     extrinsic: true,
   })
   .addCall({
@@ -59,6 +69,78 @@ export const processor = new SubstrateBatchProcessor()
   })
   .addCall({
     name: [IdentityCall.removeUsernameAuthority],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.addRegistrar],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setFee],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setFields],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setAccountId],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addEvent({
+    name: [IdentityEvent.setIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.requestJudgement],
+    extrinsic: true,
+  })
+  // TODO: UNIMPLEMENTED
+  .addCall({
+    name: [IdentityCall.cancelRequest],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.removeSub],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.quitSub],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addEvent({
+    name: [IdentityEvent.addSubIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.setUsernameFor],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.acceptUsername],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.setPrimaryUsername],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.removeExpiredApproval],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.removeDanglingUsername],
     extrinsic: true,
   })
   .addEvent({
@@ -91,11 +173,12 @@ export const processor = new SubstrateBatchProcessor()
     extrinsic: true,
     call: true,
   })
-  .addEvent({
-    name: [IdentityEvent.removeSubIdentity],
-    extrinsic: true,
-    call: true,
-  })
+  // OUTSIDE OF SCOPE
+  // .addEvent({
+  //   name: [IdentityEvent.renameSubIdentity],
+  //   extrinsic: true,
+  //   call: true,
+  // })
   .addEvent({
     name: [IdentityEvent.revokeSubIdentity],
     extrinsic: true,

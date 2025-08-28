@@ -41,6 +41,14 @@ export const processor = new SubstrateBatchProcessor()
     extrinsic: true,
   })
   .addCall({
+    name: [IdentityCall.clearIdentity],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.killIdentity],
+    extrinsic: true,
+  })
+  .addCall({
     name: [IdentityCall.provideJudgement],
     extrinsic: true,
   })
@@ -62,6 +70,78 @@ export const processor = new SubstrateBatchProcessor()
   })
   .addCall({
     name: [IdentityCall.removeUsernameAuthority],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.addRegistrar],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setFee],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setFields],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.setAccountId],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addEvent({
+    name: [IdentityEvent.setIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.requestJudgement],
+    extrinsic: true,
+  })
+  // TODO: UNIMPLEMENTED
+  .addCall({
+    name: [IdentityCall.cancelRequest],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.removeSub],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.quitSub],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addEvent({
+    name: [IdentityEvent.addSubIdentity],
+    extrinsic: true,
+    call: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.setUsernameFor],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.acceptUsername],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.setPrimaryUsername],
+    extrinsic: true,
+  })
+  .addCall({
+    name: [IdentityCall.removeExpiredApproval],
+    extrinsic: true,
+  })
+  // RECHECK
+  .addCall({
+    name: [IdentityCall.removeDanglingUsername],
     extrinsic: true,
   })
   .addEvent({
@@ -94,11 +174,12 @@ export const processor = new SubstrateBatchProcessor()
     extrinsic: true,
     call: true,
   })
-  .addEvent({
-    name: [IdentityEvent.removeSubIdentity],
-    extrinsic: true,
-    call: true,
-  })
+  // OUTSIDE OF SCOPE
+  // .addEvent({
+  //   name: [IdentityEvent.renameSubIdentity],
+  //   extrinsic: true,
+  //   call: true,
+  // })
   .addEvent({
     name: [IdentityEvent.revokeSubIdentity],
     extrinsic: true,
