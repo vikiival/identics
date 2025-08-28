@@ -1,8 +1,9 @@
 default := 'squid'
 types := 'typegen'
+chain := 'people'
 
-process: build
-	node --require=dotenv/config lib/main.js
+process CHAIN=chain: build
+	CHAIN={{CHAIN}} node --require=dotenv/config lib/main.js
 
 serve:
 	@npx squid-graphql-server
