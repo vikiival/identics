@@ -153,6 +153,40 @@ export function getProvideJudgementCall(_ctx: Context) {
   }
 }
 
+export function getRequestJudgementCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.requestJudgement
+  if (call.v5.is(ctx)) {
+    const { regIndex, maxFee } = call.v5.decode(ctx)
+    return {
+      registrarId: regIndex,
+      maxFee,
+    }
+  }
+
+  const { regIndex, maxFee } = call.v5.decode(ctx)
+  return {
+    registrarId: regIndex,
+    maxFee,
+  }
+}
+
+export function getCancelRequestCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.cancelRequest
+  if (call.v5.is(ctx)) {
+    const { regIndex } = call.v5.decode(ctx)
+    return {
+      registrarId: regIndex,
+    }
+  }
+
+  const { regIndex } = call.v5.decode(ctx)
+  return {
+    registrarId: regIndex,
+  }
+}
+
 function fromLookupSource(source: any): string {
   if (typeof source === 'string') {
     return source

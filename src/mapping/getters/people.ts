@@ -114,6 +114,40 @@ export function getProvideJudgementCall(_ctx: Context) {
   }
 }
 
+export function getRequestJudgementCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.requestJudgement
+  if (call.v1002006.is(ctx)) {
+    const { regIndex, maxFee } = call.v1002006.decode(ctx)
+    return {
+      registrarId: regIndex,
+      maxFee,
+    }
+  }
+
+  const { regIndex, maxFee } = call.v1002006.decode(ctx)
+  return {
+    registrarId: regIndex,
+    maxFee,
+  }
+}
+
+export function getCancelRequestCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.cancelRequest
+  if (call.v1002006.is(ctx)) {
+    const { regIndex } = call.v1002006.decode(ctx)
+    return {
+      registrarId: regIndex,
+    }
+  }
+
+  const { regIndex } = call.v1002006.decode(ctx)
+  return {
+    registrarId: regIndex,
+  }
+}
+
 export function getAddSubCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.addSub

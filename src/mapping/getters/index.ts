@@ -12,6 +12,14 @@ export function getProvideJudgementCall(_ctx: Context) {
   return proc.getProvideJudgementCall(_ctx)
 }
 
+export function getRequestJudgementCall(_ctx: Context) {
+  return proc.getRequestJudgementCall(_ctx)
+}
+
+export function getCancelRequestCall(_ctx: Context) {
+  return proc.getCancelRequestCall(_ctx)
+}
+
 export function getAddSubCall(_ctx: Context) {
   return proc.getAddSubCall(_ctx)
 }
