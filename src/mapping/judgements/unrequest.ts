@@ -13,7 +13,9 @@ const OPERATION = `CALL::JUDGEMENT_CANCEL` //Action.CREATE
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
-export async function handleJudgementCancel(context: Context): Promise<void> {
+export async function handleJudgementUnrequest(
+  context: Context
+): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getJudgementUnrequestedEvent)
   debug(OPERATION, event)
