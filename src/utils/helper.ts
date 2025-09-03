@@ -5,7 +5,11 @@ import {
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/substrate-processor'
 import md5 from 'md5'
-import { AddressType } from '../model'
+
+export enum AddressType {
+  Ethereum = 'Ethereum',
+  Substrate = 'Substrate',
+}
 
 const codec = 'polkadot'
 
