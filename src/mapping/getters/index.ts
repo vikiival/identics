@@ -72,6 +72,10 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
   return proc.getRemoveUsernameAuthorityCall(_ctx)
 }
 
+export function getIdentitySetEvent(_ctx: Context) {
+  return proc.getIdentitySetEvent(_ctx)
+}
+
 export function getIdentityClearedEvent(_ctx: Context) {
   return proc.getIdentityClearedEvent(_ctx)
 }
