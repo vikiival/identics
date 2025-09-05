@@ -6,7 +6,7 @@ import { debug, pending } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getPrimaryUsernameSetEvent } from '../getters'
 
-const OPERATION = `CALL::SET_MAIN_USERNAME` //Action.CREATE
+const OPERATION = `EVENT::SET_PRIMARY_USERNAME` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
