@@ -8,6 +8,14 @@ export function getSetIdentityCall(_ctx: Context) {
   return proc.getSetIdentityCall(_ctx)
 }
 
+export function getKillIdentityCall(_ctx: Context) {
+  return proc.getKillIdentityCall(_ctx)
+}
+
+export function getClearIdentityCall(_ctx: Context) {
+  return proc.getClearIdentityCall(_ctx)
+}
+
 export function getProvideJudgementCall(_ctx: Context) {
   return proc.getProvideJudgementCall(_ctx)
 }

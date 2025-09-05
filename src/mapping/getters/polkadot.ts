@@ -10,7 +10,7 @@ import {
   Data_ShaThree256,
   MultiAddress,
 } from '../../types/polkadot/v9110'
-import { addressOf, unHex } from '../../utils/helper'
+import { addressOf, onlyValue, unHex } from '../../utils/helper'
 import { debug } from '../../utils/logger'
 import { Context } from '../../utils/types'
 
@@ -103,6 +103,31 @@ export function getSetIdentityCall(_ctx: Context) {
     discord: undefined, // not available in polkadot v5
     origin: ChainOrigin.RELAY,
   }
+}
+
+export function getKillIdentityCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.killIdentity
+  if (call.v5.is(ctx)) {
+    const { target: who } = call.v5.decode(ctx)
+    return { who: fromLookupSource(who) }
+  }
+  if (call.v28.is(ctx)) {
+    const { target: who } = call.v28.decode(ctx)
+    return { who: fromLookupSource(who) }
+  }
+  const { target: who } = call.v9110.decode(ctx)
+  return { who: fromLookupSource(who) }
+}
+
+export function getClearIdentityCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.clearIdentity
+  if (call.v5.is(ctx)) {
+    return { who: null }
+  }
+
+  return { who: null }
 }
 
 export function getProvideJudgementCall(_ctx: Context) {

@@ -80,6 +80,27 @@ export function getSetIdentityCall(_ctx: Context) {
   }
 }
 
+export function getKillIdentityCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.killIdentity
+  if (call.v1002006.is(ctx)) {
+    const { target: who } = call.v1002006.decode(ctx)
+    return { who: fromMulticall(who) }
+  }
+  const { target: who } = call.v1002006.decode(ctx)
+  return { who: fromMulticall(who) }
+}
+
+export function getClearIdentityCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.clearIdentity
+  if (call.v1002006.is(ctx)) {
+    return { who: null }
+  }
+
+  return { who: null }
+}
+
 function fromMulticall(ma: MultiAddress) {
   if (ma.__kind === 'Index') {
     return null
