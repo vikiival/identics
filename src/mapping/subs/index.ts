@@ -1,5 +1,7 @@
 export * from './add'
 export * from './quit'
+export * from './quitCall'
 export * from './remove'
+export * from './removeCall'
 export * from './rename'
 export * from './set'
