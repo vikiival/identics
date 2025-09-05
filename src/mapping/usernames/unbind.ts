@@ -1,17 +1,12 @@
 import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import {
-  getAddSubCall,
-  getSetIdentityCall,
-  getSetSubsCall,
-  getUsernameSetEvent,
-} from '../getters'
 import { Identity, Username } from '../../model'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getUsernameUnbindEvent } from '../getters'
 
-const OPERATION = `CALL::UNBIND_USERNAME` //Action.CREATE
+const OPERATION = `EVENT::UNBIND_USERNAME` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -21,7 +16,7 @@ const OPERATION = `CALL::UNBIND_USERNAME` //Action.CREATE
  */
 export async function handleUsernameUnbind(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getUsernameSetEvent)
+  const event = unwrap(context, getUsernameUnbindEvent)
   debug(OPERATION, event)
 
   const id = event.username
