@@ -5,9 +5,9 @@ import { unwrap } from '../../utils/extract'
 import { subNameOf } from '../../utils/helper'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
-import { getAddSubCall, getSubIdentityAddEvent } from '../getters'
+import { getAddSubCall } from '../getters'
 
-const OPERATION = `EVENT::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::ADD_SUB` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -15,12 +15,12 @@ const OPERATION = `EVENT::ADD_SUB` //Action.CREATE
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
-export async function handleSubAdd(context: Context): Promise<void> {
+export async function handleSubAddCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getSubIdentityAddEvent)
-  debug(OPERATION, event)
+  const call = unwrap(context, getAddSubCall)
+  debug(OPERATION, call)
 
-  const id = event.main
+  const id = call.caller
 
   const identity = await get(context.store, Identity, id)
 
@@ -29,15 +29,15 @@ export async function handleSubAdd(context: Context): Promise<void> {
     return
   }
 
-  const sub = create(Sub, event.sub, {
-    name: event.data || subNameOf(id, event.address),
+  const sub = create(Sub, call.address, {
+    name: call.data || subNameOf(id, call.address),
     identity,
-    blockNumber: BigInt(event.blockNumber),
-    createdAt: event.timestamp,
-    updatedAt: event.timestamp,
-    origin: event.origin || ChainOrigin.PEOPLE,
+    blockNumber: BigInt(call.blockNumber),
+    createdAt: call.timestamp,
+    updatedAt: call.timestamp,
+    origin: call.origin || ChainOrigin.PEOPLE,
   })
 
   await context.store.save(sub)
-  success(OPERATION, `${id}/${event.address}`)
+  success(OPERATION, `${id}/${call.address}`)
 }
