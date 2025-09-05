@@ -91,4 +91,7 @@ export class Identity {
 
     @Column_("varchar", {length: 9, nullable: true})
     type!: AddressType | undefined | null
+
+    @BigIntColumn_({nullable: true})
+    deposit!: bigint | undefined | null
 }

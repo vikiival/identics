@@ -42,6 +42,7 @@ export async function handleIdentitySetCall(context: Context): Promise<void> {
   final.discord = call.discord
 
   final.type = addressTypeOf(id)
+  final.deposit = BigInt(0n)
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)

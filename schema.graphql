@@ -24,6 +24,7 @@ type Identity @entity {
   origin: ChainOrigin!
   burned: Boolean!
   type: AddressType
+  deposit: BigInt
 }
 
 type Registrar @entity {

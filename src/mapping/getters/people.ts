@@ -67,6 +67,7 @@ export function getSetIdentityCall(_ctx: Context) {
       twitter: fromData(info.twitter),
       github: fromData(info.github),
       discord: fromData(info.discord),
+      origin: ChainOrigin.PEOPLE,
     }
   }
 
@@ -82,6 +83,7 @@ export function getSetIdentityCall(_ctx: Context) {
     twitter: fromData(info.twitter),
     github: fromData(info.github),
     discord: fromData(info.discord),
+    origin: ChainOrigin.PEOPLE,
   }
 }
 
