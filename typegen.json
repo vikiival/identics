@@ -29,6 +29,8 @@
       ],
       "calls": [
         "set_identity",
+        "clear_identity",
+        "kill_identity",
         "provide_judgement",
         "set_subs",
         "add_sub",
