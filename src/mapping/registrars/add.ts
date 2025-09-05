@@ -24,8 +24,8 @@ export async function handleRegistrarAdd(context: Context): Promise<void> {
   const final = create(Registrar, id, {
     address: call.account,
     blockNumber: BigInt(event.blockNumber),
-    createdAt: event.timestamp,
-    updatedAt: event.timestamp,
+    createdAt: call.timestamp,
+    updatedAt: call.timestamp,
   })
 
   success(OPERATION, `OK`)
