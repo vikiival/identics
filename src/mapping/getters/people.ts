@@ -233,6 +233,50 @@ export function getQuitSubCall(_ctx: Context) {
   return { sub: null }
 }
 
+export function getSetUsernameForCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.setUsernameFor
+  if (call.v1002006.is(ctx)) {
+    const { who, username } = call.v1002006.decode(ctx)
+    return { who: fromMulticall(who), username }
+  }
+  const { who, username } = call.v1002006.decode(ctx)
+  return { who: fromMulticall(who), username }
+}
+
+export function getAcceptUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.acceptUsername
+  if (call.v1002006.is(ctx)) {
+    const { username } = call.v1002006.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002006.decode(ctx)
+  return { username }
+}
+
+export function getSetPrimaryUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.setPrimaryUsername
+  if (call.v1002006.is(ctx)) {
+    const { username } = call.v1002006.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002006.decode(ctx)
+  return { username }
+}
+
+export function getRemoveDanglingUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.removeDanglingUsername
+  if (call.v1002006.is(ctx)) {
+    const { username } = call.v1002006.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002006.decode(ctx)
+  return { username }
+}
+
 export function getAddUsernameAuthorityCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.addUsernameAuthority

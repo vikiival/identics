@@ -318,18 +318,71 @@ export function getQuitSubCall(_ctx: Context) {
   return { sub: null }
 }
 
+export function getSetUsernameForCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.setUsernameFor
+  if (call.v1002000.is(ctx)) {
+    const { who, username } = call.v1002000.decode(ctx)
+    return { who: fromMulticall(who), username }
+  }
+  const { who, username } = call.v1002000.decode(ctx)
+  return { who: fromMulticall(who), username }
+}
+
+export function getAcceptUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.acceptUsername
+  if (call.v1002000.is(ctx)) {
+    const { username } = call.v1002000.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002000.decode(ctx)
+  return { username }
+}
+
+export function getSetPrimaryUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.setPrimaryUsername
+  if (call.v1002000.is(ctx)) {
+    const { username } = call.v1002000.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002000.decode(ctx)
+  return { username }
+}
+
+export function getRemoveDanglingUsernameCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.removeDanglingUsername
+  if (call.v1002000.is(ctx)) {
+    const { username } = call.v1002000.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002000.decode(ctx)
+  return { username }
+}
+
 export function getAddUsernameAuthorityCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.addUsernameAuthority
-  // This call doesn't exist in polkadot identity pallet
-  return { authority: '', suffix: '', allocation: 0 }
+  if (call.v1002000.is(ctx)) {
+    const { authority, suffix, allocation } = call.v1002000.decode(ctx)
+    return { authority: fromMulticall(authority) as string, suffix, allocation }
+  }
+
+  const { authority, suffix, allocation } = call.v1002000.decode(ctx)
+  return { authority: fromMulticall(authority) as string, suffix, allocation }
 }
 
 export function getRemoveUsernameAuthorityCall(_ctx: Context) {
   const ctx = _ctx.call
   const call = calls.removeUsernameAuthority
-  // This call doesn't exist in polkadot identity pallet
-  return { authority: '', suffix: '' }
+  if (call.v1002000.is(ctx)) {
+    const { authority } = call.v1002000.decode(ctx)
+    return { authority: fromMulticall(authority) as string, suffix: '' }
+  }
+  const { authority } = call.v1002000.decode(ctx)
+  return { authority: fromMulticall(authority) as string, suffix: '' }
 }
 
 // OK Events
