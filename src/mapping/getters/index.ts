@@ -48,6 +48,22 @@ export function getQuitSubCall(_ctx: Context) {
   return proc.getQuitSubCall(_ctx)
 }
 
+export function getSetUsernameForCall(_ctx: Context) {
+  return proc.getSetUsernameForCall(_ctx)
+}
+
+export function getAcceptUsernameCall(_ctx: Context) {
+  return proc.getAcceptUsernameCall(_ctx)
+}
+
+export function getSetPrimaryUsernameCall(_ctx: Context) {
+  return proc.getSetPrimaryUsernameCall(_ctx)
+}
+
+export function getRemoveDanglingUsernameCall(_ctx: Context) {
+  return proc.getRemoveDanglingUsernameCall(_ctx)
+}
+
 export function getAddUsernameAuthorityCall(_ctx: Context) {
   return proc.getAddUsernameAuthorityCall(_ctx)
 }
