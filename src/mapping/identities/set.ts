@@ -1,11 +1,11 @@
 import { getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { ChainOrigin, Identity } from '../../model'
 import { unwrap } from '../../utils/extract'
-import { addressTypeOf } from '../../utils/helper'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
-import { getIdentitySetEvent, getSetIdentityCall } from '../getters'
+import { getSetIdentityCall } from '../getters'
+import { ChainOrigin, Identity } from '../../model'
+import { addressTypeOf } from '../../utils/helper'
 
 const OPERATION = Action.CREATE
 
@@ -15,14 +15,12 @@ const OPERATION = Action.CREATE
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
-export async function handleIdentitySet(context: Context): Promise<void> {
+export async function handleIdentitySetCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getIdentitySetEvent)
-  // EVENT is missing all the fields, fallback to call
   const call = unwrap(context, getSetIdentityCall)
-  debug(OPERATION, event)
+  debug(OPERATION, call)
 
-  const id = event.who
+  const id = call.caller
   const final = await getOrCreate(context.store, Identity, id, {})
 
   // Set properties from basic
