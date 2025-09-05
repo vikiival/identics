@@ -44,6 +44,10 @@ export function getRemoveSubCall(_ctx: Context) {
   return proc.getRemoveSubCall(_ctx)
 }
 
+export function getQuitSubCall(_ctx: Context) {
+  return proc.getQuitSubCall(_ctx)
+}
+
 export function getAddUsernameAuthorityCall(_ctx: Context) {
   return proc.getAddUsernameAuthorityCall(_ctx)
 }

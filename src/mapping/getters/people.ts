@@ -217,10 +217,20 @@ export function getRemoveSubCall(_ctx: Context) {
   const call = calls.removeSub
   if (call.v1002006.is(ctx)) {
     const { sub } = call.v1002006.decode(ctx)
-    return { address: fromMulticall(sub) }
+    return { sub: fromMulticall(sub) }
   }
   const { sub } = call.v1002006.decode(ctx)
-  return { address: fromMulticall(sub) }
+  return { sub: fromMulticall(sub) }
+}
+
+export function getQuitSubCall(_ctx: Context) {
+  const ctx = _ctx.call
+  const call = calls.quitSub
+  if (call.v1002006.is(ctx)) {
+    return { sub: null }
+  }
+
+  return { sub: null }
 }
 
 export function getAddUsernameAuthorityCall(_ctx: Context) {
