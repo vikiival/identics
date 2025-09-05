@@ -56,6 +56,7 @@ type Sub @entity {
   createdAt: DateTime! @index
   origin: ChainOrigin!
   type: AddressType
+  deposit: BigInt
 }
 
 type Username @entity {

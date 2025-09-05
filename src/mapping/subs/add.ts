@@ -5,7 +5,7 @@ import { unwrap } from '../../utils/extract'
 import { subNameOf } from '../../utils/helper'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
-import { getAddSubCall, getSubIdentityAddEvent } from '../getters'
+import { getSubIdentityAddEvent } from '../getters'
 
 const OPERATION = `EVENT::ADD_SUB` //Action.CREATE
 
@@ -30,12 +30,13 @@ export async function handleSubAdd(context: Context): Promise<void> {
   }
 
   const sub = create(Sub, event.sub, {
-    name: event.data || subNameOf(id, event.address),
+    name: subNameOf(id, event.address),
     identity,
     blockNumber: BigInt(event.blockNumber),
     createdAt: event.timestamp,
     updatedAt: event.timestamp,
     origin: event.origin || ChainOrigin.PEOPLE,
+    deposit: event.deposit,
   })
 
   await context.store.save(sub)

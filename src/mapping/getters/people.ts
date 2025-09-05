@@ -1,3 +1,4 @@
+import { ChainOrigin } from '../../model'
 import { identity as calls } from '../../types/people/calls'
 import { identity as events } from '../../types/people/events'
 import {
@@ -41,8 +42,12 @@ function isEmpty<T>(data: Data): data is Data_None {
 function subFrom(
   sub: MultiAddress,
   data: Data
-): { address: string; data: string | undefined } {
-  return { address: fromMulticall(sub) as string, data: fromData(data) }
+): { address: string; data: string | undefined; deposit: bigint } {
+  return {
+    address: fromMulticall(sub) as string,
+    data: fromData(data),
+    deposit: BigInt(0),
+  }
 }
 
 // GETTERS
@@ -333,20 +338,30 @@ export function getIdentityKilledEvent(_ctx: Context) {
   return { who: addressOf(who) }
 }
 
-export function getSubIdentityRemovedEvent(_ctx: Context) {
-  const ctx = _ctx.event
-  const event = events.subIdentityRemoved
-  if (event.v1002006.is(ctx)) {
-    const { sub, main } = event.v1002006.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
-  }
-  const { sub, main } = event.v1002006.decode(ctx)
-  return { sub: addressOf(sub), main: addressOf(main) }
-}
-
 export function getSubIdentityAddEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.subIdentityAdded
+  if (event.v1002006.is(ctx)) {
+    const { sub, main, deposit } = event.v1002006.decode(ctx)
+    return {
+      sub: addressOf(sub),
+      main: addressOf(main),
+      deposit,
+      origin: ChainOrigin.PEOPLE,
+    }
+  }
+  const { sub, main, deposit } = event.v1002006.decode(ctx)
+  return {
+    sub: addressOf(sub),
+    main: addressOf(main),
+    deposit,
+    origin: ChainOrigin.PEOPLE,
+  }
+}
+
+export function getSubIdentityRemovedEvent(_ctx: Context) {
+  const ctx = _ctx.event
+  const event = events.subIdentityRemoved
   if (event.v1002006.is(ctx)) {
     const { sub, main } = event.v1002006.decode(ctx)
     return { sub: addressOf(sub), main: addressOf(main) }

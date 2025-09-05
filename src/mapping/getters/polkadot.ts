@@ -447,15 +447,22 @@ export function getSubIdentityAddEvent(_ctx: Context) {
   const ctx = _ctx.event
   const event = events.subIdentityAdded
   if (event.v15.is(ctx)) {
-    const [sub, main] = event.v15.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
+    const [sub, main, deposit] = event.v15.decode(ctx)
+    return {
+      sub: addressOf(sub),
+      main: addressOf(main),
+      deposit,
+      origin: ChainOrigin.RELAY,
+    }
   }
-  if (event.v9140.is(ctx)) {
-    const { sub, main } = event.v9140.decode(ctx)
-    return { sub: addressOf(sub), main: addressOf(main) }
+
+  const { sub, main, deposit } = event.v9140.decode(ctx)
+  return {
+    sub: addressOf(sub),
+    main: addressOf(main),
+    deposit,
+    origin: ChainOrigin.RELAY,
   }
-  const { sub, main } = event.v9140.decode(ctx)
-  return { sub: addressOf(sub), main: addressOf(main) }
 }
 
 export function getSubIdentityRevokedEvent(_ctx: Context) {
