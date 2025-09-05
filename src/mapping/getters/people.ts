@@ -299,6 +299,17 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
   return { authority: fromMulticall(authority) as string, suffix: '' }
 }
 
+export function getIdentitySetEvent(_ctx: Context) {
+  const ctx = _ctx.event
+  const event = events.identitySet
+  if (event.v1002006.is(ctx)) {
+    const { who } = event.v1002006.decode(ctx)
+    return { who: addressOf(who) }
+  }
+  const { who } = event.v1002006.decode(ctx)
+  return { who: addressOf(who) }
+}
+
 // OK Events
 export function getIdentityClearedEvent(_ctx: Context) {
   const ctx = _ctx.event

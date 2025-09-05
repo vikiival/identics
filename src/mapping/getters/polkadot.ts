@@ -10,7 +10,7 @@ import {
   Data_ShaThree256,
   MultiAddress,
 } from '../../types/polkadot/v9110'
-import { addressOf, onlyValue, unHex } from '../../utils/helper'
+import { addressOf, unHex } from '../../utils/helper'
 import { debug } from '../../utils/logger'
 import { Context } from '../../utils/types'
 
@@ -383,6 +383,18 @@ export function getRemoveUsernameAuthorityCall(_ctx: Context) {
   }
   const { authority } = call.v1002000.decode(ctx)
   return { authority: fromMulticall(authority) as string, suffix: '' }
+}
+
+export function getIdentitySetEvent(_ctx: Context) {
+  const ctx = _ctx.event
+  const event = events.identitySet
+  if (event.v5.is(ctx)) {
+    const [who] = event.v5.decode(ctx)
+    return { who: addressOf(who) }
+  }
+
+  const { who } = event.v9140.decode(ctx)
+  return { who: addressOf(who) }
 }
 
 // OK Events
