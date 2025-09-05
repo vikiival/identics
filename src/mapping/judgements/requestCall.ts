@@ -3,7 +3,7 @@ import { Identity } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { CallWith, Context } from '../../utils/types'
-import { getProvideJudgementCall } from '../getters'
+import { getRequestJudgementCall } from '../getters'
 
 const OPERATION = `EVENT::JUDGEMENT_REQUEST` //Action.CREATE
 
@@ -17,7 +17,7 @@ export async function handleJudgementRequestCall(
   context: Context
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const call: CallWith<any> = unwrap(context, getProvideJudgementCall)
+  const call: CallWith<any> = unwrap(context, getRequestJudgementCall)
   debug(OPERATION, call)
 
   const id = call.caller
