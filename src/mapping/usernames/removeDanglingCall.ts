@@ -14,7 +14,7 @@ const OPERATION = `EVENT::USERNAME_REMOVE_DANGLING`
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
-export async function handleDanglingUsernameRemove(
+export async function handleDanglingUsernameRemoveCall(
   context: Context
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
