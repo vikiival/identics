@@ -9,9 +9,9 @@ import { Identity, Registrar } from '../../model'
 const OPERATION = `CALL::SET_FIELDS`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the identity create call (Identity.set_fields)
+ * Set the field information for a registrar.
+ * Logs CALL::SET_FIELDS event
  * @param context - the context for the Call
  */
 export async function handleFieldSet(context: Context): Promise<void> {
@@ -27,10 +27,10 @@ export async function handleFieldSet(context: Context): Promise<void> {
     return
   }
 
-  // DEV: bitmap of requeired fields
+  // DEV: bitmap of required fields
   final.field = call.fields
   final.updatedAt = call.timestamp
 
-  success(OPERATION, `${final.id}/${final.fee}`)
+  success(OPERATION, `${final.id}/${final.field}`)
   await context.store.save(final)
 }
