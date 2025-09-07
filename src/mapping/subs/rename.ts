@@ -9,9 +9,9 @@ import { getRenameSubCall } from '../getters'
 const OPERATION = `CALL::RENAME_SUB` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the sub-identity alter call (Identity.rename_sub)
+ * Renames existing Sub entity
+ * Logs CALL::RENAME_SUB call
  * @param context - the context for the Call
  */
 export async function handleSubRename(context: Context): Promise<void> {
