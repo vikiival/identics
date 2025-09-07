@@ -1,17 +1,17 @@
 import { logger } from '@kodadot1/metasquid/logger'
 
 import { Store } from '@subsquid/typeorm-store'
+import { ProcessorContext } from '../people/processor'
 import {
   IdentityCall as IdxCall,
   IdentityEvent as IdxEvent,
 } from '../processable'
-import { ProcessorContext } from '../processor'
-import { debug, error } from '../utils/logger'
+import { debug } from '../utils/logger'
 import { Context, SelectedCall, SelectedEvent } from '../utils/types'
 import * as idx from './identities'
-import * as sub from './subs'
 import * as jud from './judgements'
 import * as reg from './registrars'
+import * as sub from './subs'
 import * as usrn from './usernames'
 
 type EventHandlerFunction = <T extends SelectedEvent>(
@@ -22,9 +22,10 @@ type CallHandlerFunction = <T extends SelectedCall>(
 ) => Promise<void>
 
 const eventHandlers: Record<string, EventHandlerFunction> = {
+  // [IdxEvent.setIdentity]: idx.handleIdentitySet, // USELESS, DO NOT USE
   [IdxEvent.clearIdentity]: idx.handleIdentityClear,
   [IdxEvent.killIdentity]: idx.handleIdentityKill,
-  //   [IdxEvent.addSubIdentity]: idx.handleSubIdentityAddedEvent,
+  [IdxEvent.addSubIdentity]: sub.handleSubAdd, // USED FROM CALL
   //   [IdxEvent.setSubIdentities]: idx.handleSubIdentitiesSetEvent,
   //   [IdxEvent.renameSubIdentity]: idx.handleSubIdentityRenamedEvent,
   [IdxEvent.removeSubIdentity]: sub.handleSubRemove,
@@ -32,7 +33,7 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
   [IdxEvent.requestJudgement]: jud.handleJudgementRequest,
   //   [IdxEvent.giveJudgement]: idx.handleJudgementGivenEvent,
   //   [IdxEvent.addRegistrar]: idx.handleRegistrarAddedEvent,
-  [IdxEvent.unrequestJudgement]: jud.handleJudgementCancel,
+  [IdxEvent.unrequestJudgement]: jud.handleJudgementUnrequest,
   // [IdxEvent.addAuthority]: idx.handleAuthorityAddedEvent,
   // [IdxEvent.removeAuthority]: idx.handleAuthorityRemovedEvent,
   [IdxEvent.setUsername]: usrn.handleUsernameSet,
@@ -46,28 +47,28 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
 }
 
 const callHandlers: Record<string, CallHandlerFunction> = {
-  [IdxCall.setIdentity]: idx.handleIdentitySet,
-  // [IdxCall.clearIdentity]: idx.handleIdentityClear,
-  // [IdxCall.killIdentity]: idx.handleIdentityKill,
+  [IdxCall.setIdentity]: idx.handleIdentitySetCall,
+  // [IdxCall.clearIdentity]: idx.handleIdentityClearCall, // USED FROM EVENT
+  // [IdxCall.killIdentity]: idx.handleIdentityKillCall, // USED FROM EVENT
   [IdxCall.provideJudgement]: jud.handleJudgementProvide,
   [IdxCall.addSub]: sub.handleSubAdd,
   [IdxCall.setSubs]: sub.handleSubListSet,
   [IdxCall.renameSub]: sub.handleSubRename,
-  // [IdxCall.removeSub]: idx.handleSubRemove,
-  // [IdxCall.quitSub]: idx.handleSubQuit,
+  // [IdxCall.removeSub]: sub.handleSubRemoveCall, // USED FROM EVENT
+  // [IdxCall.quitSub]: sub.handleSubQuitCall, // USED FROM EVENT
   [IdxCall.addUsernameAuthority]: usrn.handleUsernameAuthorityAdd,
   [IdxCall.removeUsernameAuthority]: usrn.handleUsernameAuthorityRemove,
   [IdxCall.addRegistrar]: reg.handleRegistrarAdd,
   [IdxCall.setFee]: reg.handleFeeSet,
   [IdxCall.setFields]: reg.handleFieldSet,
   [IdxCall.setAccountId]: reg.handleAccountIdSet,
-  // [IdxCall.requestJudgement]: idx.handleJudgementRequest,
-  // [IdxCall.cancelRequest]: idx.handleJudgementRequestCancel,
-  // [IdxCall.setUsernameFor]: idx.handleUsernameSetFor,
-  // [IdxCall.acceptUsername]: idx.handleUsernameAccept,
-  // [IdxCall.setPrimaryUsername]: idx.handleUsernamePrimarySet,
+  // [IdxCall.requestJudgement]: jud.handleJudgementRequestCall, // USED FROM EVENT
+  [IdxCall.cancelRequest]: jud.handleJudgementCancel,
+  // [IdxCall.setUsernameFor]: usrn.handleUsernameSetForCall, // USED FROM EVENT
+  // [IdxCall.acceptUsername]: usrn.handleUsernameAcceptCall, // NOT NEEDED as it can be handled by Username set
+  // [IdxCall.setPrimaryUsername]: usrn.handlePrimaryUsernameSet, // USED FROM EVENT, RECHECK
   [IdxCall.removeExpiredApproval]: usrn.handleExpiredApprovalRemove,
-  // [IdxCall.removeDanglingUsername]: idx.handleUsernameDanglingRemove
+  [IdxCall.removeDanglingUsername]: usrn.handleDanglingUsernameRemoveCall,
 }
 
 /**
@@ -81,6 +82,7 @@ export async function events<T extends SelectedEvent>(
 ): Promise<void> {
   const handler = eventHandlers[item.name as IdxEvent]
   if (!handler) {
+    throw Error(`NO EVENT handler FOR ${item.name}`)
     logger.error(`Unknown event ${item.name}`)
     debug(`EVENT::${item.name}`, item, true)
     return
@@ -95,6 +97,7 @@ export async function calls<T extends SelectedCall>(
 ): Promise<void> {
   const handler = callHandlers[item.name as IdxCall]
   if (!handler) {
+    throw Error(`NO CALL handler FOR ${item.name}`)
     logger.error(`Unknown call ${item.name}`)
     debug(`CALL::${item.name}`, item, true)
     return
