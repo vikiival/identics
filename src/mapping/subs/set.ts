@@ -11,8 +11,8 @@ import { getSetSubsCall } from '../getters'
 const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
+ * Handle the sub-identity create call (Identity.set_subs)
+ * Creates a new Sub entities
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
