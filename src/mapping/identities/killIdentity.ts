@@ -1,10 +1,9 @@
-import { logger } from '@kodadot1/metasquid/logger'
+import { findOneWithJoin } from '@kodadot1/metasquid/entity'
 import { Identity, Sub } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getIdentityKilledEvent } from '../getters'
-import { findOneWithJoin, get, getWith } from '@kodadot1/metasquid/entity'
 
 const OPERATION = Action.DESTROY
 
@@ -34,10 +33,15 @@ export async function handleIdentityKill(context: Context): Promise<void> {
   final.judgement = undefined
   final.hash = undefined
 
-  await context.store.remove(
-    Sub,
-    final.subs.map((sub) => sub.id)
-  )
+  const subCount = final.subs.length
 
-  success(OPERATION, `OK`)
+  if (subCount) {
+    await context.store.remove(
+      Sub,
+      final.subs.map((sub) => sub.id)
+    )
+  }
+
+  await context.store.save(final)
+  success(OPERATION, `${id}/${subCount}`)
 }
