@@ -8,21 +8,21 @@ import { getQuitSubCall } from '../getters'
 const OPERATION = `CALL::QUIT_SUB` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the sub-identity remove call (Identity.quit_sub)
+ * Removes existing Sub entity
+ * Logs CALL::QUIT_SUB call
  * @param context - the context for the Call
  */
 export async function handleSubQuitCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getQuitSubCall)
-  debug(OPERATION, event)
+  const call = unwrap(context, getQuitSubCall)
+  debug(OPERATION, call)
 
-  const id = event.caller
+  const id = call.caller
   const final = await get(context.store, Sub, id)
   if (final) {
     await context.store.remove(final)
   }
 
-  success(OPERATION, `${event.main}/${id}`)
+  success(OPERATION, `${call.main}/${id}`)
 }
