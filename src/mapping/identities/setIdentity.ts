@@ -7,7 +7,7 @@ import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getIdentitySetEvent, getSetIdentityCall } from '../getters'
 
-const OPERATION = Action.CREATE
+const OPERATION = `EVENT::${Action.CREATE}`
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -31,6 +31,7 @@ export async function handleIdentitySet(context: Context): Promise<void> {
   final.updatedAt = call.timestamp
   final.origin = call.origin || ChainOrigin.PEOPLE
   final.burned = false
+  final.deposit = BigInt(0n)
 
   // Set properties from IdentityInfo
   final.name = call.display
