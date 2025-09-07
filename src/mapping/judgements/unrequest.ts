@@ -5,7 +5,7 @@ import { Context } from '../../utils/types'
 import { getJudgementUnrequestedEvent } from '../getters'
 import { Identity } from '../../model'
 
-const OPERATION = `CALL::JUDGEMENT_CANCEL` //Action.CREATE
+const OPERATION = `EVENT::JUDGEMENT_CANCEL` //Action.CREATE
 
 /**
  * Handle the identity create call (Identity.set_identity)
@@ -29,15 +29,6 @@ export async function handleJudgementUnrequest(
   }
 
   final.registrar = undefined
-
-  // final.jugdement = call.judgement as Judgement
-  // final.registrar = call.registrarId
-  // final.hash = call.checksum
-
-  // Set properties from basic
-  // final.blockNumber = BigInt(call.blockNumber)
-  // final.createdAt = call.timestamp
-  // final.updatedAt = call.timestamp
 
   success(OPERATION, `${final.id}/${event.registrar}`)
   await context.store.save(final)
