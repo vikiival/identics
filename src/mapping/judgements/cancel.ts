@@ -1,16 +1,16 @@
 import { get } from '@kodadot1/metasquid/entity'
+import { Identity } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getCancelRequestCall } from '../getters'
-import { Identity } from '../../model'
 
-const OPERATION = `CALL::JUDGEMENT_CANCEL` //Action.CREATE
+const OPERATION = `CALL::JUDGEMENT_CANCEL`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the identity create call (Identity.cancel_request)
+ * Cancels request for judgement
+ * Logs CALL::JUDGEMENT_CANCEL event
  * @param context - the context for the Call
  */
 export async function handleJudgementCancel(context: Context): Promise<void> {
