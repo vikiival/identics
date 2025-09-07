@@ -8,9 +8,9 @@ import { getSetAccountCall } from '../getters'
 const OPERATION = `CALL::SET_ACCOUNT`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the registrar change call (Identity.set_account_id)
+ * Change the account associated with a registrar.
+ * Logs CALL::SET_ACCOUNT event
  * @param context - the context for the Call
  */
 export async function handleAccountIdSet(context: Context): Promise<void> {
