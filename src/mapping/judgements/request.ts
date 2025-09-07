@@ -1,16 +1,16 @@
 import { get } from '@kodadot1/metasquid/entity'
+import { Identity } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
-import { getJudgementRequestedEvent, getProvideJudgementCall } from '../getters'
-import { Identity, Judgement } from '../../model'
+import { getJudgementRequestedEvent } from '../getters'
 
 const OPERATION = `EVENT::JUDGEMENT_REQUEST` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the identity create call (Identity.request_judgement)
+ * Creates a request of judgement fro a given Identity
+ * Logs EVENT::JUDGEMENT_REQUEST event
  * @param context - the context for the Call
  */
 export async function handleJudgementRequest(context: Context): Promise<void> {
