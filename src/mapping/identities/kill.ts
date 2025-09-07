@@ -14,10 +14,10 @@ const OPERATION = Action.DESTROY
  */
 export async function handleIdentityKillCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getKillIdentityCall)
+  const call = unwrap(context, getKillIdentityCall)
   debug(OPERATION, context)
 
-  const id = event.who
+  const id = call.who
   const final = await findOneWithJoin(context.store, Identity, id, {
     subs: true,
   })
@@ -28,15 +28,20 @@ export async function handleIdentityKillCall(context: Context): Promise<void> {
   }
 
   final.burned = true
-  final.updatedAt = event.timestamp
+  final.updatedAt = call.timestamp
   final.registrar = undefined
   final.judgement = undefined
   final.hash = undefined
 
-  await context.store.remove(
-    Sub,
-    final.subs.map((sub) => sub.id)
-  )
+  const subCount = final.subs.length
 
-  success(OPERATION, `OK`)
+  if (subCount) {
+    await context.store.remove(
+      Sub,
+      final.subs.map((sub) => sub.id)
+    )
+  }
+
+  await context.store.save(final)
+  success(OPERATION, `${id}/${subCount}`)
 }
