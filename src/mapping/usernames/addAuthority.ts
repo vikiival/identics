@@ -1,14 +1,16 @@
+import { getOrCreate } from '@kodadot1/metasquid/entity'
 import { unwrap } from '../../utils/extract'
-import { debug, pending } from '../../utils/logger'
+import { debug, pending, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getAddUsernameAuthorityCall } from '../getters'
+import { Authority, ChainOrigin } from '../../model'
 
-const OPERATION = `CALL::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::ADD_USERNAME_AUTHORITY` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the identity create call (Identity.add_username_authority)
+ * Creates a new Authority entity
+ * Logs CALL::ADD_USERNAME_AUTHORITY call
  * @param context - the context for the Call
  */
 export async function handleUsernameAuthorityAdd(
@@ -18,7 +20,16 @@ export async function handleUsernameAuthorityAdd(
   const call = unwrap(context, getAddUsernameAuthorityCall)
   debug(OPERATION, call)
 
-  const id = call.caller
+  const id = call.authority
 
-  console.log(`Identity set to: ${id}`)
+  const authority = await getOrCreate(context.store, Authority, id, {})
+  authority.address = call.authority
+  authority.suffix = call.suffix
+  authority.createdAt = call.timestamp
+  authority.updatedAt = call.timestamp
+  authority.origin = call.origin || ChainOrigin.PEOPLE
+  authority.blockNumber = call.blockNumber
+
+  success(OPERATION, `${id}/${call.suffix}`)
+  await context.store.save(authority)
 }
