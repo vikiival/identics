@@ -7,13 +7,13 @@ import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getSubIdentityAddEvent } from '../getters'
 
-const OPERATION = `EVENT::ADD_SUB` //Action.CREATE
+const OPERATION = `EVENT::ADD_SUB`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
+ * Handle the sub-identity create event (Identity.SubIdentityAdded)
+ * Creates a new Sub entity
+ * Logs EVENT::ADD_SUB event
+ * @param context - the context for the Event
  */
 export async function handleSubAdd(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
