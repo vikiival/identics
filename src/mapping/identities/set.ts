@@ -1,11 +1,11 @@
 import { getOrCreate } from '@kodadot1/metasquid/entity'
 
+import { ChainOrigin, Identity } from '../../model'
 import { unwrap } from '../../utils/extract'
+import { addressTypeOf } from '../../utils/helper'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getSetIdentityCall } from '../getters'
-import { ChainOrigin, Identity } from '../../model'
-import { addressTypeOf } from '../../utils/helper'
 
 const OPERATION = Action.CREATE
 
@@ -29,6 +29,7 @@ export async function handleIdentitySetCall(context: Context): Promise<void> {
   final.updatedAt = call.timestamp
   final.origin = call.origin || ChainOrigin.PEOPLE
   final.burned = false
+  final.deposit = BigInt(0n)
 
   // Set properties from IdentityInfo
   final.name = call.display
@@ -42,7 +43,6 @@ export async function handleIdentitySetCall(context: Context): Promise<void> {
   final.discord = call.discord
 
   final.type = addressTypeOf(id)
-  final.deposit = BigInt(0n)
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
