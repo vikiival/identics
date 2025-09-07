@@ -1,9 +1,8 @@
-import { findOneWithJoin, get, getWith } from '@kodadot1/metasquid/entity'
+import { findOneWithJoin } from '@kodadot1/metasquid/entity'
 import { Identity, Sub } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
-import { getIdentityClearedEvent } from '../getters'
 import { getClearIdentityCall } from '../getters/people'
 
 const OPERATION = Action.CLEAR
