@@ -7,12 +7,12 @@ import { debug, pending, skip, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getAddSubCall } from '../getters'
 
-const OPERATION = `CALL::ADD_SUB` //Action.CREATE
+const OPERATION = `CALL::ADD_SUB`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the identity create call (Identity.add_sub)
+ * Creates a new Sub entity
+ * Logs CALL::ADD_SUB event
  * @param context - the context for the Call
  */
 export async function handleSubAddCall(context: Context): Promise<void> {
