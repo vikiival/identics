@@ -9,19 +9,19 @@ import { getAcceptUsernameCall } from '../getters'
 const OPERATION = `CALL::ACCEPT_USERNAME` //Action.CREATE
 
 /**
- * Handle the identity create call (Identity.accept_username)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the username create call (Identity.accept_username)
+ * Creates a new Username entity
+ * Logs CALL::ACCEPT_USERNAME call
  * @param context - the context for the Call
  */
 export async function handleUsernameAcceptCall(
   context: Context
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getAcceptUsernameCall)
-  debug(OPERATION, event)
+  const call = unwrap(context, getAcceptUsernameCall)
+  debug(OPERATION, call)
 
-  const id = event.username
+  const id = call.username
   const final = await getOrCreate(context.store, Username, id, {})
 
   final.status = UsernameStatus.Active
