@@ -8,9 +8,9 @@ import { getAddRegistrarCall, getRegistrarAddedEvent } from '../getters'
 const OPERATION = `CALL::ADD_REGISTRAR`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the registrar create call (Identity.add_registrar)
+ * Creates a new Registrar entity
+ * Logs CALL::ADD_REGISTRAR event
  * @param context - the context for the Call
  */
 export async function handleRegistrarAdd(context: Context): Promise<void> {
