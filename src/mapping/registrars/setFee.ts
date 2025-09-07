@@ -9,8 +9,8 @@ import { Identity, Registrar } from '../../model'
 const OPERATION = `CALL::SET_FEE`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
+ * Handle the identity create call (Identity.set_fee)
+ * Set the fee required for a judgement to be requested from a registrar.
  * Logs Action.CREATE event
  * @param context - the context for the Call
  */
