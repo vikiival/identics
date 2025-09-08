@@ -5,7 +5,7 @@ import { debug, pending, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getRemoveExpiredApprovalCall } from '../getters'
 
-const OPERATION = `CALL::AUTH_REMOVE`
+const OPERATION = `CALL::USERNAME_APPROVAL_REMOVE`
 
 /**
  * Handle the identity create call (Identity.set_identity)
