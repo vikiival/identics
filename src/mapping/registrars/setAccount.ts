@@ -16,7 +16,7 @@ const OPERATION = `CALL::SET_ACCOUNT`
 export async function handleAccountIdSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getSetAccountCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.index.toString()
   const final = await get(context.store, Registrar, id)
