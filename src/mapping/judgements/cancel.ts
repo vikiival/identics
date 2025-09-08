@@ -16,7 +16,7 @@ const OPERATION = `CALL::JUDGEMENT_CANCEL`
 export async function handleJudgementCancel(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getCancelRequestCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
   const final = await get(context.store, Identity, id)
