@@ -54,7 +54,7 @@
         "remove_username",
         "kill_username"
       ],
-      "storage": ["Registrars"],
+      "storage": ["Registrars", "AuthorityOf"],
       "constants": []
     }
   }
