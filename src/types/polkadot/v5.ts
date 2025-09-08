@@ -1,5 +1,23 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
+export interface RegistrarInfo {
+    account: AccountId
+    fee: Balance
+    fields: bigint
+}
+
+export type Balance = bigint
+
+export type AccountId = Bytes
+
+export const RegistrarInfo: sts.Type<RegistrarInfo> = sts.struct(() => {
+    return  {
+        account: AccountId,
+        fee: Balance,
+        fields: sts.bigint(),
+    }
+})
+
 export const IdentityJudgement: sts.Type<IdentityJudgement> = sts.closedEnum(() => {
     return  {
         Erroneous: sts.unit(),
@@ -42,8 +60,6 @@ export interface IdentityJudgement_Reasonable {
 export interface IdentityJudgement_Unknown {
     __kind: 'Unknown'
 }
-
-export type Balance = bigint
 
 export const LookupSource = sts.bytes()
 
