@@ -21,50 +21,90 @@ type CallHandlerFunction = <T extends SelectedCall>(
   ctx: Context
 ) => Promise<void>
 
+function skipEvent(
+  what: IdxCall | IdxEvent,
+  reason: string
+): (ctx: Context) => Promise<void> {
+  logger.error(`Unhandled ${what}: ${reason}`)
+  return async (ctx: Context) => debug(what as any, ctx.event, true)
+}
+
+function skipCall(
+  what: IdxCall | IdxEvent,
+  reason: string
+): (ctx: Context) => Promise<void> {
+  logger.error(`Unhandled ${what}: ${reason}`)
+  return async (ctx: Context) => debug(what as any, ctx.call, true)
+}
+
 const eventHandlers: Record<string, EventHandlerFunction> = {
-  // [IdxEvent.setIdentity]: idx.handleIdentitySet, // USELESS, DO NOT USE
+  [IdxEvent.setIdentity]: skipEvent(
+    IdxEvent.setIdentity,
+    'USELESS, DO NOT USE'
+  ), //idx.handleIdentitySet, // USELESS, DO NOT USE
   [IdxEvent.clearIdentity]: idx.handleIdentityClear,
   [IdxEvent.killIdentity]: idx.handleIdentityKill,
-  [IdxEvent.addSubIdentity]: sub.handleSubAdd, // USED FROM CALL
+  [IdxEvent.addSubIdentity]: skipEvent(
+    IdxEvent.addSubIdentity,
+    `USED FROM CALL ${IdxCall.addSub}`
+  ), // sub.handleSubAdd,
   //   [IdxEvent.setSubIdentities]: idx.handleSubIdentitiesSetEvent,
   //   [IdxEvent.renameSubIdentity]: idx.handleSubIdentityRenamedEvent,
   [IdxEvent.removeSubIdentity]: sub.handleSubRemove,
   [IdxEvent.revokeSubIdentity]: sub.handleSubQuit,
   [IdxEvent.requestJudgement]: jud.handleJudgementRequest,
-  //   [IdxEvent.giveJudgement]: idx.handleJudgementGivenEvent,
-  //   [IdxEvent.addRegistrar]: idx.handleRegistrarAddedEvent,
+  [IdxEvent.giveJudgement]: skipEvent(
+    IdxEvent.giveJudgement,
+    `USED FROM CALL ${IdxCall.provideJudgement}`
+  ), //jud.handleJudgementProvide,
+  //   [IdxEvent.addRegistrar]: jud.handleRegistrarAddedEvent,
   [IdxEvent.unrequestJudgement]: jud.handleJudgementUnrequest,
-  // [IdxEvent.addAuthority]: idx.handleAuthorityAddedEvent,
-  // [IdxEvent.removeAuthority]: idx.handleAuthorityRemovedEvent,
+  // [IdxEvent.addAuthority]: jud.handleAuthorityAddedEvent,
+  // [IdxEvent.removeAuthority]: jud.handleAuthorityRemovedEvent,
   [IdxEvent.setUsername]: usrn.handleUsernameSet,
-  // [IdxEvent.queueUsername]: idx.handleUsernameQueuedEvent,
-  // [IdxEvent.expirePreapproval]: idx.handlePreapprovalExpiredEvent,
+  // [IdxEvent.queueUsername]: usrn.handleUsernameQueuedEvent,
+  // [IdxEvent.expirePreapproval]: usrn.handlePreapprovalExpiredEvent,
   [IdxEvent.setPrimaryUsername]: usrn.handlePrimaryUsernameSet,
   [IdxEvent.removeDanglingUsername]: usrn.handleDanglingUsernameRemove,
-  // [IdxEvent.unbindUsername]: idx.handleUsernameUnboundEvent,
-  // [IdxEvent.removeUsername]: idx.handleUsernameRemovedEvent,
-  // [IdxEvent.killUsername]: idx.handleUsernameKilledEvent
+  [IdxEvent.unbindUsername]: usrn.handleUsernameUnbind,
+  [IdxEvent.removeUsername]: usrn.handleUsernameRemove,
+  [IdxEvent.killUsername]: usrn.handleUsernameKill,
 }
 
 const callHandlers: Record<string, CallHandlerFunction> = {
   [IdxCall.setIdentity]: idx.handleIdentitySetCall,
-  // [IdxCall.clearIdentity]: idx.handleIdentityClearCall, // USED FROM EVENT
-  // [IdxCall.killIdentity]: idx.handleIdentityKillCall, // USED FROM EVENT
+  [IdxCall.clearIdentity]: skipCall(
+    IdxCall.clearIdentity,
+    `USED FROM EVENT ${IdxEvent.clearIdentity}`
+  ), // USED FROM EVENT
+  [IdxCall.killIdentity]: skipCall(
+    IdxCall.killIdentity,
+    `USED FROM EVENT ${IdxEvent.killIdentity}`
+  ), // idx.handleIdentityKillCall,
   [IdxCall.provideJudgement]: jud.handleJudgementProvide,
-  [IdxCall.addSub]: sub.handleSubAdd,
+  [IdxCall.addSub]: sub.handleSubAddCall,
   [IdxCall.setSubs]: sub.handleSubListSet,
   [IdxCall.renameSub]: sub.handleSubRename,
-  // [IdxCall.removeSub]: sub.handleSubRemoveCall, // USED FROM EVENT
-  // [IdxCall.quitSub]: sub.handleSubQuitCall, // USED FROM EVENT
+  [IdxCall.removeSub]: skipCall(
+    IdxCall.removeSub,
+    `USED FROM EVENT ${IdxEvent.removeSubIdentity}`
+  ), // USED FROM EVENT
+  [IdxCall.quitSub]: sub.handleSubQuitCall, // USED FROM EVENT
   [IdxCall.addUsernameAuthority]: usrn.handleUsernameAuthorityAdd,
   [IdxCall.removeUsernameAuthority]: usrn.handleUsernameAuthorityRemove,
   [IdxCall.addRegistrar]: reg.handleRegistrarAdd,
   [IdxCall.setFee]: reg.handleFeeSet,
   [IdxCall.setFields]: reg.handleFieldSet,
   [IdxCall.setAccountId]: reg.handleAccountIdSet,
-  // [IdxCall.requestJudgement]: jud.handleJudgementRequestCall, // USED FROM EVENT
+  [IdxCall.requestJudgement]: skipCall(
+    IdxCall.requestJudgement,
+    `USED FROM EVENT ${IdxEvent.requestJudgement}`
+  ), // jud.handleJudgementRequestCall, // USED FROM EVENT
   [IdxCall.cancelRequest]: jud.handleJudgementCancel,
-  // [IdxCall.setUsernameFor]: usrn.handleUsernameSetForCall, // USED FROM EVENT
+  [IdxCall.setUsernameFor]: skipCall(
+    IdxCall.setUsernameFor,
+    `USED FROM EVENT ${IdxEvent.setUsername}`
+  ), // usrn.handleUsernameSetForCall,
   // [IdxCall.acceptUsername]: usrn.handleUsernameAcceptCall, // NOT NEEDED as it can be handled by Username set
   // [IdxCall.setPrimaryUsername]: usrn.handlePrimaryUsernameSet, // USED FROM EVENT, RECHECK
   [IdxCall.removeExpiredApproval]: usrn.handleExpiredApprovalRemove,
