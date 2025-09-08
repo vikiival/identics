@@ -429,40 +429,35 @@ export function getPrimaryUsernameSetEvent(_ctx: Context) {
 
 export function getUsernameRemoveEvent(_ctx: Context) {
   const ctx = _ctx.event
-  return { username: '' }
-  // const event = events.usernameRemoved
-  // if (event.v1002006.is(ctx)) {
-  //   const { username } = event.v1002006.decode(ctx)
-  //   return { username }
-  // }
-  // const { username } = event.v1002006.decode(ctx)
-  // return { username }
+  const event = events.usernameRemoved
+  if (event.v1005001.is(ctx)) {
+    const { username } = event.v1005001.decode(ctx)
+    return { username }
+  }
+  const { username } = event.v1005001.decode(ctx)
+  return { username }
 }
 
 export function getUsernameKillEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Uncomment once the event is available in types
-  // const event = events.usernameKilled
-  // if (event.v1002006.is(ctx)) {
-  //     const { username } = event.v1002006.decode(ctx)
-  //     return { username }
-  // }
-  //     const { username } = event.v1002006.decode(ctx)
-  //     return { username }
-  return { username: '' }
+  const event = events.usernameKilled
+  if (event.v1005001.is(ctx)) {
+    const { username } = event.v1005001.decode(ctx)
+    return { username }
+  }
+  const { username } = event.v1005001.decode(ctx)
+  return { username }
 }
 
 export function getUsernameUnbindEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Uncomment once the event is available in types
-  // const event = events.usernameUnbound
-  // if (event.v1002006.is(ctx)) {
-  //     const { username } = event.v1002006.decode(ctx)
-  //     return { username }
-  // }
-  //     const { username } = event.v1002006.decode(ctx)
-  //     return { username }
-  return { username: '' }
+  const event = events.usernameUnbound
+  if (event.v1005001.is(ctx)) {
+    const { username } = event.v1005001.decode(ctx)
+    return { username }
+  }
+  const { username } = event.v1005001.decode(ctx)
+  return { username }
 }
 
 // DOABLE Events
@@ -533,14 +528,14 @@ export function getSetAccountCall(_ctx: Context) {
 }
 
 // export function getJudgementGivenEvent(_ctx: Context) {
-//     const ctx = _ctx.event
-//     const event = events.judgementGiven
-//     if (event.v1002006.is(ctx)) {
-//         const { target, registrarIndex: registrar } = event.v1002006.decode(ctx)
-//         return { target: addressOf(target), registrar }
-//     }
+//   const ctx = _ctx.event
+//   const event = events.judgementGiven
+//   if (event.v1002006.is(ctx)) {
 //     const { target, registrarIndex: registrar } = event.v1002006.decode(ctx)
 //     return { target: addressOf(target), registrar }
+//   }
+//   const { target, registrarIndex: registrar } = event.v1002006.decode(ctx)
+//   return { target: addressOf(target), registrar }
 // }
 
 export function getRegistrarAddedEvent(_ctx: Context) {
