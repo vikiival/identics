@@ -578,8 +578,13 @@ export function getJudgementUnrequestedEvent(_ctx: Context) {
 
 export function getRemoveDanglingUsernameEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Username events don't exist in polkadot identity pallet
-  return { who: '', username: '' }
+  const event = events.danglingUsernameRemoved
+  if (event.v1002000.is(ctx)) {
+    const { who, username } = event.v1002000.decode(ctx)
+    return { who: addressOf(who), username: unHex(username) }
+  }
+  const { who, username } = event.v1002000.decode(ctx)
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getSetFeeCall(_ctx: Context) {
