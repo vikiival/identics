@@ -19,7 +19,7 @@ export async function handleExpiredApprovalRemove(
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getRemoveExpiredApprovalCall)
 
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.username
   const final = await get(context.store, Username, id)
