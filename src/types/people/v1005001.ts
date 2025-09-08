@@ -1,5 +1,19 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
+export interface AuthorityProperties {
+    accountId: AccountId32
+    allocation: number
+}
+
+export type AccountId32 = Bytes
+
+export const AuthorityProperties: sts.Type<AuthorityProperties> = sts.struct(() => {
+    return  {
+        accountId: AccountId32,
+        allocation: sts.number(),
+    }
+})
+
 export const MultiSignature: sts.Type<MultiSignature> = sts.closedEnum(() => {
     return  {
         Ecdsa: sts.bytes(),
@@ -60,7 +74,5 @@ export interface MultiAddress_Raw {
     __kind: 'Raw'
     value: Bytes
 }
-
-export type AccountId32 = Bytes
 
 export const AccountId32 = sts.bytes()
