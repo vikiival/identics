@@ -9,10 +9,10 @@ import { getUsernameRemoveEvent } from '../getters'
 const OPERATION = `EVENT::REMOVE_USERNAME`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
+ * Handle the username removal event (Identity.UsernameRemoved)
+ * Removes existing Username entity
+ * Logs EVENT::REMOVE_USERNAME event
+ * @param context - the context for the Event
  */
 export async function handleUsernameRemove(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
