@@ -1,17 +1,17 @@
-import { get, getOrCreate } from '@kodadot1/metasquid/entity'
+import { get } from '@kodadot1/metasquid/entity'
 
+import { Registrar } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
+import { Context } from '../../utils/types'
 import { getSetFeeCall } from '../getters'
-import { Identity, Registrar } from '../../model'
 
 const OPERATION = `CALL::SET_FEE`
 
 /**
  * Handle the identity create call (Identity.set_fee)
  * Set the fee required for a judgement to be requested from a registrar.
- * Logs Action.CREATE event
+ * Logs CALL::SET_FEE event
  * @param context - the context for the Call
  */
 export async function handleFeeSet(context: Context): Promise<void> {
