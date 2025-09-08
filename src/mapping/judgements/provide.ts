@@ -16,7 +16,7 @@ const OPERATION = `CALL::JUDGEMENT_GIVE`
 export async function handleJudgementProvide(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getProvideJudgementCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.target
   const final = await get(context.store, Identity, id)
