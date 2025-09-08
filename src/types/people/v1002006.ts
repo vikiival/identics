@@ -1,5 +1,21 @@
 import {sts, Result, Option, Bytes, BitSequence} from './support'
 
+export interface RegistrarInfo {
+    account: AccountId32
+    fee: bigint
+    fields: bigint
+}
+
+export type AccountId32 = Bytes
+
+export const RegistrarInfo: sts.Type<RegistrarInfo> = sts.struct(() => {
+    return  {
+        account: AccountId32,
+        fee: sts.bigint(),
+        fields: sts.bigint(),
+    }
+})
+
 export const MultiSignature: sts.Type<MultiSignature> = sts.closedEnum(() => {
     return  {
         Ecdsa: sts.bytes(),
@@ -371,7 +387,5 @@ export interface MultiAddress_Raw {
     __kind: 'Raw'
     value: Bytes
 }
-
-export type AccountId32 = Bytes
 
 export const AccountId32 = sts.bytes()
