@@ -18,7 +18,7 @@ export async function handleRegistrarAdd(context: Context): Promise<void> {
   const event = unwrap(context, getRegistrarAddedEvent)
   const call = unwrap(context, getAddRegistrarCall)
   debug(OPERATION, event)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = event.index.toString()
   const final = create(Registrar, id, {
