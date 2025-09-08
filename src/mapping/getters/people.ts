@@ -1,6 +1,7 @@
 import { ChainOrigin } from '../../model'
 import { identity as calls } from '../../types/people/calls'
 import { identity as events } from '../../types/people/events'
+import { registrars } from '../../types/people/identity/storage'
 import {
   Data,
   Data_BlakeTwo256,
@@ -543,10 +544,10 @@ export function getRegistrarAddedEvent(_ctx: Context) {
   const event = events.registrarAdded
   if (event.v1002006.is(ctx)) {
     const { registrarIndex: index } = event.v1002006.decode(ctx)
-    return { index }
+    return { index, origin: ChainOrigin.PEOPLE }
   }
   const { registrarIndex: index } = event.v1002006.decode(ctx)
-  return { index }
+  return { index, origin: ChainOrigin.PEOPLE }
 }
 
 export function getRemoveExpiredApprovalCall(_ctx: Context) {
@@ -569,4 +570,8 @@ export function getAddRegistrarCall(_ctx: Context) {
   }
   const { account } = call.v1002006.decode(ctx)
   return { account: fromMulticall(account) as string }
+}
+
+export function getRegistrarStorageInfo() {
+  return registrars.v1002006
 }

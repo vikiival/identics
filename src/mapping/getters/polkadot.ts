@@ -1,6 +1,7 @@
 import { ChainOrigin } from '../../model'
 import { identity as calls } from '../../types/polkadot/calls'
 import { identity as events } from '../../types/polkadot/events'
+import { registrars } from '../../types/polkadot/identity/storage'
 import {
   Data,
   Data_BlakeTwo256,
@@ -629,14 +630,14 @@ export function getRegistrarAddedEvent(_ctx: Context) {
   const event = events.registrarAdded
   if (event.v5.is(ctx)) {
     const index = event.v5.decode(ctx)
-    return { index }
+    return { index, origin: ChainOrigin.RELAY }
   }
   if (event.v9140.is(ctx)) {
     const { registrarIndex: index } = event.v9140.decode(ctx)
-    return { index }
+    return { index, origin: ChainOrigin.RELAY }
   }
   const { registrarIndex: index } = event.v9140.decode(ctx)
-  return { index }
+  return { index, origin: ChainOrigin.RELAY }
 }
 
 export function getRemoveExpiredApprovalCall(_ctx: Context) {
@@ -663,4 +664,8 @@ export function getAddRegistrarCall(_ctx: Context) {
   }
   const { account } = call.v9291.decode(ctx)
   return { account: fromMulticall(account) as string }
+}
+
+export function getRegistrarStorageInfo() {
+  return registrars.v5
 }

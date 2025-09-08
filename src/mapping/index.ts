@@ -57,7 +57,7 @@ const eventHandlers: Record<string, EventHandlerFunction> = {
     IdxEvent.giveJudgement,
     `USED FROM CALL ${IdxCall.provideJudgement}`
   ), //jud.handleJudgementProvide,
-  //   [IdxEvent.addRegistrar]: jud.handleRegistrarAddedEvent,
+  [IdxEvent.addRegistrar]: reg.handleRegistrarAdd,
   [IdxEvent.unrequestJudgement]: jud.handleJudgementUnrequest,
   // [IdxEvent.addAuthority]: jud.handleAuthorityAddedEvent,
   // [IdxEvent.removeAuthority]: jud.handleAuthorityRemovedEvent,
@@ -92,7 +92,10 @@ const callHandlers: Record<string, CallHandlerFunction> = {
   [IdxCall.quitSub]: sub.handleSubQuitCall, // USED FROM EVENT
   [IdxCall.addUsernameAuthority]: usrn.handleUsernameAuthorityAdd,
   [IdxCall.removeUsernameAuthority]: usrn.handleUsernameAuthorityRemove,
-  [IdxCall.addRegistrar]: reg.handleRegistrarAdd,
+  [IdxCall.addRegistrar]: skipCall(
+    IdxCall.addRegistrar,
+    `USED FROM EVENT ${IdxEvent.addRegistrar}`
+  ), //reg.handleRegistrarAdd,
   [IdxCall.setFee]: reg.handleFeeSet,
   [IdxCall.setFields]: reg.handleFieldSet,
   [IdxCall.setAccountId]: reg.handleAccountIdSet,
@@ -137,6 +140,15 @@ export async function calls<T extends SelectedCall>(
 ): Promise<void> {
   const handler = callHandlers[item.name as IdxCall]
   if (!handler) {
+    if (item.name === 'Utility.batch' || item.name === 'Council.close') {
+      debug(
+        `CALL::UNPROCESSABLE`,
+        { name: item.name, args: item.args, block: item.block.height },
+        true
+      )
+      logger.error(`Unknown call ${item.name}`)
+      return
+    }
     throw Error(`NO CALL handler FOR ${item.name}`)
     logger.error(`Unknown call ${item.name}`)
     debug(`CALL::${item.name}`, item, true)
@@ -162,6 +174,7 @@ export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
       )
 
       if (call.success) {
+        debug(`CALL::${call.name}`, call.events, true)
         await calls(call, {
           event: call.events[0],
           block: block.header,
