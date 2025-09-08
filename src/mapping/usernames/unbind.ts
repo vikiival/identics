@@ -2,7 +2,7 @@ import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { Identity, Username } from '../../model'
 import { unwrap } from '../../utils/extract'
-import { debug, pending } from '../../utils/logger'
+import { debug, pending, skip } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getUsernameUnbindEvent } from '../getters'
 
@@ -18,6 +18,11 @@ export async function handleUsernameUnbind(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const event = unwrap(context, getUsernameUnbindEvent)
   debug(OPERATION, event)
+
+  if (!event.username) {
+    skip(OPERATION, `Missing username`)
+    return
+  }
 
   const id = event.username
   const final = await getOrCreate(context.store, Username, id, {})
