@@ -17,7 +17,7 @@ const OPERATION = `CALL::RENAME_SUB` //Action.CREATE
 export async function handleSubRename(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getRenameSubCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.address
   const final = await get(context.store, Sub, id)
