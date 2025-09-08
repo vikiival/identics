@@ -4,28 +4,28 @@ import { Username, UsernameStatus } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
-import { getRemoveDanglingUsernameEvent } from '../getters'
+import { getRemoveDanglingUsernameCall } from '../getters'
 
-const OPERATION = `EVENT::USERNAME_REMOVE_DANGLING`
+const OPERATION = `CALL::USERNAME_REMOVE_DANGLING`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the dangling username removal call (Identity.remove_dangling_username)
+ * Removes existing Username entity
+ * Logs CALL::USERNAME_REMOVE_DANGLING event
  * @param context - the context for the Call
  */
 export async function handleDanglingUsernameRemoveCall(
   context: Context
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getRemoveDanglingUsernameEvent)
-  debug(OPERATION, event)
+  const call = unwrap(context, getRemoveDanglingUsernameCall)
+  debug(OPERATION, call)
 
-  const id = event.username
+  const id = call.username
   const final = await getOrCreate(context.store, Username, id, {})
 
   final.status = UsernameStatus.Removed
 
   await context.store.save(final)
-  success(OPERATION, `${event.who}/${id}`)
+  success(OPERATION, `${call.who}/${id}`)
 }
