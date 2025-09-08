@@ -18,7 +18,7 @@ export async function handleUsernameAuthorityRemove(
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getRemoveUsernameAuthorityCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.authority
   const final = await get(context.store, Authority, id)
