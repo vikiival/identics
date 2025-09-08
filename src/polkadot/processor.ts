@@ -33,6 +33,7 @@ export const processor = new SubstrateBatchProcessor()
     // Set via .env for local runs or via secrets when deploying to Subsquid Cloud
     // https://docs.subsquid.io/deploy-squid/env-variables/
     url: assertNotNull(NODE_URL, 'No RPC endpoint supplied'),
+    // capacity: 20,
     // More RPC connection options at https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source
     rateLimit: 10,
   })
@@ -73,10 +74,6 @@ export const processor = new SubstrateBatchProcessor()
     extrinsic: true,
   })
   .addCall({
-    name: [IdentityCall.addRegistrar],
-    extrinsic: true,
-  })
-  .addCall({
     name: [IdentityCall.setFee],
     extrinsic: true,
   })
@@ -88,13 +85,11 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.setAccountId],
     extrinsic: true,
   })
-  // RECHECK
   .addEvent({
     name: [IdentityEvent.setIdentity],
     extrinsic: true,
     call: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.requestJudgement],
     extrinsic: true,
@@ -104,33 +99,27 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.cancelRequest],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.removeSub],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.quitSub],
     extrinsic: true,
   })
-  // RECHECK
   .addEvent({
     name: [IdentityEvent.addSubIdentity],
     extrinsic: true,
     call: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.setUsernameFor],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.acceptUsername],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.setPrimaryUsername],
     extrinsic: true,
@@ -139,7 +128,6 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.removeExpiredApproval],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.removeDanglingUsername],
     extrinsic: true,

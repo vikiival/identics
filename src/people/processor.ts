@@ -1,17 +1,16 @@
-import { assertNotNull } from '@subsquid/util-internal'
 import {
-  BlockHeader,
   Call as _Call,
-  DataHandlerContext,
   Event as _Event,
   Extrinsic as _Extrinsic,
+  BlockHeader,
+  DataHandlerContext,
   SubstrateBatchProcessor,
   SubstrateBatchProcessorFields,
 } from '@subsquid/substrate-processor'
+import { assertNotNull } from '@subsquid/util-internal'
 
-import { events } from '../types/people'
-import { calls } from '../types/people'
 import { IdentityCall, IdentityEvent } from '../processable'
+import { events } from '../types/people'
 import { fieldSelection } from '../utils/types'
 
 const ARCHIVE_URL = `https://v2.archive.subsquid.io/network/people-chain`
@@ -30,6 +29,7 @@ export const processor = new SubstrateBatchProcessor()
     // Set via .env for local runs or via secrets when deploying to Subsquid Cloud
     // https://docs.subsquid.io/deploy-squid/env-variables/
     url: assertNotNull(NODE_URL, 'No RPC endpoint supplied'),
+    // capacity: 20,
     // More RPC connection options at https://docs.subsquid.io/substrate-indexing/setup/general/#set-data-source
     rateLimit: 10,
   })
