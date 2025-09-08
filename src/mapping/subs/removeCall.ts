@@ -16,7 +16,7 @@ const OPERATION = `CALL::REMOVE_SUB` //Action.CREATE
 export async function handleSubRemoveCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getRemoveSubCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.sub
   const final = await get(context.store, Sub, id)
