@@ -17,7 +17,7 @@ const OPERATION = `CALL::SET_FIELDS`
 export async function handleFieldSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getSetFieldCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.index.toString()
   const final = await get(context.store, Registrar, id)
