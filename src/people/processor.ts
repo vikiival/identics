@@ -37,12 +37,10 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.setIdentity],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.clearIdentity],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.killIdentity],
     extrinsic: true,
@@ -87,49 +85,43 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.setAccountId],
     extrinsic: true,
   })
-  // RECHECK
-  .addEvent({
-    name: [IdentityEvent.setIdentity],
-    extrinsic: true,
-    call: true,
-  })
-  // RECHECK
-  .addCall({
-    name: [IdentityCall.requestJudgement],
-    extrinsic: true,
-  })
+  // DO not use, handled by call
+  // .addEvent({
+  //   name: [IdentityEvent.setIdentity],
+  //   extrinsic: true,
+  //   call: true,
+  // })
+  // DO not use, handled by event
+  // .addCall({
+  //   name: [IdentityCall.requestJudgement],
+  //   extrinsic: true,
+  // })
   // TODO: UNIMPLEMENTED
   .addCall({
     name: [IdentityCall.cancelRequest],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.removeSub],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.quitSub],
     extrinsic: true,
   })
-  // RECHECK
   .addEvent({
     name: [IdentityEvent.addSubIdentity],
     extrinsic: true,
     call: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.setUsernameFor],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.acceptUsername],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.setPrimaryUsername],
     extrinsic: true,
@@ -138,7 +130,6 @@ export const processor = new SubstrateBatchProcessor()
     name: [IdentityCall.removeExpiredApproval],
     extrinsic: true,
   })
-  // RECHECK
   .addCall({
     name: [IdentityCall.removeDanglingUsername],
     extrinsic: true,
