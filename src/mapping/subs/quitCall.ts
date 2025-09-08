@@ -16,7 +16,7 @@ const OPERATION = `CALL::QUIT_SUB` //Action.CREATE
 export async function handleSubQuitCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getQuitSubCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
   const final = await get(context.store, Sub, id)
