@@ -64,7 +64,9 @@ type Username @entity {
   id: ID!
   primary: Boolean!
   name: String! @index
+  address: String! @index
   identity: Identity
+  blockNumber: BigInt @index
   createdAt: DateTime! @index
   gracePeriod: BigInt @index
   status: UsernameStatus!
