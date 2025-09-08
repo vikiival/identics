@@ -1,0 +1,1 @@
+export { IdentityCountResolver } from './identityTotalCount'
