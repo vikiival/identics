@@ -9,10 +9,10 @@ import { getRemoveDanglingUsernameEvent } from '../getters'
 const OPERATION = `EVENT::USERNAME_REMOVE_DANGLING`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
+ * Handle the dangling username removal event (Identity.DanglingUsernameRemoved)
+ * Removes existing Username entity
+ * Logs EVENT::USERNAME_REMOVE_DANGLING event
+ * @param context - the context for the Event
  */
 export async function handleDanglingUsernameRemove(
   context: Context
