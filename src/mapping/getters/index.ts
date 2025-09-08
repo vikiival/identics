@@ -159,3 +159,7 @@ export function getRemoveExpiredApprovalCall(_ctx: Context) {
 export function getAddRegistrarCall(_ctx: Context) {
   return proc.getAddRegistrarCall(_ctx)
 }
+
+export function getRegistrarStorageInfo() {
+  return proc.getRegistrarStorageInfo()
+}
