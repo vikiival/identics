@@ -6,7 +6,7 @@ import { debug, pending } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getAcceptUsernameCall } from '../getters'
 
-const OPERATION = `CALL::ACCEPT_USERNAME` //Action.CREATE
+const OPERATION = `CALL::ACCEPT_USERNAME`
 
 /**
  * Handle the username create call (Identity.accept_username)
