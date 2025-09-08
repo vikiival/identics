@@ -1,27 +1,22 @@
 import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import {
-  getAddSubCall,
-  getSetIdentityCall,
-  getSetSubsCall,
-  getUsernameSetEvent,
-} from '../getters'
 import { Identity, Username } from '../../model'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getUsernameKillEvent } from '../getters'
 
-const OPERATION = `CALL::KILL_USERNAME` //Action.CREATE
+const OPERATION = `EVENT::KILL_USERNAME`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
+ * Handle the identity removal event (Identity.UsernameKilled)
+ * Removes existing Username entity
  * Logs Action.CREATE event
- * @param context - the context for the Call
+ * @param context - the context for the Event
  */
 export async function handleUsernameKill(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
-  const event = unwrap(context, getUsernameSetEvent)
+  const event = unwrap(context, getUsernameKillEvent)
   debug(OPERATION, event)
 
   const id = event.username
