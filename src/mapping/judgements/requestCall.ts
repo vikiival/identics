@@ -18,7 +18,7 @@ export async function handleJudgementRequestCall(
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call: CallWith<any> = unwrap(context, getRequestJudgementCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
   const final = await get(context.store, Identity, id)
