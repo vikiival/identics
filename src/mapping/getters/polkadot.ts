@@ -482,43 +482,66 @@ export function getSubIdentityRevokedEvent(_ctx: Context) {
 
 export function getUsernameSetEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Username events don't exist in polkadot identity pallet
-  return { who: '', username: '' }
+  const event = events.usernameSet
+  if (event.v1002000.is(ctx)) {
+    const { who, username } = event.v1002000.decode(ctx)
+    return { who: addressOf(who), username: unHex(username) }
+  }
+  const { who, username } = event.v1002000.decode(ctx)
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getUsernameQueuedEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Username events don't exist in polkadot identity pallet
-  return { who: '', username: '', expiration: 0 }
+  const event = events.usernameQueued
+  if (event.v1002000.is(ctx)) {
+    const { who, username, expiration } = event.v1002000.decode(ctx)
+    return { who: addressOf(who), username: unHex(username), expiration }
+  }
+  const { who, username, expiration } = event.v1002000.decode(ctx)
+  return { who: addressOf(who), username: unHex(username), expiration }
 }
 
 export function getPreapprovalExpiredEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Username events don't exist in polkadot identity pallet
-  return { who: '' }
+  const event = events.preapprovalExpired
+  if (event.v1002000.is(ctx)) {
+    const { whose: who } = event.v1002000.decode(ctx)
+    return { who: addressOf(who) }
+  }
+  const { whose: who } = event.v1002000.decode(ctx)
+  return { who: addressOf(who) }
 }
 
 export function getPrimaryUsernameSetEvent(_ctx: Context) {
   const ctx = _ctx.event
-  // Username events don't exist in polkadot identity pallet
-  return { who: '', username: '' }
+  const event = events.primaryUsernameSet
+  if (event.v1002000.is(ctx)) {
+    const { who, username } = event.v1002000.decode(ctx)
+    return { who: addressOf(who), username: unHex(username) }
+  }
+  const { who, username } = event.v1002000.decode(ctx)
+  return { who: addressOf(who), username: unHex(username) }
 }
 
 export function getUsernameRemoveEvent(_ctx: Context) {
   const ctx = _ctx.event
   // Username events don't exist in polkadot identity pallet
+  // const event = events.usernameRemoved
   return { username: '' }
 }
 
 export function getUsernameKillEvent(_ctx: Context) {
   const ctx = _ctx.event
   // Username events don't exist in polkadot identity pallet
+  // const event = events.usernameKilled
   return { username: '' }
 }
 
 export function getUsernameUnbindEvent(_ctx: Context) {
   const ctx = _ctx.event
   // Username events don't exist in polkadot identity pallet
+  // const event = events.usernameUnbound
   return { username: '' }
 }
 
@@ -613,8 +636,13 @@ export function getRegistrarAddedEvent(_ctx: Context) {
 
 export function getRemoveExpiredApprovalCall(_ctx: Context) {
   const ctx = _ctx.call
-  // Username calls don't exist in polkadot identity pallet
-  return { username: '' }
+  const call = calls.removeExpiredApproval
+  if (call.v1002000.is(ctx)) {
+    const { username } = call.v1002000.decode(ctx)
+    return { username }
+  }
+  const { username } = call.v1002000.decode(ctx)
+  return { username }
 }
 
 export function getAddRegistrarCall(_ctx: Context) {
