@@ -19,7 +19,7 @@ export async function handleUsernameAcceptCall(
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getAcceptUsernameCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.username
   const final = await getOrCreate(context.store, Username, id, {})
