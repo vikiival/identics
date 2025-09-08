@@ -18,7 +18,7 @@ export async function handleUsernameAuthorityAdd(
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getAddUsernameAuthorityCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.authority
 
