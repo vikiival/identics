@@ -5,12 +5,12 @@ import { Context } from '../../utils/types'
 import { getRemoveUsernameAuthorityCall } from '../getters'
 import { Authority } from '../../model'
 
-const OPERATION = `CALL::AUTH_REMOVE`
+const OPERATION = `CALL::USERNAME_AUTH_REMOVE`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the authority removal call (Identity.remove_username_authority)
+ * Removes existing Authority entity
+ * Logs CALL::USERNAME_AUTH_REMOVE event
  * @param context - the context for the Call
  */
 export async function handleUsernameAuthorityRemove(
@@ -23,9 +23,11 @@ export async function handleUsernameAuthorityRemove(
   const id = call.authority
   const final = await get(context.store, Authority, id)
 
+  const suffix = final?.suffix
+
   if (final) {
     await context.store.remove(final)
   }
 
-  success(OPERATION, `${id}/${call.suffix}`)
+  success(OPERATION, `${id}/${suffix}`)
 }
