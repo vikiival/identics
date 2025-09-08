@@ -1017,11 +1017,12 @@ app.get('/registrars/statistics', async (c) => {
 
     // Get all registrars
     const registrars = await store.find(Registrar)
+    console.log(Array.isArray(registrars))
 
     // Get statistics for each registrar
     const statistics = await Promise.all(
       registrars.map(async (registrar) => {
-        const [totalIdentities] = await store
+        const totalIdentities = await store
           .createQueryBuilder(Identity, 'identity')
           .select('COUNT(*)', 'count')
           .where('identity.registrar = :registrarId', {
@@ -1029,7 +1030,7 @@ app.get('/registrars/statistics', async (c) => {
           })
           .getRawOne()
 
-        const [verifiedIdentities] = await store
+        const verifiedIdentities = await store
           .createQueryBuilder(Identity, 'identity')
           .select('COUNT(*)', 'count')
           .where('identity.registrar = :registrarId', {
@@ -1040,7 +1041,7 @@ app.get('/registrars/statistics', async (c) => {
           })
           .getRawOne()
 
-        const [pendingIdentities] = await store
+        const pendingIdentities = await store
           .createQueryBuilder(Identity, 'identity')
           .select('COUNT(*)', 'count')
           .where('identity.registrar = :registrarId', {
