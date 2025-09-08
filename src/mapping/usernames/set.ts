@@ -26,6 +26,8 @@ export async function handleUsernameSet(context: Context): Promise<void> {
   final.primary = false
   final.name = event.username
   final.status = UsernameStatus.Active
+  final.address = event.who
+  final.blockNumber = event.blockNumber
 
   const identity = await get(context.store, Identity, event.who)
   final.identity = identity
