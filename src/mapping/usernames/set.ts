@@ -1,22 +1,17 @@
 import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { unwrap } from '../../utils/extract'
-import { debug, pending, success } from '../../utils/logger'
-import { Action, Context } from '../../utils/types'
-import {
-  getAddSubCall,
-  getSetIdentityCall,
-  getSetSubsCall,
-  getUsernameSetEvent,
-} from '../getters'
 import { Identity, Username, UsernameStatus } from '../../model'
+import { unwrap } from '../../utils/extract'
+import { debug, pending } from '../../utils/logger'
+import { Context } from '../../utils/types'
+import { getUsernameSetEvent } from '../getters'
 
-const OPERATION = `CALL::SET_USERNAME` //Action.CREATE
+const OPERATION = `EVENT::USERNAME_SET`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
+ * Handle the username set event (Identity.UsernameSet)
+ * Creates a new Username entity
+ * Logs EVENT::SET_USERNAME event
  * @param context - the context for the Call
  */
 export async function handleUsernameSet(context: Context): Promise<void> {
