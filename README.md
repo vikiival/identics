@@ -27,6 +27,9 @@ on top of Polkadot Relay Chain and People chain for identities
 
 ## Quickly running the sample
 
+> [!NOTE] by default indexer is set to use `people` chain. To change it in step
+> 5 run `just process polkadot`
+
 ```bash
 # 1. Install dependencies
 npm ci
@@ -113,36 +116,31 @@ npm start
 
 > [!NOTE] Server is running on http://localhost:3000
 
-
 Identity APIs:
 
-GET /identity/:account - Get complete identity by account address
-GET /identities/judgement/:status - Get identities by judgement status
-GET /identities/registrar/:registrarId - Get identities by registrar
-GET /identities/field/:field - Get identities with specific field verified
-GET /identities/verification/:status - Get identities by verification status
+GET /identity/:account - Get complete identity by account address GET
+/identities/judgement/:status - Get identities by judgement status GET
+/identities/registrar/:registrarId - Get identities by registrar GET
+/identities/field/:field - Get identities with specific field verified GET
+/identities/verification/:status - Get identities by verification status
 Sub-account APIs:
 
-GET /subs/:account - Get sub-accounts for main identity
-GET /subs/name/:pattern - Get sub-accounts by name pattern
-GET /super/:subAccount - Get main identity for sub-account
-Username APIs:
+GET /subs/:account - Get sub-accounts for main identity GET
+/subs/name/:pattern - Get sub-accounts by name pattern GET /super/:subAccount -
+Get main identity for sub-account Username APIs:
 
-GET /username/:account - Get primary username for account
-GET /account/username/:username - Get account by username
-GET /usernames/authority/:authority - Get usernames by authority
-GET /usernames/suffix/:suffix - Get usernames by suffix
-GET /usernames/pending/:account - Get pending usernames for account
-Registrar APIs:
+GET /username/:account - Get primary username for account GET
+/account/username/:username - Get account by username GET
+/usernames/authority/:authority - Get usernames by authority GET
+/usernames/suffix/:suffix - Get usernames by suffix GET
+/usernames/pending/:account - Get pending usernames for account Registrar APIs:
 
-GET /registrars - Get all registrars
-GET /judgement-requests/registrar/:registrarId - Get pending requests by registrar
-GET /registrars/statistics - Get registrar statistics
-Analytics & History:
+GET /registrars - Get all registrars GET
+/judgement-requests/registrar/:registrarId - Get pending requests by registrar
+GET /registrars/statistics - Get registrar statistics Analytics & History:
 
-GET /events/:account - Get identity events by account
-GET /history/:account - Get identity history by account
-
+GET /events/:account - Get identity events by account GET /history/:account -
+Get identity history by account
 
 2. **GraphQL API**: The API also provides a GraphQL endpoint for more flexible
    and efficient data retrieval. You can use GraphQL queries to fetch exactly
