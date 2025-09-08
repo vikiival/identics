@@ -2,7 +2,7 @@ import { get, getOrCreate } from '@kodadot1/metasquid/entity'
 
 import { Identity, Username } from '../../model'
 import { unwrap } from '../../utils/extract'
-import { debug, pending } from '../../utils/logger'
+import { debug, pending, success } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getUsernameKillEvent } from '../getters'
 
@@ -20,10 +20,12 @@ export async function handleUsernameKill(context: Context): Promise<void> {
   debug(OPERATION, event)
 
   const id = event.username
-  const final = await getOrCreate(context.store, Username, id, {})
+  const final = await get(context.store, Username, id)
+  const address = final?.address
 
-  final.createdAt = event.timestamp
+  if (final) {
+    await context.store.remove(final)
+  }
 
-  const identity = await get(context.store, Identity, event.who)
-  final.identity = identity
+  success(OPERATION, `${id}/${address}`)
 }
