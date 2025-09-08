@@ -6,13 +6,13 @@ import { debug, pending } from '../../utils/logger'
 import { Context } from '../../utils/types'
 import { getPrimaryUsernameSetEvent } from '../getters'
 
-const OPERATION = `EVENT::SET_PRIMARY_USERNAME` //Action.CREATE
+const OPERATION = `EVENT::USERNAME_SET_PRIMARY`
 
 /**
- * Handle the identity create call (Identity.set_identity)
- * Creates a new Identity entity
- * Logs Action.CREATE event
- * @param context - the context for the Call
+ * Handle the username set event (Identity.PrimaryUsernameSet)
+ * Creates a new Username entity
+ * Logs EVENT::SET_USERNAME_PRIMARY event
+ * @param context - the context for the Event
  */
 export async function handlePrimaryUsernameSet(
   context: Context
