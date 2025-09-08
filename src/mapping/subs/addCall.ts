@@ -18,7 +18,7 @@ const OPERATION = `CALL::ADD_SUB`
 export async function handleSubAddCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getAddSubCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
 
