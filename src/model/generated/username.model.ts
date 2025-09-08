@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BooleanColumn as BooleanColumn_, StringColumn as StringColumn_, Index as Index_, ManyToOne as ManyToOne_, DateTimeColumn as DateTimeColumn_, BigIntColumn as BigIntColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, BooleanColumn as BooleanColumn_, StringColumn as StringColumn_, Index as Index_, ManyToOne as ManyToOne_, BigIntColumn as BigIntColumn_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
 import {Identity} from "./identity.model"
 import {UsernameStatus} from "./_usernameStatus"
 
@@ -19,8 +19,16 @@ export class Username {
     name!: string
 
     @Index_()
+    @StringColumn_({nullable: false})
+    address!: string
+
+    @Index_()
     @ManyToOne_(() => Identity, {nullable: true})
     identity!: Identity | undefined | null
+
+    @Index_()
+    @BigIntColumn_({nullable: true})
+    blockNumber!: bigint | undefined | null
 
     @Index_()
     @DateTimeColumn_({nullable: false})
