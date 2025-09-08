@@ -19,7 +19,7 @@ const OPERATION = `CALL::SET_SUBS` //Action.CREATE
 export async function handleSubListSet(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getSetSubsCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
   const identity = await get(context.store, Identity, id)
