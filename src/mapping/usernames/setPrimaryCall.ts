@@ -19,7 +19,7 @@ export async function handlePrimaryUsernameSetCall(
 ): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getSetPrimaryUsernameCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.username
   const final = await getOrCreate(context.store, Username, id, {})
