@@ -18,7 +18,7 @@ const OPERATION = Action.CREATE
 export async function handleIdentitySetCall(context: Context): Promise<void> {
   pending(OPERATION, `${context.block.height}`)
   const call = unwrap(context, getSetIdentityCall)
-  debug(OPERATION, call)
+  debug(OPERATION, call, true)
 
   const id = call.caller
   const final = await getOrCreate(context.store, Identity, id, {})
