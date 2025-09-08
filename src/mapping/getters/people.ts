@@ -433,10 +433,10 @@ export function getUsernameRemoveEvent(_ctx: Context) {
   const event = events.usernameRemoved
   if (event.v1005001.is(ctx)) {
     const { username } = event.v1005001.decode(ctx)
-    return { username }
+    return { username: unHex(username) }
   }
   const { username } = event.v1005001.decode(ctx)
-  return { username }
+  return { username: unHex(username) }
 }
 
 export function getUsernameKillEvent(_ctx: Context) {
@@ -444,10 +444,10 @@ export function getUsernameKillEvent(_ctx: Context) {
   const event = events.usernameKilled
   if (event.v1005001.is(ctx)) {
     const { username } = event.v1005001.decode(ctx)
-    return { username }
+    return { username: unHex(username) }
   }
   const { username } = event.v1005001.decode(ctx)
-  return { username }
+  return { username: unHex(username) }
 }
 
 export function getUsernameUnbindEvent(_ctx: Context) {
@@ -455,10 +455,10 @@ export function getUsernameUnbindEvent(_ctx: Context) {
   const event = events.usernameUnbound
   if (event.v1005001.is(ctx)) {
     const { username } = event.v1005001.decode(ctx)
-    return { username }
+    return { username: unHex(username) }
   }
   const { username } = event.v1005001.decode(ctx)
-  return { username }
+  return { username: unHex(username) }
 }
 
 // DOABLE Events
