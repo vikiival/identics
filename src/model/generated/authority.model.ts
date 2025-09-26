@@ -1,4 +1,4 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_, Index as Index_, DateTimeColumn as DateTimeColumn_} from "@subsquid/typeorm-store"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, StringColumn as StringColumn_, BigIntColumn as BigIntColumn_, Index as Index_, DateTimeColumn as DateTimeColumn_, IntColumn as IntColumn_} from "@subsquid/typeorm-store"
 import {ChainOrigin} from "./_chainOrigin"
 
 @Entity_()
@@ -27,6 +27,10 @@ export class Authority {
     @Index_()
     @DateTimeColumn_({nullable: false})
     createdAt!: Date
+
+    @Index_()
+    @IntColumn_({nullable: true})
+    allocation!: number | undefined | null
 
     @Column_("varchar", {length: 6, nullable: false})
     origin!: ChainOrigin
