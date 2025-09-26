@@ -857,16 +857,66 @@ app.get('/authorities/allocation', async (c) => {
   const minAllocation = parseInt(c.req.query('minAllocation') || '0')
 
   try {
-    // This endpoint returns 500 as allocation data might not be tracked
-    return c.json(
-      {
-        success: false,
-        error: 'Username allocation tracking not implemented',
-        message:
-          'This feature requires additional allocation tracking in the database schema',
+    if (isNaN(page) || page < 1) {
+      return c.json(
+        {
+          success: false,
+          error: 'Invalid page parameter',
+        },
+        400
+      )
+    }
+
+    if (isNaN(limit) || limit < 1 || limit > 100) {
+      return c.json(
+        {
+          success: false,
+          error: 'Invalid limit parameter',
+          constraints: {
+            min: 1,
+            max: 100,
+          },
+        },
+        400
+      )
+    }
+
+    if (isNaN(minAllocation) || minAllocation < 0) {
+      return c.json(
+        {
+          success: false,
+          error: 'Invalid minAllocation parameter',
+          constraints: {
+            min: 0,
+          },
+        },
+        400
+      )
+    }
+
+    const store = dataSource.manager
+    const queryBuilder = store
+      .createQueryBuilder(Authority, 'authority')
+      .where('authority.allocation IS NOT NULL')
+      .andWhere('authority.allocation >= :minAllocation', { minAllocation })
+      .orderBy('authority.allocation', 'DESC')
+      .addOrderBy('authority.updatedAt', 'DESC')
+      .skip((page - 1) * limit)
+      .take(limit)
+
+    const [authorities, total] = await queryBuilder.getManyAndCount()
+
+    return c.json({
+      success: true,
+      data: JSON.parse(JSON.stringify(authorities, serializer)),
+      count: authorities.length,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
       },
-      500
-    )
+    })
   } catch (error) {
     console.error('Error fetching authorities by allocation:', error)
     return c.json(
@@ -1145,7 +1195,7 @@ serve(
     console.log(`  GET /events/:account - Get identity events by account`)
     console.log(`  GET /history/:account - Get identity history by account`)
     console.log(
-      `  GET /authorities/allocation - Get authorities by allocation (returns 500 - not implemented)`
+      `  GET /authorities/allocation - Get authorities filtered by allocation`
     )
     console.log(``)
     console.log(`Query parameters:`)
