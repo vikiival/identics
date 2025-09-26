@@ -45,6 +45,7 @@ type Authority @entity {
   blockNumber: BigInt @index
   updatedAt: DateTime! @index
   createdAt: DateTime! @index
+  allocation: Int @index
   origin: ChainOrigin!
 }
 
