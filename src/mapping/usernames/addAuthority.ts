@@ -25,6 +25,7 @@ export async function handleUsernameAuthorityAdd(
   const authority = await getOrCreate(context.store, Authority, id, {})
   authority.address = call.authority
   authority.suffix = call.suffix
+  authority.allocation = call.allocation ?? 0
   authority.createdAt = call.timestamp
   authority.updatedAt = call.timestamp
   authority.origin = call.origin || ChainOrigin.PEOPLE
