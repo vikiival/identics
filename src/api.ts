@@ -1177,8 +1177,12 @@ async function bootstrap() {
       console.log(``)
       console.log(`👥 Sub-account APIs:`)
       console.log(`  GET /subs/:account - Get sub-accounts for main identity`)
-      console.log(`  GET /subs/name/:pattern - Get sub-accounts by name pattern`)
-      console.log(`  GET /super/:subAccount - Get main identity for sub-account`)
+      console.log(
+        `  GET /subs/name/:pattern - Get sub-accounts by name pattern`
+      )
+      console.log(
+        `  GET /super/:subAccount - Get main identity for sub-account`
+      )
       console.log(``)
       console.log(`🏷️ Username APIs:`)
       console.log(`  GET /username/:account - Get primary username for account`)
@@ -1206,9 +1210,13 @@ async function bootstrap() {
       )
       console.log(``)
       console.log(`Query parameters:`)
-      console.log(`  ?page=1&limit=50 - Pagination (available on list endpoints)`)
+      console.log(
+        `  ?page=1&limit=50 - Pagination (available on list endpoints)`
+      )
       console.log(`  ?interaction=SET - Filter events by interaction type`)
-      console.log(`  ?name=alice - Filter identities by name (case insensitive)`)
+      console.log(
+        `  ?name=alice - Filter identities by name (case insensitive)`
+      )
       console.log(`  ?twitter=handle - Filter identities by Twitter handle`)
       console.log(`  ?origin=PEOPLE - Filter by chain origin (PEOPLE or RELAY)`)
       console.log(``)
