@@ -2,6 +2,8 @@ import { serve } from '@hono/node-server'
 import { createOrmConfig } from '@subsquid/typeorm-config'
 import { Hono } from 'hono'
 import { serializer } from '@kodadot1/metasquid'
+import { DataSource } from 'typeorm'
+import { ensureFixtureSeedData } from './api/seedFixtures'
 import {
   Identity,
   Sub,
@@ -14,20 +16,8 @@ import {
 } from './model'
 
 const app = new Hono()
-
-import { DataSource } from 'typeorm'
 const cfg = createOrmConfig({ projectDir: process.cwd() })
 const dataSource = new DataSource(cfg)
-
-// Initialize the data source
-dataSource
-  .initialize()
-  .then(() => {
-    console.log('✅ Database connected successfully')
-  })
-  .catch((error) => {
-    console.error('❌ Error during DataSource initialization:', error)
-  })
 
 // GET /identities - Get all identities with optional filtering and pagination
 app.get('/identities', async (c) => {
@@ -1131,89 +1121,112 @@ app.get('/registrars/statistics', async (c) => {
   }
 })
 
-const port = parseInt(process.env.PORT || '3000')
-
-console.log(`🚀 Starting Identics API server on port ${port}`)
-
-serve(
-  {
-    fetch: app.fetch,
-    port,
-  },
-  (info) => {
-    console.log(`✅ Server is running on http://localhost:${info.port}`)
-    console.log(`📊 Available endpoints:`)
-    console.log(``)
-    console.log(`🔍 General:`)
-    console.log(`  GET /health - Health check`)
-    console.log(
-      `  GET /identities - Get all identities (with optional filters)`
-    )
-    console.log(`  GET /identities/:id - Get specific identity by ID`)
-    console.log(``)
-    console.log(`👤 Identity APIs:`)
-    console.log(
-      `  GET /identity/:account - Get complete identity by account address`
-    )
-    console.log(
-      `  GET /identities/judgement/:status - Get identities by judgement status`
-    )
-    console.log(
-      `  GET /identities/registrar/:registrarId - Get identities by registrar`
-    )
-    console.log(
-      `  GET /identities/field/:field - Get identities with specific field verified`
-    )
-    console.log(
-      `  GET /identities/verification/:status - Get identities by verification status`
-    )
-    console.log(``)
-    console.log(`👥 Sub-account APIs:`)
-    console.log(`  GET /subs/:account - Get sub-accounts for main identity`)
-    console.log(`  GET /subs/name/:pattern - Get sub-accounts by name pattern`)
-    console.log(`  GET /super/:subAccount - Get main identity for sub-account`)
-    console.log(``)
-    console.log(`🏷️ Username APIs:`)
-    console.log(`  GET /username/:account - Get primary username for account`)
-    console.log(`  GET /account/username/:username - Get account by username`)
-    console.log(
-      `  GET /usernames/authority/:authority - Get usernames by authority`
-    )
-    console.log(`  GET /usernames/suffix/:suffix - Get usernames by suffix`)
-    console.log(
-      `  GET /usernames/pending/:account - Get pending usernames for account`
-    )
-    console.log(``)
-    console.log(`🏛️ Registrar APIs:`)
-    console.log(`  GET /registrars - Get all registrars`)
-    console.log(
-      `  GET /judgement-requests/registrar/:registrarId - Get pending requests by registrar`
-    )
-    console.log(`  GET /registrars/statistics - Get registrar statistics`)
-    console.log(``)
-    console.log(`📈 Analytics & History:`)
-    console.log(`  GET /events/:account - Get identity events by account`)
-    console.log(`  GET /history/:account - Get identity history by account`)
-    console.log(
-      `  GET /authorities/allocation - Get authorities filtered by allocation`
-    )
-    console.log(``)
-    console.log(`Query parameters:`)
-    console.log(`  ?page=1&limit=50 - Pagination (available on list endpoints)`)
-    console.log(`  ?interaction=SET - Filter events by interaction type`)
-    console.log(`  ?name=alice - Filter identities by name (case insensitive)`)
-    console.log(`  ?twitter=handle - Filter identities by Twitter handle`)
-    console.log(`  ?origin=PEOPLE - Filter by chain origin (PEOPLE or RELAY)`)
-    console.log(``)
-    console.log(
-      `Valid judgement statuses: ${Object.values(Judgement).join(', ')}`
-    )
-    console.log(
-      `Valid verification statuses: verified, unverified, rejected, pending`
-    )
-    console.log(
-      `Valid identity fields: name, legal, web, matrix, email, image, twitter, github, discord`
-    )
+async function bootstrap() {
+  try {
+    await dataSource.initialize()
+    console.log('✅ Database connected successfully')
+  } catch (error) {
+    console.error('❌ Error during DataSource initialization:', error)
+    throw error
   }
-)
+
+  try {
+    await ensureFixtureSeedData(dataSource)
+    console.log('🌱 Fixture data is ready')
+  } catch (error) {
+    console.error('❌ Failed to seed fixture data:', error)
+    throw error
+  }
+
+  const port = parseInt(process.env.PORT || '3000')
+
+  console.log(`🚀 Starting Identics API server on port ${port}`)
+
+  return serve(
+    {
+      fetch: app.fetch,
+      port,
+    },
+    (info) => {
+      console.log(`✅ Server is running on http://localhost:${info.port}`)
+      console.log(`📊 Available endpoints:`)
+      console.log(``)
+      console.log(`🔍 General:`)
+      console.log(`  GET /health - Health check`)
+      console.log(
+        `  GET /identities - Get all identities (with optional filters)`
+      )
+      console.log(`  GET /identities/:id - Get specific identity by ID`)
+      console.log(``)
+      console.log(`👤 Identity APIs:`)
+      console.log(
+        `  GET /identity/:account - Get complete identity by account address`
+      )
+      console.log(
+        `  GET /identities/judgement/:status - Get identities by judgement status`
+      )
+      console.log(
+        `  GET /identities/registrar/:registrarId - Get identities by registrar`
+      )
+      console.log(
+        `  GET /identities/field/:field - Get identities with specific field verified`
+      )
+      console.log(
+        `  GET /identities/verification/:status - Get identities by verification status`
+      )
+      console.log(``)
+      console.log(`👥 Sub-account APIs:`)
+      console.log(`  GET /subs/:account - Get sub-accounts for main identity`)
+      console.log(`  GET /subs/name/:pattern - Get sub-accounts by name pattern`)
+      console.log(`  GET /super/:subAccount - Get main identity for sub-account`)
+      console.log(``)
+      console.log(`🏷️ Username APIs:`)
+      console.log(`  GET /username/:account - Get primary username for account`)
+      console.log(`  GET /account/username/:username - Get account by username`)
+      console.log(
+        `  GET /usernames/authority/:authority - Get usernames by authority`
+      )
+      console.log(`  GET /usernames/suffix/:suffix - Get usernames by suffix`)
+      console.log(
+        `  GET /usernames/pending/:account - Get pending usernames for account`
+      )
+      console.log(``)
+      console.log(`🏛️ Registrar APIs:`)
+      console.log(`  GET /registrars - Get all registrars`)
+      console.log(
+        `  GET /judgement-requests/registrar/:registrarId - Get pending requests by registrar`
+      )
+      console.log(`  GET /registrars/statistics - Get registrar statistics`)
+      console.log(``)
+      console.log(`📈 Analytics & History:`)
+      console.log(`  GET /events/:account - Get identity events by account`)
+      console.log(`  GET /history/:account - Get identity history by account`)
+      console.log(
+        `  GET /authorities/allocation - Get authorities filtered by allocation`
+      )
+      console.log(``)
+      console.log(`Query parameters:`)
+      console.log(`  ?page=1&limit=50 - Pagination (available on list endpoints)`)
+      console.log(`  ?interaction=SET - Filter events by interaction type`)
+      console.log(`  ?name=alice - Filter identities by name (case insensitive)`)
+      console.log(`  ?twitter=handle - Filter identities by Twitter handle`)
+      console.log(`  ?origin=PEOPLE - Filter by chain origin (PEOPLE or RELAY)`)
+      console.log(``)
+      console.log(
+        `Valid judgement statuses: ${Object.values(Judgement).join(', ')}`
+      )
+      console.log(
+        `Valid verification statuses: verified, unverified, rejected, pending`
+      )
+      console.log(
+        `Valid identity fields: name, legal, web, matrix, email, image, twitter, github, discord`
+      )
+    }
+  )
+}
+
+bootstrap().catch((error) => {
+  console.error('❌ Failed to start Identics API server', error)
+  process.exit(1)
+})
 // export default app
