@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import { beforeAll, describe, expect, it } from 'vitest'
-import { ensureFixtureData, snapshotFixtures } from './fixtures/seedDatabase'
+import { snapshotFixtures } from './fixtures/seedDatabase'
 import { fixtureAccounts } from './fixtures/sampleData'
 
 const BASE_URL = 'http://localhost:3000'
@@ -30,7 +30,6 @@ describe.runIf(serverOk)('Identics REST API', () => {
   }
 
   beforeAll(async () => {
-    // await ensureFixtureData()
     fixtures = snapshotFixtures()
   })
 
