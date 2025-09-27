@@ -1,9 +1,38 @@
 import md5 from 'md5'
-import { Judgement } from '../../src/model/generated/_judgement'
-import { ChainOrigin } from '../../src/model/generated/_chainOrigin'
-import { AddressType } from '../../src/model/generated/_addressType'
-import { UsernameStatus } from '../../src/model/generated/_usernameStatus'
-import { Interaction } from '../../src/model/generated/_interaction'
+
+export enum Judgement {
+  Erroneous = 'Erroneous',
+  FeePaid = 'FeePaid',
+  KnownGood = 'KnownGood',
+  LowQuality = 'LowQuality',
+  OutOfDate = 'OutOfDate',
+  Reasonable = 'Reasonable',
+  Unknown = 'Unknown',
+}
+
+export enum ChainOrigin {
+  RELAY = 'RELAY',
+  PEOPLE = 'PEOPLE',
+}
+
+export enum AddressType {
+  Ethereum = 'Ethereum',
+  Substrate = 'Substrate',
+}
+
+export enum UsernameStatus {
+  Active = 'Active',
+  Unbinding = 'Unbinding',
+  Queued = 'Queued',
+  Removed = 'Removed',
+}
+
+export enum Interaction {
+  CREATE = 'CREATE',
+  CLEAR = 'CLEAR',
+  DESTROY = 'DESTROY',
+  CHANGE = 'CHANGE',
+}
 
 export const fixtureAccounts = {
   identity: '1C42oGF3s8ztCsc22MA4LKd8BogMJNdVmCgtTXGfxqwjrSb',
@@ -25,7 +54,7 @@ export const identityFixture = {
   github: 'https://github.com/Koniverse',
   discord: 'https://discord.gg/rz2CyFSqWE',
   judgement: Judgement.Reasonable,
-  registrar: 3,
+  registrar: 2,
   hash: '0x90e1de45222a2ea5526073b60fa967c0145f778e1304474700daa5f393d22d49',
   blockNumber: BigInt(769522),
   updatedAt: new Date('2024-11-07T08:40:12.000Z'),
