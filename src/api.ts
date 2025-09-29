@@ -1130,13 +1130,13 @@ async function bootstrap() {
     throw error
   }
 
-  try {
-    await ensureFixtureSeedData(dataSource)
-    console.log('🌱 Fixture data is ready')
-  } catch (error) {
-    console.error('❌ Failed to seed fixture data:', error)
-    throw error
-  }
+  // try {
+  //   await ensureFixtureSeedData(dataSource)
+  //   console.log('🌱 Fixture data is ready')
+  // } catch (error) {
+  //   console.error('❌ Failed to seed fixture data:', error)
+  //   throw error
+  // }
 
   const port = parseInt(process.env.PORT || '3000')
 

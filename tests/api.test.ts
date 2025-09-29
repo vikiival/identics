@@ -119,7 +119,9 @@ describe.runIf(serverOk)('Identics REST API', () => {
     const json = await fetchJson(`/subs/${fixtureAccounts.identity}`)
     expect(json.success).toBe(true)
     expect(json.count).toBeGreaterThan(0)
-    expect(json.data[0]).toMatchObject({
+    const hasSub = json.data.find((sub: any) => sub.id === fixtures.sub.id)
+    expect(hasSub).toBeDefined()
+    expect(hasSub).toMatchObject({
       id: fixtures.sub.id,
       name: fixtures.sub.name,
     })
