@@ -13,6 +13,8 @@ import * as jud from './judgements'
 import * as reg from './registrars'
 import * as sub from './subs'
 import * as usrn from './usernames'
+import { handleRegistrarForceAdd } from './registrars/forceAdd'
+import { handleUsernameAuthorityForceAdd } from './usernames/forceAddAuthority'
 
 type EventHandlerFunction = <T extends SelectedEvent>(
   ctx: Context
@@ -158,6 +160,8 @@ export async function calls<T extends SelectedCall>(
   return handler(ctx)
 }
 
+let once = false
+
 /**
  * mainFrame is the main entry point for processing a batch of blocks
  **/
@@ -200,10 +204,18 @@ export async function mainFrame(ctx: ProcessorContext<Store>): Promise<void> {
     }
   }
 
-  if (ctx.isHead) {
+  if (ctx.isHead && !once && process.env.CHAIN === 'people') {
     const lastBlock = ctx.blocks[ctx.blocks.length - 1].header
-    const lastDate = new Date(lastBlock.timestamp || Date.now())
+    once = true
     logger.info(`Found head block, updating cache`)
+    await handleRegistrarForceAdd({
+      block: lastBlock,
+      store: ctx.store,
+    } as any)
+    await handleUsernameAuthorityForceAdd({
+      block: lastBlock,
+      store: ctx.store,
+    } as any)
     // await updateOfferCache(lastDate, lastBlock.height, ctx.store)
   }
 }
