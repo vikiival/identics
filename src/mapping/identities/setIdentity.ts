@@ -1,7 +1,9 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
+import { create, getOrCreate } from '@kodadot1/metasquid/entity'
 
-import { ChainOrigin, Identity } from '../../model'
+import { ChainOrigin, Identity, Event } from '../../model'
 import { unwrap } from '../../utils/extract'
+import md5 from 'md5'
+import { serializer } from '@kodadot1/metasquid'
 import { addressTypeOf } from '../../utils/helper'
 import { debug, pending, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
@@ -24,6 +26,8 @@ export async function handleIdentitySet(context: Context): Promise<void> {
 
   const id = event.who
   const final = await getOrCreate(context.store, Identity, id, {})
+
+  const meta = JSON.stringify(final, serializer)
 
   // Set properties from basic
   final.blockNumber = BigInt(call.blockNumber)
@@ -48,4 +52,20 @@ export async function handleIdentitySet(context: Context): Promise<void> {
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
+
+  const eventId = md5(
+    `${OPERATION}-${Math.random()}-${process.env.CHAIN}-${
+      context.block.height
+    }-${call.caller}`
+  )
+  const interaction = create(Event, eventId, {
+    blockNumber: BigInt(context.block.height),
+    timestamp: call.timestamp,
+    caller: call.caller,
+    currentOwner: call.caller,
+    interaction: Action.CREATE,
+    identity: final,
+    meta,
+  })
+  await context.store.save(interaction)
 }

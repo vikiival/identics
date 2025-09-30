@@ -1,6 +1,7 @@
-import { getOrCreate } from '@kodadot1/metasquid/entity'
-
-import { ChainOrigin, Identity } from '../../model'
+import { create, getOrCreate } from '@kodadot1/metasquid/entity'
+import md5 from 'md5'
+import { serializer } from '@kodadot1/metasquid'
+import { ChainOrigin, Identity, Event } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { addressTypeOf } from '../../utils/helper'
 import { debug, pending, success } from '../../utils/logger'
@@ -22,6 +23,8 @@ export async function handleIdentitySetCall(context: Context): Promise<void> {
 
   const id = call.caller
   const final = await getOrCreate(context.store, Identity, id, {})
+
+  const meta = JSON.stringify(final, serializer)
 
   // Set properties from basic
   final.blockNumber = BigInt(call.blockNumber)
@@ -46,4 +49,20 @@ export async function handleIdentitySetCall(context: Context): Promise<void> {
 
   success(OPERATION, `${final.id}`)
   await context.store.save(final)
+
+  const eventId = md5(
+    `${OPERATION}-${Math.random()}-${process.env.CHAIN}-${
+      context.block.height
+    }-${call.caller}`
+  )
+  const interaction = create(Event, eventId, {
+    blockNumber: BigInt(context.block.height),
+    timestamp: call.timestamp,
+    caller: call.caller,
+    currentOwner: call.caller,
+    interaction: OPERATION,
+    identity: final,
+    meta,
+  })
+  await context.store.save(interaction)
 }

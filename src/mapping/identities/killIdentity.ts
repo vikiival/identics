@@ -1,5 +1,7 @@
-import { findOneWithJoin } from '@kodadot1/metasquid/entity'
-import { Identity, Sub } from '../../model'
+import { create, findOneWithJoin } from '@kodadot1/metasquid/entity'
+import { Identity, Sub, Event } from '../../model'
+import md5 from 'md5'
+import { serializer } from '@kodadot1/metasquid'
 import { unwrap } from '../../utils/extract'
 import { debug, pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
@@ -27,6 +29,8 @@ export async function handleIdentityKill(context: Context): Promise<void> {
     return
   }
 
+  const meta = JSON.stringify(final, serializer)
+
   final.burned = true
   final.updatedAt = event.timestamp
   final.registrar = undefined
@@ -44,4 +48,20 @@ export async function handleIdentityKill(context: Context): Promise<void> {
 
   await context.store.save(final)
   success(OPERATION, `${id}/${subCount}`)
+
+  const eventId = md5(
+    `${OPERATION}-${Math.random()}-${process.env.CHAIN}-${
+      context.block.height
+    }-${event.caller}`
+  )
+  const interaction = create(Event, eventId, {
+    blockNumber: BigInt(context.block.height),
+    timestamp: event.timestamp,
+    caller: event.caller,
+    currentOwner: event.caller,
+    interaction: OPERATION,
+    identity: final,
+    meta,
+  })
+  await context.store.save(interaction)
 }
