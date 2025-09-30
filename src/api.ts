@@ -408,7 +408,7 @@ app.get('/username/:account', async (c) => {
     const store = dataSource.manager
     const username = await store.findOne(Username, {
       where: {
-        identity: { id: account },
+        address: account,
         primary: true,
       },
       relations: ['identity'],
@@ -452,7 +452,7 @@ app.get('/account/username/:username', async (c) => {
       relations: ['identity'],
     })
 
-    if (!usernameRecord || !usernameRecord.identity) {
+    if (!usernameRecord) {
       return c.json(
         {
           success: false,
@@ -465,7 +465,7 @@ app.get('/account/username/:username', async (c) => {
     return c.json({
       success: true,
       data: {
-        account: usernameRecord.identity.id,
+        account: usernameRecord.identity?.id || usernameRecord.address,
         username: usernameRecord.name,
         primary: usernameRecord.primary,
         status: usernameRecord.status,
