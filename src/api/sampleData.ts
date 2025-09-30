@@ -54,7 +54,7 @@ export const identityFixture = {
   github: 'https://github.com/Koniverse',
   discord: 'https://discord.gg/rz2CyFSqWE',
   judgement: Judgement.Reasonable,
-  registrar: 2,
+  registrar: 3,
   hash: '0x90e1de45222a2ea5526073b60fa967c0145f778e1304474700daa5f393d22d49',
   blockNumber: BigInt(769522),
   updatedAt: new Date('2024-11-07T08:40:12.000Z'),
@@ -66,13 +66,13 @@ export const identityFixture = {
 }
 
 export const registrarFixture = {
-  id: '2',
-  address: '1EpXirnoTimS1SWq52BeYx7sitsusXNGzMyGx8WPujPd1HB',
-  blockNumber: BigInt(4319529),
-  updatedAt: new Date('2021-03-23T22:59:48.000Z'),
-  createdAt: new Date('2021-03-23T22:59:48.000Z'),
-  origin: ChainOrigin.RELAY,
-  fee: BigInt(0),
+  id: '3',
+  address: '13SceNt2ELz3ti4rnQbY1snpYH4XE4fLFsW8ph9rpwJd6HFC',
+  blockNumber: BigInt(3026699),
+  updatedAt: new Date('2025-09-28T20:03:18.000Z'),
+  createdAt: new Date('2025-09-28T20:03:18.000Z'),
+  origin: ChainOrigin.PEOPLE,
+  fee: BigInt(5000000000),
   field: BigInt(0),
 }
 
@@ -89,12 +89,12 @@ export const subFixture = {
 
 export const usernamesFixtures = [
   {
-    id: 'testiooooos.dot',
+    id: 'mikeandroid1.dot',
     primary: true,
-    name: 'testiooooos.dot',
-    address: '155vEYgAW3sSRexfErKMxiqkASQ9CX5NKvS9u7WEnv7GnadX',
-    blockNumber: BigInt(2903171),
-    createdAt: new Date('2025-09-08T09:15:48.000Z'),
+    name: 'mikeandroid1.dot',
+    address: '1Kn8cMm9HjNpsgtqm1FusA2xpcvyFMKVzgyVYcnWfT5JWb7',
+    blockNumber: BigInt(1651313),
+    createdAt: new Date('2025-03-10T14:23:42.000Z'),
     gracePeriod: BigInt(0),
     status: UsernameStatus.Active,
   },
