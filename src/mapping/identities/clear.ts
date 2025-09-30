@@ -1,9 +1,11 @@
-import { findOneWithJoin } from '@kodadot1/metasquid/entity'
-import { Identity, Sub } from '../../model'
+import { create, findOneWithJoin } from '@kodadot1/metasquid/entity'
+import { Identity, Sub, Event } from '../../model'
 import { unwrap } from '../../utils/extract'
 import { pending, skip, success } from '../../utils/logger'
 import { Action, Context } from '../../utils/types'
 import { getClearIdentityCall } from '../getters/people'
+import md5 from 'md5'
+import { serializer } from '@kodadot1/metasquid'
 
 const OPERATION = Action.CLEAR
 
@@ -26,6 +28,8 @@ export async function handleIdentityClearCall(context: Context): Promise<void> {
     return
   }
 
+  const meta = JSON.stringify(final, serializer)
+
   final.burned = true
   final.updatedAt = call.timestamp
   final.registrar = undefined
@@ -43,4 +47,20 @@ export async function handleIdentityClearCall(context: Context): Promise<void> {
 
   await context.store.save(final)
   success(OPERATION, `${id}/${subCount}`)
+
+  const eventId = md5(
+    `${OPERATION}-${Math.random()}-${process.env.CHAIN}-${
+      context.block.height
+    }-${call.caller}`
+  )
+  const event = create(Event, eventId, {
+    blockNumber: BigInt(context.block.height),
+    timestamp: call.timestamp,
+    caller: call.caller,
+    currentOwner: call.caller,
+    interaction: OPERATION,
+    identity: final,
+    meta,
+  })
+  await context.store.save(event)
 }
