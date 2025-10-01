@@ -208,7 +208,7 @@ describe.runIf(serverOk)('Identics REST API', () => {
 
   it('GET /usernames/pending/:account - lists queued usernames', async () => {
     const json = await fetchJson(
-      `/usernames/pending/${fixtureAccounts.identity}`
+      `/usernames/pending/${positiveFixtureSummary.identity.id}`
     )
     expect(json.success).toBe(true)
 
