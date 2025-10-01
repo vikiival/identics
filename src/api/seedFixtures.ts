@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm'
 import { Authority, Event, Identity, Registrar, Sub, Username } from '../model'
-import { fixtureSummary } from './sampleData'
+import { fixtureSummary, positiveFixtureSummary } from './sampleData'
 
 async function upsertIdentity(dataSource: DataSource) {
   const manager = dataSource.manager
@@ -14,6 +14,21 @@ async function upsertIdentity(dataSource: DataSource) {
   }
 
   manager.merge(Identity, existing, fixtureSummary.identity)
+  return manager.save(existing)
+}
+
+async function upsertFeePaidIdentity(dataSource: DataSource) {
+  const manager = dataSource.manager
+  const existing = await manager.findOne(Identity, {
+    where: { id: positiveFixtureSummary.identity.id },
+  })
+
+  if (!existing) {
+    const created = manager.create(Identity, positiveFixtureSummary.identity)
+    return manager.save(created)
+  }
+
+  manager.merge(Identity, existing, positiveFixtureSummary.identity)
   return manager.save(existing)
 }
 
@@ -67,6 +82,28 @@ async function upsertUsernames(dataSource: DataSource, identity: Identity) {
   }
 }
 
+async function upsertPendingUsernames(
+  dataSource: DataSource,
+  identity: Identity
+) {
+  const manager = dataSource.manager
+
+  for (const username of positiveFixtureSummary.usernames) {
+    const payload = { ...username, identity }
+    const existing = await manager.findOne(Username, {
+      where: { id: username.id },
+    })
+
+    if (!existing) {
+      await manager.save(manager.create(Username, payload))
+      continue
+    }
+
+    manager.merge(Username, existing, payload)
+    await manager.save(existing)
+  }
+}
+
 async function upsertAuthorities(dataSource: DataSource) {
   const manager = dataSource.manager
 
@@ -102,6 +139,13 @@ async function upsertEvents(dataSource: DataSource, identity: Identity) {
     manager.merge(Event, existing, payload)
     await manager.save(existing)
   }
+}
+
+export async function ensurePositiveFixtureData(
+  dataSource: DataSource
+): Promise<void> {
+  const identity = await upsertFeePaidIdentity(dataSource)
+  await Promise.all([upsertPendingUsernames(dataSource, identity)])
 }
 
 export async function ensureFixtureSeedData(
