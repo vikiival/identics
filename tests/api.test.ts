@@ -2,6 +2,10 @@ import 'reflect-metadata'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { snapshotFixtures } from './fixtures/seedDatabase'
 import { fixtureAccounts } from './fixtures/sampleData'
+import {
+  positiveFixtureSummary,
+  positiveIdentityFixture,
+} from '../src/api/sampleData'
 
 const BASE_URL = 'http://localhost:3000'
 
@@ -208,14 +212,12 @@ describe.runIf(serverOk)('Identics REST API', () => {
     )
     expect(json.success).toBe(true)
 
-    if (json.count > 0) {
-      expect(json.count).toBeGreaterThan(0)
-      expect(
-        json.data.every((username: any) =>
-          ['Queued', 'Unbinding'].includes(username.status)
-        )
-      ).toBe(true)
-    }
+    expect(json.count).toBeGreaterThan(0)
+    expect(
+      json.data.every((username: any) =>
+        ['Queued', 'Unbinding'].includes(username.status)
+      )
+    ).toBe(true)
   })
 
   it('GET /registrars - returns known registrars', async () => {
@@ -226,6 +228,27 @@ describe.runIf(serverOk)('Identics REST API', () => {
       (entry: any) => entry.id === fixtures.registrar.id
     )
     expect(registrar).toMatchObject({ address: fixtures.registrar.address })
+  })
+
+  it('GET /judgement-requests/registrar/:registrarId - Get pending requests by registrar', async () => {
+    const json = await fetchJson(
+      '/judgement-requests/registrar/' + fixtures.registrar.id
+    )
+    console.log(json)
+    expect(json.success).toBe(true)
+    expect(json.count).toBeGreaterThan(0)
+    expect(Array.isArray(json.data)).toBe(true)
+    json.data.forEach((entry: any) => {
+      expect(entry.registrar.id).toBe(fixtures.registrar.id)
+    })
+
+    const entity = json.data.find(
+      (entry: any) => entry.id === positiveFixtureSummary.identity.id
+    )
+
+    expect(entity).toBeDefined()
+    expect(entity.name).toBe(positiveIdentityFixture.name)
+    expect(entity.judgement).toBe('FeePaid')
   })
 
   it('GET /registrars/statistics - returns aggregate counts', async () => {
