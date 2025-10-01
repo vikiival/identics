@@ -3,7 +3,7 @@ import { createOrmConfig } from '@subsquid/typeorm-config'
 import { Hono } from 'hono'
 import { serializer } from '@kodadot1/metasquid'
 import { DataSource } from 'typeorm'
-import { ensureFixtureSeedData } from './api/seedFixtures'
+import { ensurePositiveFixtureData } from './api/seedFixtures'
 import {
   Identity,
   Sub,
@@ -1130,13 +1130,14 @@ async function bootstrap() {
     throw error
   }
 
-  // try {
-  //   await ensureFixtureSeedData(dataSource)
-  //   console.log('🌱 Fixture data is ready')
-  // } catch (error) {
-  //   console.error('❌ Failed to seed fixture data:', error)
-  //   throw error
-  // }
+  try {
+    // await ensureFixtureSeedData(dataSource)
+    await ensurePositiveFixtureData(dataSource)
+    console.log('🌱 Fixture data is ready')
+  } catch (error) {
+    console.error('❌ Failed to seed fixture data:', error)
+    throw error
+  }
 
   const port = parseInt(process.env.PORT || '3000')
 
