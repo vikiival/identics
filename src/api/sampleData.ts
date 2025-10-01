@@ -110,6 +110,41 @@ export const usernamesFixtures = [
   },
 ]
 
+export const positiveIdentityFixture = {
+  id: '14QBw4Feq5d53wg4haQ1gL4PvPMv74WLkBqt2oQFRkoLgZ3x',
+  name: 'vikiival.dot',
+  legal: 'Viki Val',
+  web: 'https://kodadot.xyz',
+  matrix: null,
+  email: 'vikiival@kodadot.xyz',
+  image: null,
+  twitter: '@vikiival',
+  github: 'https://github.com/vikiival',
+  judgement: Judgement.FeePaid,
+  registrar: 3,
+  hash: '',
+  blockNumber: BigInt(0),
+  updatedAt: new Date('2025-10-01T14:23:42.000Z'),
+  createdAt: new Date('2025-10-01T14:23:42.000Z'),
+  origin: ChainOrigin.PEOPLE,
+  burned: false,
+  type: AddressType.Substrate,
+  deposit: BigInt(0),
+}
+
+export const positiveUsernamesFixtures = [
+  {
+    id: 'vikiival.dot',
+    primary: true,
+    name: 'vikiival.dot',
+    address: '14QBw4Feq5d53wg4haQ1gL4PvPMv74WLkBqt2oQFRkoLgZ3x',
+    blockNumber: BigInt(0),
+    createdAt: new Date('2025-10-01T14:23:42.000Z'),
+    gracePeriod: BigInt(0),
+    status: UsernameStatus.Queued,
+  },
+]
+
 export const authorityFixtures = [
   {
     id: fixtureAccounts.authority,
@@ -142,6 +177,15 @@ export const fixtureSummary = {
   usernames: usernamesFixtures,
   authorities: authorityFixtures,
   events: eventFixtures,
+}
+
+export const positiveFixtureSummary = {
+  identity: positiveIdentityFixture,
+  // registrar: registrarFixture,
+  // sub: subFixture,
+  usernames: positiveUsernamesFixtures,
+  // authorities: authorityFixtures,
+  // events: eventFixtures,
 }
 
 export type FixtureSummary = typeof fixtureSummary
